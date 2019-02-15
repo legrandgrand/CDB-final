@@ -4,9 +4,6 @@ import java.util.List;
 
 import model.Computer;
 
-/**
- * The Interface ComputerDao.
- */
 public interface ComputerDao {
 	
 	/**
@@ -14,27 +11,27 @@ public interface ComputerDao {
 	 *
 	 * @return the list
 	 */
-	public List<Computer> listComputers();
+	public List<Computer> list();
 	
 	/**
 	 * Delete computer.
 	 *
 	 * @param computerName the computer name
 	 */
-	public void deleteComputer(String computerName);
+	public void delete(String computerName);
 	
 	/**
 	 * Update computer.
 	 *
 	 * @param computer the computer
 	 */
-	public void updateComputer(Computer computer);	
+	public void update(Computer computer);	
 	
 	/**
 	 * Adds the computer.
 	 *
 	 * @param computer the computer
 	 */
-	public void addComputer(Computer computer);	
+	public void add(Computer computer);	
 
 }

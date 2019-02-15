@@ -11,17 +11,25 @@ import java.util.List;
 
 import model.Computer;
 
-/**
- * The Class ComputerDaoImp.
- */
+//TODO Try with resources
+//TODO Singleton
+//TODO Pagination
 public class ComputerDaoImp implements ComputerDao{
+
+
+	private static final String INSERT = "INSERT INTO computer (name,introduced,discontinued,company_id) VALUES (?,?,?,?)";
+	private static final String UPDATE = "UPDATE computer SET introduced = ?, discontinued = ?, company_id = ? WHERE name= ?";
+	private static final String SELECT= "SELECT name, introduced, discontinued, company_id FROM computer";
+	private static final String DELETE= "DELETE FROM computer WHERE name= ?";
+
 
 
 	/* (non-Javadoc)
 	 * @see dao.ComputerDao#listComputers()
 	 */
 	@Override
-	public List<Computer> listComputers() {
+	//TODO: stream
+	public List<Computer> list() {
 		List<Computer> list= new ArrayList<Computer>();
 		DaoFactory factory = DaoFactory.getInstance();
 		Connection connection=null;
@@ -31,7 +39,7 @@ public class ComputerDaoImp implements ComputerDao{
 			// Create objects for query 
 			Statement statement = connection.createStatement();
 			// execute query
-			ResultSet resultat = statement.executeQuery("SELECT name, introduced, discontinued, company_id FROM computer");
+			ResultSet resultat = statement.executeQuery(SELECT);
 	
 			 while(resultat.next()) {
 				 String name=resultat.getString("name");
@@ -61,15 +69,14 @@ public class ComputerDaoImp implements ComputerDao{
 	 * @see dao.ComputerDao#deleteComputer(java.lang.String)
 	 */
 	@Override
-	public void deleteComputer(String computerName) {
+	public void delete(String computerName) {
 		DaoFactory factory = DaoFactory.getInstance();
 		Connection connection=null;
 		
 		try {
 			connection = factory.connectDB(connection);
 			// Create objects for query 
-			String sql=("DELETE FROM computer WHERE name= ?");
-			PreparedStatement statement = connection.prepareStatement(sql);
+			PreparedStatement statement = connection.prepareStatement(DELETE);
 			statement.setString(1, computerName);
 			// execute query
 			statement.executeUpdate();	
@@ -93,20 +100,19 @@ public class ComputerDaoImp implements ComputerDao{
 	 * @see dao.ComputerDao#updateComputer(model.Computer)
 	 */
 	@Override
-	public void updateComputer(Computer computer) {
+	public void update(Computer computer) {
 		DaoFactory factory = DaoFactory.getInstance();
 		Connection connection=null;
 		
 		String name=computer.getNamePC();
-		int companyId=computer.getNameManuf();
-		Timestamp introduced=computer.getDateB();
-		Timestamp discontinued=computer.getDateF();
+		int companyId=computer.getNameManufacturer();
+		Timestamp introduced=computer.getDateIntro();
+		Timestamp discontinued=computer.getDateDiscontinuation();
 		
 		try {
 			connection = factory.connectDB(connection);
 			// Create objects for query 
-			String sql=("UPDATE computer SET introduced = ?, discontinued = ?, company_id = ? WHERE name= ?");
-			PreparedStatement statement = connection.prepareStatement(sql);
+			PreparedStatement statement = connection.prepareStatement(UPDATE);
 			statement.setTimestamp(1, introduced);
 			statement.setTimestamp(2, discontinued);
 			statement.setInt(3, companyId);
@@ -132,21 +138,20 @@ public class ComputerDaoImp implements ComputerDao{
 	 * @see dao.ComputerDao#addComputer(model.Computer)
 	 */
 	@Override
-	public void addComputer(Computer computer) {
+	public void add(Computer computer) {
 		DaoFactory factory = DaoFactory.getInstance();
 		Connection connection=null;
 		
 
 		String name=computer.getNamePC();
-		int companyId=computer.getNameManuf();
-		Timestamp introduced=computer.getDateB();
-		Timestamp discontinued=computer.getDateF();
+		int companyId=computer.getNameManufacturer();
+		Timestamp introduced=computer.getDateIntro();
+		Timestamp discontinued=computer.getDateDiscontinuation();
 		
 		try {
 			connection = factory.connectDB(connection);
 			// Create objects for query 
-			String sql=("INSERT INTO computer (name,introduced,discontinued,company_id) VALUES (?,?,?,?)");
-			PreparedStatement statement = connection.prepareStatement(sql);
+			PreparedStatement statement = connection.prepareStatement(INSERT);
 			statement.setString(1, name);
 			statement.setTimestamp(2, introduced);
 			statement.setTimestamp(3, discontinued);

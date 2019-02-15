@@ -2,21 +2,11 @@ package model;
 
 import java.sql.Timestamp;
 
-/**
- * The Class Computer.
- */
 public class Computer {
 	
-	/** The PC name. */
 	private String namePC;//Compulsory
-	
-	/** The name of the manufacturer. */
-	private int nameManufacturer;
-	
-	/** The date of introduction. */
-	private Timestamp dateIntro;
-	
-	/** The date of discontinuation. */
+	private int nameManufacturer;//TODO: pas entier, mais company
+	private Timestamp dateIntro;//TODO: Pas timestamp, date
 	private Timestamp dateDiscontinuation;//Has to be higher than date B
 	
 	/**
@@ -28,9 +18,8 @@ public class Computer {
 	 * @param dateDiscontinuation the date discontinuation
 	 */
 	public Computer(String namePC, int nameManufacturer, Timestamp dateIntro, Timestamp dateDiscontinuation) {
-		super();
 		this.setNamePC(namePC);
-		this.setNameManuf(nameManufacturer);
+		this.setNameManufacturer(nameManufacturer);
 		this.setDateIntro(dateIntro);
 		this.setDateDiscontinuation(dateDiscontinuation);
 	}
@@ -41,7 +30,7 @@ public class Computer {
 	public Computer() {
 	}
 
-	public Timestamp getDateB() {
+	public Timestamp getDateIntro() {
 		return dateIntro;
 	}
 
@@ -49,7 +38,7 @@ public class Computer {
 		this.dateIntro = dateB;
 	}
 
-	public Timestamp getDateF() {
+	public Timestamp getDateDiscontinuation() {
 		return dateDiscontinuation;
 	}
 
@@ -57,11 +46,11 @@ public class Computer {
 		this.dateDiscontinuation = dateF;
 	}
 
-	public int getNameManuf() {
+	public int getNameManufacturer() {
 		return nameManufacturer;
 	}
 
-	public void setNameManuf(int nameManuf) {
+	public void setNameManufacturer(int nameManuf) {
 		this.nameManufacturer = nameManuf;
 	}
 

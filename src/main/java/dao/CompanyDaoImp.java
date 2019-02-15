@@ -9,12 +9,12 @@ import java.util.List;
 
 import model.Company;
 
-// TODO: Auto-generated Javadoc
-/**
- * The Class CompanyDaoImp.
- */
 public class CompanyDaoImp implements CompanyDao {
-	
+	private static final String SELECT = "SELECT id, name FROM company";
+
+	//TODO Singleton
+	//TODO Try with resources
+	//TODO Pagination
 	public CompanyDaoImp() {
 		
 	}
@@ -22,18 +22,18 @@ public class CompanyDaoImp implements CompanyDao {
 	/* (non-Javadoc)
 	 * @see dao.CompanyDao#listCompanies()
 	 */
+	//TODO: stream
 	@Override
-	public List<Company> listCompanies() {
+	public List<Company> list() {
 		List<Company> list= new ArrayList<Company>();
 		DaoFactory factory = DaoFactory.getInstance();
 		Connection connection=null;
 		try {
 			connection = factory.connectDB(connection);
-			String sql = "SELECT id, name FROM company";
 			// Create objects for query 
 			Statement statement = connection.createStatement();
 			//Execute query
-			ResultSet resultat = statement.executeQuery(sql);
+			ResultSet resultat = statement.executeQuery(SELECT);
 	
 			 while(resultat.next()) {
 				 String name=resultat.getString("name");
@@ -55,6 +55,7 @@ public class CompanyDaoImp implements CompanyDao {
 		return list;
 	}
 	
+	//TODO return optional
 	public int getCompany(String name) {
 		DaoFactory factory = DaoFactory.getInstance();
 		Connection connection=null;
