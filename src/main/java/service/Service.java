@@ -10,7 +10,7 @@ import model.Computer;
  * The Class Service.
  */
 public class Service {
-	
+	//TODO Singleton
 	/**
 	 * Instantiates a new service.
 	 */
@@ -22,7 +22,7 @@ public class Service {
 	 * @param name the name
 	 */
 	public void deleteComputer(String name){
-		DaoFactory.getComputerDao().deleteComputer(name);
+		DaoFactory.getComputerDao().delete(name);
 	}
 	
 	/**
@@ -31,7 +31,7 @@ public class Service {
 	 * @return the list
 	 */
 	public List<Computer> listComputer() {
-		return  DaoFactory.getComputerDao().listComputers();
+		return  DaoFactory.getComputerDao().list();
 	}
 	
 	/**
@@ -40,7 +40,7 @@ public class Service {
 	 * @return the list
 	 */
 	public List<Company>  listCompany() {
-		return DaoFactory.getCompanyDao().listCompanies();
+		return DaoFactory.getCompanyDao().list();
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class Service {
 	 * @param computer the computer
 	 */
 	public void addComputer(Computer computer) {
-		DaoFactory.getComputerDao().addComputer(computer);
+		DaoFactory.getComputerDao().add(computer);
 		
 	}
 
@@ -59,7 +59,7 @@ public class Service {
 	 * @param computer the computer
 	 */
 	public void updateComputer(Computer computer) {
-		DaoFactory.getComputerDao().updateComputer(computer);	
+		DaoFactory.getComputerDao().update(computer);	
 	}
 	
 

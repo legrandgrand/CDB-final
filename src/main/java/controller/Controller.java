@@ -9,11 +9,8 @@ import model.Company;
 import model.Computer;
 import service.Service;
 
-/**
- * The Class Controller.
- */
 public class Controller {
-	
+	//TODO Singleton
 	private Service service;
 	
 	/**
@@ -102,9 +99,9 @@ public class Controller {
 			timestamp2=sc.nextLine();
 			if(!timestamp2.equals("")) {
 				discontinuation = setTimestamp(timestamp2);
-				if(intro.equals(null)) {
+				/*if(null.equals(intro)) {//TODO: null.equals()null
 					break;
-				}
+				}*/
 				if(discontinuation.before(intro)) {
 					System.out.println("The date you entered happened before the date of introduction. Please enter a valid date.");
 				}

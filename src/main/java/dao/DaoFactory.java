@@ -4,22 +4,15 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-/**
- * A factory for creating Dao objects.
- */
 public class DaoFactory {
 	
-	/** The url. */
 	private final String url = "jdbc:mysql://localhost:3306/computer-database-db";
-	
-	/** The user. */
 	private final String user = "admincdb";
-	
-	/** The password. */
 	private final String password = "qwerty1234";
 	
-	/** The Constant instance. */
-	private static final DaoFactory instance = new DaoFactory();	
+	private static final DaoFactory instance = new DaoFactory();
+	
+	private DaoFactory() {}
 
 	public static final DaoFactory getInstance() {
     	return instance;

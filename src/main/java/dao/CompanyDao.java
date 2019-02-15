@@ -4,17 +4,13 @@ import java.util.List;
 
 import model.Company;
 
-/**
- * The Interface CompanyDao.
- */
 public interface CompanyDao{
-	
 	/**
 	 * List companies.
 	 *
 	 * @return the list
 	 */
-	public List<Company> listCompanies();
+	public List<Company> list();
 	
 	/**
 	 * Gets the company.

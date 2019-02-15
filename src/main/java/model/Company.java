@@ -5,18 +5,9 @@ package model;
  */
 public class Company {
 	
-	/** The company name. */
 	private String nameCompany;
 
-
-
-	/**
-	 * Instantiates a new company.
-	 *
-	 * @param nameCompany the company name
-	 */
 	public Company(String nameCompany) {
-		super();
 		this.setNameCompany(nameCompany);
 	}
 
