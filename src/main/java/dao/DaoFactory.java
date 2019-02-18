@@ -33,7 +33,6 @@ public class DaoFactory {
 	/**
 	 * Connect DB.
 	 *
-	 * @param connection the connection
 	 * @return the connection
 	 * @throws SQLException the SQL exception
 	 */

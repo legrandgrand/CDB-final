@@ -1,15 +1,19 @@
 package dao;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import model.Company;
 
 public class CompanyDaoImp implements CompanyDao {
+
+	private static final String SELECT_ID = "SELECT id FROM company WHERE name = ?";
 
 	private static final String SELECT = "SELECT id, name FROM company";
 	
@@ -48,22 +52,19 @@ public class CompanyDaoImp implements CompanyDao {
 		return list;
 	}
 	
-	//TODO return optional
-	public int getCompany(String name) {
+	public Optional<Integer> getCompany(String name) {
 		DaoFactory factory = DaoFactory.getInstance();
-		String sql = "SELECT id FROM company WHERE name = '"+name+"'";
+		Optional<Integer> companyId=null;
 		try (Connection connection = factory.connectDB();
-			 Statement statement = connection.createStatement()){
-		
-			try (ResultSet resultat = statement.executeQuery(sql)){
-				if(resultat.next()) {
-				return resultat.getInt("id");
-				}	
+			PreparedStatement statement = connection.prepareStatement(SELECT_ID)){
+			statement.setString(1, "name");
+			ResultSet resultat = statement.executeQuery(SELECT_ID);
+			if(resultat.next()) {
+				companyId = Optional.ofNullable(resultat.getInt("id"));
 			}
-			
 		} catch ( SQLException e ) {
 			System.out.println("Couldn't connect to database");
-		} 
-		return 0;
+		}
+		return companyId;
 	}
 }
