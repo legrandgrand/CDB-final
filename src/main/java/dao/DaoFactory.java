@@ -37,8 +37,8 @@ public class DaoFactory {
 	 * @return the connection
 	 * @throws SQLException the SQL exception
 	 */
-	public Connection connectDB(Connection connection) throws SQLException {
-		   return connection = DriverManager.getConnection( url, user, password );
+	public Connection connectDB() throws SQLException {
+		   return DriverManager.getConnection( url, user, password );
 	}
 	
 	/**

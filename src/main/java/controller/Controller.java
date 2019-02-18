@@ -10,8 +10,8 @@ import model.Computer;
 import service.Service;
 
 public class Controller {
-	//TODO Singleton
 	private Service service;
+	
 	
 	/**
 	 * Instantiates a new controller.
@@ -20,6 +20,7 @@ public class Controller {
 	public Controller(Service service) {
 		this.service = service;
 	}
+
 	
 
 	
@@ -94,11 +95,11 @@ public class Controller {
 	 */
 	public Date setComputerDisc(Scanner sc, Date intro) {//TODO: gérer le cas où intro est null
 		Date discontinuation = null;
-		String timestamp2 = null;	
+		String timestamp = null;	
 		do {
-			timestamp2=sc.nextLine();
-			if(!timestamp2.equals("")) {
-				discontinuation = setTimestamp(timestamp2);
+			timestamp=sc.nextLine();
+			if(!timestamp.equals("")) {
+				discontinuation = setTimestamp(timestamp);
 				/*if(null.equals(intro)) {//TODO: null.equals()null
 					break;
 				}*/

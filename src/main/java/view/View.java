@@ -164,8 +164,7 @@ public class View {
 	 */
 	public void updateComputer() {
 		
-		System.out.println("We will now update a computer from the database."
-				+ "\nPlease enter the computer's name you want to update.");
+		System.out.println("We will now update a computer from the database.");
 		Scanner sc = new Scanner(System.in);
 		try{
 			String name= setComputerName(sc);
