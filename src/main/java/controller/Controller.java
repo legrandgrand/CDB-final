@@ -7,18 +7,21 @@ import java.util.Scanner;
 
 import model.Company;
 import model.Computer;
-import service.Service;
+import service.ServiceCompany;
+import service.ServiceComputer;
 
 public class Controller {
-	private Service service;
+	private ServiceComputer serviceComputer;
+	private ServiceCompany serviceCompany;
 	
 	
 	/**
 	 * Instantiates a new controller.
 	 * @param service 
 	 */
-	public Controller(Service service) {
-		this.service = service;
+	public Controller(ServiceComputer serviceComputer, ServiceCompany serviceCompany) {
+		this.serviceComputer = serviceComputer;
+		this.serviceCompany = serviceCompany;
 	}
 
 	
@@ -28,7 +31,7 @@ public class Controller {
 	 * List company.
 	 */
 	public void listCompany() {
-		List<Company> list = service.listCompany();
+		List<Company> list = serviceCompany.listCompany();
 		Company company = new Company();
 		 Iterator<Company> itr = list.iterator();
 		 while(itr.hasNext()) {
@@ -41,7 +44,7 @@ public class Controller {
 	 * List computer.
 	 */
 	public void listComputer() {
-		List<Computer> list = service.listComputer();
+		List<Computer> list = serviceComputer.listComputer();
 		Computer computer = new Computer();
 		Iterator<Computer> itr = list.iterator();
 		while(itr.hasNext()) {
@@ -57,7 +60,7 @@ public class Controller {
 	 * @param name the name
 	 */
 	public void deleteComputer(String name) {
-		service.deleteComputer(name);
+		serviceComputer.deleteComputer(name);
 	}
 	
 	/**
@@ -137,7 +140,7 @@ public class Controller {
 	 */
 	public Computer addComputer(String name, Date intro, Date discontinuation, int companyId) {
 		Computer computer=new Computer(name, companyId, intro, discontinuation);
-		service.addComputer(computer);
+		serviceComputer.addComputer(computer);
 		return computer;
 	}
 	
@@ -152,7 +155,7 @@ public class Controller {
 	 */
 	public Computer updateComputer(String name, Date intro, Date discontinuation, int companyId) {
 		Computer computer=new Computer(name, companyId, intro, discontinuation);
-		service.updateComputer(computer);
+		serviceComputer.updateComputer(computer);
 		
 		return computer;
 	}

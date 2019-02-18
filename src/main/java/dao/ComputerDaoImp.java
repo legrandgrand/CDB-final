@@ -19,8 +19,8 @@ public class ComputerDaoImp implements ComputerDao{
 
 	private static final String INSERT = "INSERT INTO computer (name,introduced,discontinued,company_id) VALUES (?,?,?,?)";
 	private static final String UPDATE = "UPDATE computer SET introduced = ?, discontinued = ?, company_id = ? WHERE name= ?";
-	private static final String SELECT= "SELECT name, introduced, discontinued, company_id FROM computer";
-	private static final String DELETE= "DELETE FROM computer WHERE name= ?";
+	private static final String SELECT = "SELECT name, introduced, discontinued, company_id FROM computer";
+	private static final String DELETE = "DELETE FROM computer WHERE name= ?";
 	
 	private static final ComputerDaoImp instance = new ComputerDaoImp();
 	
@@ -41,16 +41,15 @@ public class ComputerDaoImp implements ComputerDao{
 		
 		try (Connection connection = factory.connectDB();
 				 Statement statement = connection.createStatement()){
-			try(ResultSet resultat = statement.executeQuery(SELECT)){
-				 while(resultat.next()) {
-					 String name=resultat.getString("name");
-					 int companyId=resultat.getInt("company_id");
-					 Timestamp introduced=resultat.getTimestamp("introduced");
-					 Timestamp discontinued=resultat.getTimestamp("discontinued");
-					 Computer computer=new Computer(name, companyId, introduced, discontinued);
-					 list.add(computer);
-				}
-			}
+			ResultSet resultat = statement.executeQuery(SELECT);
+			while(resultat.next()) {
+				String name=resultat.getString("name");
+				int companyId=resultat.getInt("company_id");
+				Timestamp introduced=resultat.getTimestamp("introduced");
+				Timestamp discontinued=resultat.getTimestamp("discontinued");
+				Computer computer=new Computer(name, companyId, introduced, discontinued);
+				list.add(computer);
+			}	
 			} catch ( SQLException e ) {
 				System.out.println("An error happened during the query");
 		    } 
@@ -65,24 +64,14 @@ public class ComputerDaoImp implements ComputerDao{
 	@Override
 	public void delete(String computerName) {
 		DaoFactory factory = DaoFactory.getInstance();
-		Connection connection=null;
 		
-		try {
-			connection = factory.connectDB();
-			PreparedStatement statement = connection.prepareStatement(DELETE);
-			statement.setString(1, computerName);
-			statement.executeUpdate();	
+		try (Connection connection = factory.connectDB();
+			PreparedStatement statement = connection.prepareStatement(DELETE)){
+				statement.setString(1, computerName);
+				statement.executeUpdate();	
 			} catch ( SQLException e ) {
 				System.out.println("An error happened during the query");
-		    } finally {
-		        if ( connection != null ) {
-		                try {
-							connection.close();
-						} catch (SQLException e) {
-							e.printStackTrace();
-						}
-		    }
-	    }
+		    } 
 		
 	}
 
@@ -94,35 +83,22 @@ public class ComputerDaoImp implements ComputerDao{
 	@Override
 	public void update(Computer computer) {
 		DaoFactory factory = DaoFactory.getInstance();
-		Connection connection=null;
 		
 		String name=computer.getNamePC();
 		int companyId=computer.getNameManufacturer();
 		Timestamp introduced=(Timestamp) computer.getDateIntro();
 		Timestamp discontinued=(Timestamp) computer.getDateDiscontinuation();
 		
-		try {
-			connection = factory.connectDB();
-			// Create objects for query 
-			PreparedStatement statement = connection.prepareStatement(UPDATE);
-			//
+		try (Connection connection = factory.connectDB();
+			PreparedStatement statement = connection.prepareStatement(UPDATE)){
 			statement.setTimestamp(1, introduced);
 			statement.setTimestamp(2, discontinued);
 			statement.setInt(3, companyId);
 			statement.setString(4, name);
-			// execute query
 			statement.executeUpdate();
 			} catch ( SQLException e ) {
 				System.out.println("An error happened during the query");
-		    } finally {
-		        if ( connection != null ) {
-		                try {
-							connection.close();
-						} catch (SQLException e) {
-							e.printStackTrace();
-						}
-		    }
-	    }
+		    } 
 	}
 
 	
@@ -132,19 +108,15 @@ public class ComputerDaoImp implements ComputerDao{
 	 */
 	@Override
 	public void add(Computer computer) {
-		DaoFactory factory = DaoFactory.getInstance();
-		Connection connection=null;
-		
+		DaoFactory factory = DaoFactory.getInstance();	
 
 		String name=computer.getNamePC();
 		int companyId=computer.getNameManufacturer();
 		Timestamp introduced=(Timestamp) computer.getDateIntro();
 		Timestamp discontinued=(Timestamp) computer.getDateDiscontinuation();
 		
-		try {
-			connection = factory.connectDB();
-			// Create objects for query 
-			PreparedStatement statement = connection.prepareStatement(INSERT);
+		try (Connection connection = factory.connectDB();
+			PreparedStatement statement = connection.prepareStatement(INSERT)){
 			statement.setString(1, name);
 			statement.setTimestamp(2, introduced);
 			statement.setTimestamp(3, discontinued);
@@ -154,15 +126,7 @@ public class ComputerDaoImp implements ComputerDao{
 			System.out.println("yay");
 			} catch ( SQLException e ) {
 				System.out.println("An error happened during the query");
-		    } finally {
-		        if ( connection != null ) {
-		                try {
-							connection.close();
-						} catch (SQLException e) {
-							e.printStackTrace();
-						}
-		        }
-		    }
+		    } 
 	}
 	
 	

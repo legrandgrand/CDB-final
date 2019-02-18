@@ -14,7 +14,7 @@ public class CompanyDaoImp implements CompanyDao {
 	private static final String SELECT = "SELECT id, name FROM company";
 	
 	//TODO Pagination
-
+	//TODO: stream
 	private static final CompanyDaoImp instance = new CompanyDaoImp();	
 
 	public static final CompanyDaoImp getInstance() {
@@ -27,7 +27,6 @@ public class CompanyDaoImp implements CompanyDao {
 	/* (non-Javadoc)
 	 * @see dao.CompanyDao#listCompanies()
 	 */
-	//TODO: stream
 	@Override
 	public List<Company> list() {
 		List<Company> list= new ArrayList<Company>();
