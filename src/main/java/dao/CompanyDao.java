@@ -1,6 +1,7 @@
 package dao;
 
 import java.util.List;
+import java.util.Optional;
 
 import model.Company;
 
@@ -15,8 +16,8 @@ public interface CompanyDao{
 	/**
 	 * Gets the company.
 	 *
-	 * @param i the name
+	 * @param name the Company name
 	 * @return the company
 	 */
-	public int getCompany(String name);
+	public Optional<Integer> getCompany(String name);
 }

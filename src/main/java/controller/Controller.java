@@ -17,7 +17,8 @@ public class Controller {
 	
 	/**
 	 * Instantiates a new controller.
-	 * @param service 
+	 * @param serviceComputer the service of the Computer
+	 * @param serviceComputer the service of the Company
 	 */
 	public Controller(ServiceComputer serviceComputer, ServiceCompany serviceCompany) {
 		this.serviceComputer = serviceComputer;
@@ -125,7 +126,7 @@ public class Controller {
 	 * @param sc the scanner
 	 * @return the Company Id
 	 */
-	public int  setComputerCompanyId(Scanner sc) {
+	public int setComputerCompanyId(Scanner sc) {
 		return sc.nextInt();	
 	}
 	
