@@ -97,16 +97,16 @@ public class Controller {
 	 * @param intro the date of introduction
 	 * @return the date of discontinuation
 	 */
-	public Date setComputerDisc(Scanner sc, Date intro) {//TODO: gérer le cas où intro est null
+	public Date setComputerDisc(Scanner sc, Date intro) {
 		Date discontinuation = null;
 		String timestamp = null;	
 		do {
 			timestamp=sc.nextLine();
 			if(!timestamp.equals("")) {
 				discontinuation = setTimestamp(timestamp);
-				/*if(null.equals(intro)) {//TODO: null.equals()null
+				if(null != intro) {//TODO: null.equals()null
 					break;
-				}*/
+				}
 				if(discontinuation.before(intro)) {
 					System.out.println("The date you entered happened before the date of introduction. Please enter a valid date.");
 				}
@@ -171,5 +171,4 @@ public class Controller {
 		timestamp=timestamp+" 00:00:00";//timestamp format: YYYY-MM-DD (user input) + 00:00:00 
 		return Date.valueOf(timestamp);
 	}
-
 }
