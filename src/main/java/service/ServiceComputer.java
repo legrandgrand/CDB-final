@@ -9,16 +9,13 @@ import model.Computer;
 /**
  * The Class Service.
  */
-public class Service {
+public class ServiceComputer {
 	
-	private static final Service instance= new Service();
+	private static final ServiceComputer instance= new ServiceComputer();
 	
-	/**
-	 * Instantiates a new service.
-	 */
-	private Service () {}
+	private ServiceComputer () {}
 	
-	public static Service getInstance() {
+	public static ServiceComputer getInstance() {
 		return instance;
 	}
 	
@@ -38,15 +35,6 @@ public class Service {
 	 */
 	public List<Computer> listComputer() {
 		return  DaoFactory.getComputerDao().list();
-	}
-	
-	/**
-	 * List company.
-	 *
-	 * @return the list
-	 */
-	public List<Company>  listCompany() {
-		return DaoFactory.getCompanyDao().list();
 	}
 
 	/**
