@@ -1,6 +1,6 @@
 package controller;
 
-import java.sql.Timestamp;
+import java.sql.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
@@ -75,8 +75,8 @@ public class Controller {
 	 * @param sc the scanner
 	 * @return the timestamp
 	 */
-	public Timestamp setComputerIntro(Scanner sc) {
-		Timestamp intro = null;
+	public Date setComputerIntro(Scanner sc) {
+		Date intro = null;
 		String timestamp = null;
 		timestamp=sc.nextLine();
 		if(!timestamp.equals("")) {
@@ -92,8 +92,8 @@ public class Controller {
 	 * @param intro the date of introduction
 	 * @return the date of discontinuation
 	 */
-	public Timestamp setComputerDisc(Scanner sc, Timestamp intro) {//TODO: gérer le cas où intro est null
-		Timestamp discontinuation = null;
+	public Date setComputerDisc(Scanner sc, Date intro) {//TODO: gérer le cas où intro est null
+		Date discontinuation = null;
 		String timestamp2 = null;	
 		do {
 			timestamp2=sc.nextLine();
@@ -134,7 +134,7 @@ public class Controller {
 	 * @param companyId the company id
 	 * @return the computer
 	 */
-	public Computer addComputer(String name, Timestamp intro, Timestamp discontinuation, int companyId) {
+	public Computer addComputer(String name, Date intro, Date discontinuation, int companyId) {
 		Computer computer=new Computer(name, companyId, intro, discontinuation);
 		service.addComputer(computer);
 		return computer;
@@ -149,7 +149,7 @@ public class Controller {
 	 * @param companyId the company id
 	 * @return the computer
 	 */
-	public Computer updateComputer(String name, Timestamp intro, Timestamp discontinuation, int companyId) {
+	public Computer updateComputer(String name, Date intro, Date discontinuation, int companyId) {
 		Computer computer=new Computer(name, companyId, intro, discontinuation);
 		service.updateComputer(computer);
 		
@@ -162,9 +162,9 @@ public class Controller {
 	 * @param timestamp the timestamp to change
 	 * @return the timestamp
 	 */
-	public Timestamp setTimestamp(String timestamp){	
+	public Date setTimestamp(String timestamp){	
 		timestamp=timestamp+" 00:00:00";//timestamp format: YYYY-MM-DD (user input) + 00:00:00 
-		return Timestamp.valueOf(timestamp);
+		return Date.valueOf(timestamp);
 	}
 
 }

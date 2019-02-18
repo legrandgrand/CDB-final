@@ -1,13 +1,13 @@
 package model;
 
-import java.sql.Timestamp;
+import java.util.Date;
 
 public class Computer {
 	
 	private String namePC;//Compulsory
 	private int nameManufacturer;//TODO: pas entier, mais company
-	private Timestamp dateIntro;//TODO: Pas timestamp, date
-	private Timestamp dateDiscontinuation;//Has to be higher than date B
+	private Date dateIntro;
+	private Date dateDiscontinuation;//Has to be higher than date B
 	
 	/**
 	 * Instantiates a new computer.
@@ -17,7 +17,7 @@ public class Computer {
 	 * @param dateIntro the date intro
 	 * @param dateDiscontinuation the date discontinuation
 	 */
-	public Computer(String namePC, int nameManufacturer, Timestamp dateIntro, Timestamp dateDiscontinuation) {
+	public Computer(String namePC, int nameManufacturer, Date dateIntro, Date dateDiscontinuation) {
 		this.setNamePC(namePC);
 		this.setNameManufacturer(nameManufacturer);
 		this.setDateIntro(dateIntro);
@@ -30,19 +30,19 @@ public class Computer {
 	public Computer() {
 	}
 
-	public Timestamp getDateIntro() {
+	public Date getDateIntro() {
 		return dateIntro;
 	}
 
-	public void setDateIntro(Timestamp dateB) {
-		this.dateIntro = dateB;
+	public void setDateIntro(Date dateIntro2) {
+		this.dateIntro = dateIntro2;
 	}
 
-	public Timestamp getDateDiscontinuation() {
+	public Date getDateDiscontinuation() {
 		return dateDiscontinuation;
 	}
 
-	public void setDateDiscontinuation(Timestamp dateF) {
+	public void setDateDiscontinuation(Date dateF) {
 		this.dateDiscontinuation = dateF;
 	}
 

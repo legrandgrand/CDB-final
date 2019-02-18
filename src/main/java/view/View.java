@@ -1,6 +1,6 @@
 package view;
 
-import java.sql.Timestamp;
+import java.sql.Date;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -104,9 +104,9 @@ public class View {
 		try {
 			String name= setComputerName(sc);
 			
-			Timestamp intro = addComputerDateIntro(sc);
+			Date intro = addComputerDateIntro(sc);
 			
-			Timestamp discontinuation = addComputerDateDisc(sc, intro);
+			Date discontinuation = addComputerDateDisc(sc, intro);
 			
 			int companyId = setComputerCompanyId(sc);		
 			
@@ -125,7 +125,7 @@ public class View {
 		}
 	}
 	
-	public Timestamp addComputerDateIntro(Scanner sc) {
+	public Date addComputerDateIntro(Scanner sc) {
 		System.out.println("Please enter the date of introduction. Format should be YYYY-MM-DD. (If the date is unknown, just press enter.)");
 		return controller.setComputerIntro(sc);
 	}
@@ -135,7 +135,7 @@ public class View {
 		return controller.setComputerName(sc);
 	}
 	
-	public Timestamp addComputerDateDisc(Scanner sc, Timestamp intro) {
+	public Date addComputerDateDisc(Scanner sc, Date intro) {
 		System.out.println("Please enter the date of discontinuation. Format should be YYYY-MM-DD. (If the date is unknown or the computer is still continuing, just press enter.)");		
 		return controller.setComputerDisc(sc,intro);
 	}
@@ -170,9 +170,9 @@ public class View {
 		try{
 			String name= setComputerName(sc);
 			
-			Timestamp intro = addComputerDateIntro(sc);
+			Date intro = addComputerDateIntro(sc);
 			
-			Timestamp discontinuation = addComputerDateDisc(sc, intro);
+			Date discontinuation = addComputerDateDisc(sc, intro);
 			
 			int companyId = setComputerCompanyId(sc);		
 			

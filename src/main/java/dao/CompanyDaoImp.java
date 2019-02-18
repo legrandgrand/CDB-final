@@ -10,14 +10,20 @@ import java.util.List;
 import model.Company;
 
 public class CompanyDaoImp implements CompanyDao {
-	private static final String SELECT = "SELECT id, name FROM company";
 
-	//TODO Singleton
+	private static final String SELECT = "SELECT id, name FROM company";
+	
 	//TODO Try with resources
 	//TODO Pagination
-	public CompanyDaoImp() {
-		
-	}
+
+	private static final CompanyDaoImp instance = new CompanyDaoImp();	
+
+	public static final CompanyDaoImp getInstance() {
+    	return instance;
+    }
+	
+	private CompanyDaoImp() {}
+	
 	
 	/* (non-Javadoc)
 	 * @see dao.CompanyDao#listCompanies()
@@ -30,6 +36,7 @@ public class CompanyDaoImp implements CompanyDao {
 		Connection connection=null;
 		try {
 			connection = factory.connectDB(connection);
+			System.out.println("Couldn't connect to database");
 			// Create objects for query 
 			Statement statement = connection.createStatement();
 			//Execute query
@@ -41,7 +48,7 @@ public class CompanyDaoImp implements CompanyDao {
 				 list.add(company);		 
 			}
 			} catch ( SQLException e ) {
-				System.out.println("Couldn't connect to database");
+				System.out.println("An error happened during the query");
 		    } finally {
 		        if ( connection != null ) {
 		                try {
