@@ -14,9 +14,7 @@ public class Company {
 	/**
 	 * Instantiates a new company.
 	 */
-	public Company() {
-		// TODO Auto-generated constructor stub
-	}
+	public Company() {}
 
 	public String getNameCompany() {
 		return nameCompany;

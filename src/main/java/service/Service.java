@@ -10,11 +10,17 @@ import model.Computer;
  * The Class Service.
  */
 public class Service {
-	//TODO Singleton
+	
+	private static final Service instance= new Service();
+	
 	/**
 	 * Instantiates a new service.
 	 */
-	public Service () {}
+	private Service () {}
+	
+	public static Service getInstance() {
+		return instance;
+	}
 	
 	/**
 	 * Delete company.

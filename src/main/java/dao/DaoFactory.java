@@ -4,27 +4,30 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * A factory for creating Dao objects.
+ */
 public class DaoFactory {
 	
 	private final String url = "jdbc:mysql://localhost:3306/computer-database-db";
 	private final String user = "admincdb";
 	private final String password = "qwerty1234";
 	
-	private static final DaoFactory instance = new DaoFactory();
-	
-	private DaoFactory() {}
+	private static final DaoFactory instance = new DaoFactory();	
 
 	public static final DaoFactory getInstance() {
     	return instance;
     }
 	
+	private DaoFactory() {}
 	
-	public static CompanyDao getCompanyDao(){
-		return new CompanyDaoImp();
+	
+	public static CompanyDaoImp getCompanyDao(){
+		return CompanyDaoImp.getInstance();
 	}
 	
 	public static ComputerDao getComputerDao(){
-		return new ComputerDaoImp();
+		return ComputerDaoImp.getInstance();
 	}
 	
 	/**
@@ -34,8 +37,8 @@ public class DaoFactory {
 	 * @return the connection
 	 * @throws SQLException the SQL exception
 	 */
-	public Connection connectDB(Connection connection) throws SQLException {
-		   return connection = DriverManager.getConnection( url, user, password );
+	public Connection connectDB() throws SQLException {
+		   return DriverManager.getConnection( url, user, password );
 	}
 	
 	/**
