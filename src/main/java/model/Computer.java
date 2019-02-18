@@ -54,7 +54,7 @@ public class Computer {
 		this.nameManufacturer = nameManuf;
 	}
 
-	public String getNamePC() {
+	public String getName() {
 		return namePC;
 	}
 

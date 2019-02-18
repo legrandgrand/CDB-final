@@ -84,7 +84,7 @@ public class ComputerDaoImp implements ComputerDao{
 	public void update(Computer computer) {
 		DaoFactory factory = DaoFactory.getInstance();
 		
-		String name=computer.getNamePC();
+		String name=computer.getName();
 		int companyId=computer.getNameManufacturer();
 		Timestamp introduced=(Timestamp) computer.getDateIntro();
 		Timestamp discontinued=(Timestamp) computer.getDateDiscontinuation();
@@ -110,7 +110,7 @@ public class ComputerDaoImp implements ComputerDao{
 	public void add(Computer computer) {
 		DaoFactory factory = DaoFactory.getInstance();	
 
-		String name=computer.getNamePC();
+		String name=computer.getName();
 		int companyId=computer.getNameManufacturer();
 		Timestamp introduced=(Timestamp) computer.getDateIntro();
 		Timestamp discontinued=(Timestamp) computer.getDateDiscontinuation();
