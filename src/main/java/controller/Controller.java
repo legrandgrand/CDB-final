@@ -1,10 +1,13 @@
 package controller;
 
-import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
+import dao.ComputerDaoImp;
 import model.Company;
 import model.Computer;
 import service.ServiceCompany;
@@ -85,7 +88,7 @@ public class Controller {
 		String timestamp = null;
 		timestamp=sc.nextLine();
 		if(!timestamp.equals("")) {
-			intro = setTimestamp(timestamp);
+			intro = setDate(timestamp);
 		}
 		return intro;
 	}
@@ -103,7 +106,7 @@ public class Controller {
 		do {
 			timestamp=sc.nextLine();
 			if(!timestamp.equals("")) {
-				discontinuation = setTimestamp(timestamp);
+				discontinuation = setDate(timestamp);
 				if(null != intro) {//TODO: null.equals()null
 					break;
 				}
@@ -167,8 +170,17 @@ public class Controller {
 	 * @param timestamp the timestamp to change
 	 * @return the timestamp
 	 */
-	public Date setTimestamp(String timestamp){	
+	public Date setDate(String timestamp){	
 		timestamp=timestamp+" 00:00:00";//timestamp format: YYYY-MM-DD (user input) + 00:00:00 
-		return Date.valueOf(timestamp);
+		SimpleDateFormat dt = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss"); 
+		try {
+			return dt.parse(timestamp);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
+	
+
 }

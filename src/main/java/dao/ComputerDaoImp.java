@@ -6,7 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 //import java.util.Date;
 import java.util.List;
 
@@ -86,8 +89,11 @@ public class ComputerDaoImp implements ComputerDao{
 		
 		String name=computer.getName();
 		int companyId=computer.getNameManufacturer();
-		Timestamp introduced=(Timestamp) computer.getDateIntro();
-		Timestamp discontinued=(Timestamp) computer.getDateDiscontinuation();
+		Date date1= computer.getDateIntro();
+		Date date2= computer.getDateDiscontinuation();
+		
+		Timestamp introduced= toTimestamp(date1);	
+		Timestamp discontinued= toTimestamp(date2);
 		
 		try (Connection connection = factory.connectDB();
 			PreparedStatement statement = connection.prepareStatement(UPDATE)){
@@ -112,8 +118,11 @@ public class ComputerDaoImp implements ComputerDao{
 
 		String name=computer.getName();
 		int companyId=computer.getNameManufacturer();
-		Timestamp introduced=(Timestamp) computer.getDateIntro();
-		Timestamp discontinued=(Timestamp) computer.getDateDiscontinuation();
+		Date date1= computer.getDateIntro();
+		Date date2= computer.getDateDiscontinuation();
+		
+		Timestamp introduced= toTimestamp(date1);
+		Timestamp discontinued= toTimestamp(date2);
 		
 		try (Connection connection = factory.connectDB();
 			PreparedStatement statement = connection.prepareStatement(INSERT)){
@@ -123,11 +132,21 @@ public class ComputerDaoImp implements ComputerDao{
 			statement.setInt(4, companyId);
 			// execute query
 			statement.executeUpdate();
-			System.out.println("yay");
 			} catch ( SQLException e ) {
 				System.out.println("An error happened during the query");
 		    } 
 	}
+
+	private Timestamp toTimestamp(Date date) {
+		if(null != date) {
+		 Timestamp ts=new Timestamp(date.getTime()); 
+		return ts;
+		}else
+			return null;
+		
+	}
+	
+
 	
 	
 }

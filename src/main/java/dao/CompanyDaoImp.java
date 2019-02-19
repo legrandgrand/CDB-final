@@ -43,7 +43,8 @@ public class CompanyDaoImp implements CompanyDao {
 				while(resultat.next()) {
 				 String name=resultat.getString("name");
 				 Company company=new Company(name);
-				 list.add(company);		 
+				 list.add(company);	
+				 	
 				}
 			}
 			} catch ( SQLException e ) {
