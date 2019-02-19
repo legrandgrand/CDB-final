@@ -31,4 +31,24 @@ public class Company {
 	public String toString() {
 		return "Company:" + nameCompany;
 	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Company other = (Company) obj;
+		if (nameCompany == null) {
+			if (other.nameCompany != null)
+				return false;
+		} else if (!nameCompany.equals(other.nameCompany))
+			return false;
+		return true;
+	}
+	
+	
 }

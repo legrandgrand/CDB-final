@@ -70,4 +70,23 @@ public class Computer {
 		return "Name: "+ namePC + "\n Introduction : " +  dateIntro + "\n Discontinuation: " + dateDiscontinuation + "\n Company Number: "+ nameManufacturer;
 	}
 
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Computer other = (Computer) obj;
+		if (namePC == null) {
+			if (other.namePC != null)
+				return false;
+		} else if (!namePC.equals(other.namePC))
+			return false;
+		return true;
+	}
+
+	
 }
