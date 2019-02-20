@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -12,20 +13,16 @@ import java.util.Optional;
 import model.Company;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CompanyDaoImp implements CompanyDao {
 
-  /** The Constant SELECT_ID. */
   private static final String SELECT_ID = "SELECT id FROM company WHERE name = ?";
-  
-  /** The Constant SELECT. */
   private static final String SELECT = "SELECT id, name FROM company";
 
-  /** The logger. */
-  Logger logger = null;
+  private static final Logger logger = LoggerFactory.getLogger(CompanyDaoImp.class);
 
   // TODO Pagination
-  /** The Constant instance. */
   // TODO: stream
   private static final CompanyDaoImp instance = new CompanyDaoImp();
 
@@ -61,13 +58,15 @@ public class CompanyDaoImp implements CompanyDao {
         }
       }
     } catch (SQLException e) {
-
-      logger.debug("An error happened during the query");
+      logger.error(e.getMessage(), e);
     }
+    logger.debug("Listed companies");
     return list;
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see dao.CompanyDao#getCompany(java.lang.String)
    */
   @Override
@@ -82,8 +81,9 @@ public class CompanyDaoImp implements CompanyDao {
         companyId = Optional.ofNullable(resultat.getInt("id"));
       }
     } catch (SQLException e) {
-      logger.debug("An error happened during the query");
+      logger.error(e.getMessage(), e);
     }
+    logger.debug("Returning company id:" + companyId);
     return companyId;
   }
 }

@@ -13,7 +13,6 @@ import model.Computer;
 
 public class View {
 
-  /** The controller. */
   private Controller controller;
 
   /**
@@ -39,7 +38,7 @@ public class View {
     try {
       int userChoice = sc.nextInt();
       System.out.println("Choix user: " + userChoice);
-      switch (userChoice) {
+      switch (userChoice) { //TODO: enums
         case 1:
           listCompanies();
           break;
@@ -159,7 +158,7 @@ public class View {
   /**
    * Adds the computer date disc.
    *
-   * @param sc the sc
+   * @param sc    the sc
    * @param intro the intro
    * @return the date
    */
@@ -187,11 +186,12 @@ public class View {
   public void deleteComputer() {
     System.out.println("We will now delete a computer from the database."
         + "Please enter the computer's name you want to delete.");
-    Scanner sc = new Scanner(System.in);
-    String computerName = sc.nextLine();
-    controller.deleteComputer(computerName);
-    System.out.println(computerName + "a été supprimé");
-    mainMenu();
+    try (Scanner sc = new Scanner(System.in)) {
+      String computerName = sc.nextLine();
+      controller.deleteComputer(computerName);
+      System.out.println(computerName + "a été supprimé");
+      mainMenu();
+    }
   }
 
   /**

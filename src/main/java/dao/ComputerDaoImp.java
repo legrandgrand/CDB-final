@@ -6,14 +6,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+
 import java.util.ArrayList;
 import java.util.Date;
-//import java.util.Date;
 import java.util.List;
 
 import model.Computer;
 
-//TODO Try with resources
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 //TODO Pagination
 public class ComputerDaoImp implements ComputerDao {
 
@@ -22,12 +24,17 @@ public class ComputerDaoImp implements ComputerDao {
   private static final String UPDATE = 
       "UPDATE computer SET introduced = ?, discontinued = ?, company_id = ? WHERE name= ?";
   private static final String SELECT = 
-      "SELECT name, introduced, discontinued, company_id FROM computer";
+      "SELECT name, introduced, discontinued, company_id FROM computer"; 
   private static final String DELETE = 
       "DELETE FROM computer WHERE name= ?";
 
   private static final ComputerDaoImp instance = new ComputerDaoImp();
+  
+  private static final Logger logger = LoggerFactory.getLogger(ComputerDaoImp.class);
 
+  /**
+   * Instantiates a new computer dao imp.
+   */
   private ComputerDaoImp() {
   }
 
@@ -58,8 +65,9 @@ public class ComputerDaoImp implements ComputerDao {
         list.add(computer);
       }
     } catch (SQLException e) {
-      System.out.println("An error happened during the query");
+      logger.error(e.getMessage(), e);
     }
+    logger.debug("Listed computers");
     return list;
 
   }
@@ -77,8 +85,9 @@ public class ComputerDaoImp implements ComputerDao {
         PreparedStatement statement = connection.prepareStatement(DELETE)) {
       statement.setString(1, computerName);
       statement.executeUpdate();
+      logger.debug("Deleted computer:" + computerName);
     } catch (SQLException e) {
-      System.out.println("An error happened during the query");
+      logger.error(e.getMessage(), e);
     }
 
   }
@@ -107,8 +116,9 @@ public class ComputerDaoImp implements ComputerDao {
       statement.setInt(3, companyId);
       statement.setString(4, name);
       statement.executeUpdate();
+      logger.debug("Updated computer:" + computer);
     } catch (SQLException e) {
-      System.out.println("An error happened during the query");
+      logger.error(e.getMessage(), e);
     }
   }
 
@@ -135,14 +145,22 @@ public class ComputerDaoImp implements ComputerDao {
       statement.setTimestamp(2, introduced);
       statement.setTimestamp(3, discontinued);
       statement.setInt(4, companyId);
-      // execute query
+
       statement.executeUpdate();
+      logger.debug("Added computer:" + computer);
     } catch (SQLException e) {
-      System.out.println("An error happened during the query");
+
+      logger.error(e.getMessage(), e);
     }
   }
 
-  private Timestamp toTimestamp(Date date) {
+  /**
+   * Changes a date to a timestamp.
+   *
+   * @param date the date
+   * @return the timestamp
+   */
+  public Timestamp toTimestamp(Date date) {
     if (null != date) {
       Timestamp ts = new Timestamp(date.getTime());
       return ts;

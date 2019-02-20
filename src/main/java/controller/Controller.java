@@ -2,24 +2,30 @@ package controller;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
 import model.Company;
 import model.Computer;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import service.ServiceCompany;
 import service.ServiceComputer;
 
 public class Controller {
   private ServiceComputer serviceComputer;
   private ServiceCompany serviceCompany;
+  private static final Logger logger = LoggerFactory.getLogger(Controller.class);
 
   /**
    * Instantiates a new controller.
    * 
    * @param serviceComputer the service of the Computer
-   * @param serviceCompany the service of the Company
+   * @param serviceCompany  the service of the Company
    */
   public Controller(ServiceComputer serviceComputer, ServiceCompany serviceCompany) {
     this.serviceComputer = serviceComputer;
@@ -30,6 +36,7 @@ public class Controller {
    * List company.
    */
   public List<Company> listCompany() {
+    logger.debug("Listing companies");
     return serviceCompany.listCompany();
   }
 
@@ -37,6 +44,7 @@ public class Controller {
    * List computer.
    */
   public List<Computer> listComputer() {
+    logger.debug("Listing computers");
     return serviceComputer.listComputer();
   }
 
@@ -46,6 +54,7 @@ public class Controller {
    * @param name the name
    */
   public void deleteComputer(String name) {
+    logger.debug("Deleting computer named" + name);
     serviceComputer.deleteComputer(name);
   }
 
@@ -56,7 +65,9 @@ public class Controller {
    * @return the ComputerName
    */
   public String setComputerName(Scanner sc) {
-    return sc.nextLine();
+    String name = sc.nextLine();
+    logger.debug("Setting computer name: " + name);
+    return name;
   }
 
   /**
@@ -72,6 +83,7 @@ public class Controller {
     if (!timestamp.equals("")) {
       intro = setDate(timestamp);
     }
+    logger.debug("Setting computer date of introduction: " + intro);
     return intro;
   }
 
@@ -93,14 +105,14 @@ public class Controller {
           break;
         }
         if (discontinuation.before(intro)) {
-          System.out.println("The date you entered happened before the date of introduction. "
+          logger.info("The date you entered happened before the date of introduction. "
               + "Please enter a valid date.");
         }
       } else {
         break;
       }
     } while (null != intro || discontinuation.before(intro));
-
+    logger.debug("Setting computer date of discontinuation: " + discontinuation);
     return discontinuation;
 
   }
@@ -112,7 +124,9 @@ public class Controller {
    * @return the Company Id
    */
   public int setComputerCompanyId(Scanner sc) {
-    return sc.nextInt();
+    int companyId = sc.nextInt();
+    logger.debug("Setting company Id: " + companyId);
+    return companyId;
   }
 
   /**
@@ -126,6 +140,7 @@ public class Controller {
    */
   public Computer addComputer(String name, Date intro, Date discontinuation, int companyId) {
     Computer computer = new Computer(name, companyId, intro, discontinuation);
+    logger.debug("Adding computer: " + computer);
     serviceComputer.addComputer(computer);
     return computer;
   }
@@ -141,6 +156,7 @@ public class Controller {
    */
   public Computer updateComputer(String name, Date intro, Date discontinuation, int companyId) {
     Computer computer = new Computer(name, companyId, intro, discontinuation);
+    logger.debug("Updating computer: " + computer);
     serviceComputer.updateComputer(computer);
 
     return computer;
@@ -158,8 +174,8 @@ public class Controller {
     try {
       return dt.parse(timestamp);
     } catch (ParseException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
+      logger.error("Parse Exception");
     }
     return null;
   }
