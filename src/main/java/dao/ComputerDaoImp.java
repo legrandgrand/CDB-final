@@ -25,6 +25,8 @@ public class ComputerDaoImp implements ComputerDao {
       "UPDATE computer SET introduced = ?, discontinued = ?, company_id = ? WHERE name= ?";
   private static final String SELECT = 
       "SELECT name, introduced, discontinued, company_id FROM computer"; 
+  private static final String SELECT_ONE = 
+      "SELECT name, introduced, discontinued, company_id FROM computer"; 
   private static final String DELETE = 
       "DELETE FROM computer WHERE name= ?";
 
@@ -69,6 +71,29 @@ public class ComputerDaoImp implements ComputerDao {
     }
     logger.debug("Listed computers");
     return list;
+
+  }
+  
+  public Computer getComputer(String name) {
+    DaoFactory factory = DaoFactory.getInstance();
+    Computer computer =  new Computer ("", 1 , null, null);
+
+    try (Connection connection = factory.connectDb();
+        PreparedStatement statement = connection.prepareStatement(SELECT_ONE)) {
+      statement.setString(1, "name");
+      ResultSet resultat = statement.executeQuery(SELECT_ONE);
+      if (resultat.next()) {
+        name = resultat.getString("name");
+        int companyId = resultat.getInt("company_id");
+        Timestamp introduced = resultat.getTimestamp("introduced");
+        Timestamp discontinued = resultat.getTimestamp("discontinued");
+        computer = new Computer(name, companyId, introduced, discontinued);
+      }
+    } catch (SQLException e) {
+      logger.error(e.getMessage(), e);
+    }
+    logger.debug("Returning computer: "+computer);
+    return computer;
 
   }
 

@@ -9,6 +9,8 @@
   <groupId>computer-database</groupId>
   <artifactId>computer-database</artifactId>
   <version>0.0.1-SNAPSHOT</version> 
+  <packaging>war</packaging>
+  
   
   <dependencies>
 	<dependency>
@@ -40,26 +42,39 @@
 	    <scope>test</scope>
 	</dependency>
 	
+	<!-- log -->
 	<dependency>
+		<groupId>org.apache.logging.log4j</groupId>
+    	<artifactId>log4j-api</artifactId>
+    	<version>2.7</version>
+		</dependency>
+	<dependency>
+	    <groupId>org.apache.logging.log4j</groupId>
+	    <artifactId>log4j-core</artifactId>
+	    <version>2.7</version>
+	</dependency>
+	<dependency>
+	    <groupId>org.apache.logging.log4j</groupId>
+	    <artifactId>log4j-slf4j-impl</artifactId>
+	    <version>2.7</version>
+	</dependency>
 	
+	  <!-- https://mvnrepository.com/artifact/javax/javaee-api -->
+	<dependency>
+	    <groupId>javax</groupId>
+	    <artifactId>javaee-api</artifactId>
+	    <version>8.0</version>
+	    <scope>provided</scope>
+	</dependency>
 	
-    <groupId>org.apache.logging.log4j</groupId>
-    <artifactId>log4j-api</artifactId>
-    <version>2.7</version>
-</dependency>
-<dependency>
-    <groupId>org.apache.logging.log4j</groupId>
-    <artifactId>log4j-core</artifactId>
-    <version>2.7</version>
-</dependency>
-<dependency>
-    <groupId>org.apache.logging.log4j</groupId>
-    <artifactId>log4j-slf4j-impl</artifactId>
-    <version>2.7</version>
-</dependency>
-  
+	<!-- jstl -->
+	<dependency>
+        <groupId>jstl</groupId>
+        <artifactId>jstl</artifactId>
+        <version>1.2</version>
+    </dependency>
   </dependencies>
-  
+    
      <reporting>
       <plugins>
         <plugin>
@@ -76,5 +91,17 @@
         </plugin>
       </plugins>
     </reporting>
+    
+    <build>
+    <plugins>
+        <plugin>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+                <source>1.7</source>
+                <target>1.7</target>
+            </configuration>
+        </plugin>
+    </plugins>
+</build>
 
 </project>
