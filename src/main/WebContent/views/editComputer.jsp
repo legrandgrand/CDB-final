@@ -1,19 +1,21 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+        <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html>
 <head>
 <title>Computer Database</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap -->
-<link href="../css/bootstrap.min.css" rel="stylesheet" media="screen">
-<link href="../css/font-awesome.css" rel="stylesheet" media="screen">
-<link href="../css/main.css" rel="stylesheet" media="screen">
+<link href="./css/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="./css/font-awesome.css" rel="stylesheet" media="screen">
+<link href="./css/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="DashboardServlet"> Application - Computer Database </a>
+            <a class="navbar-brand" href="Dashboard"> Application - Computer Database </a>
         </div>
     </header>
     <section id="main">
@@ -30,7 +32,7 @@
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName">Computer name</label>
-                                <input type="text" class="form-control" id="computerName" placeholder="Computer name">
+                                <input type="text" class="form-control" id="computerName" placeholder="Computer name"><!-- Get name from dashboard -->
                             </div>
                             <div class="form-group">
                                 <label for="introduced">Introduced date</label>
@@ -43,14 +45,16 @@
                             <div class="form-group">
                                 <label for="companyId">Company</label>
                                 <select class="form-control" id="companyId" >
-                                    <option value="0">--</option>
+                                 	<c:forEach items="${companies}" var="company">
+                                    	<option value="${company.nameCompany}">${company.nameCompany}</option>
+                                    </c:forEach>  
                                 </select>
                             </div>            
                         </fieldset>
                         <div class="actions pull-right">
-                            <input type="submit" value="Edit" class="btn btn-primary">
+                            <input type="submit" value="Edit" class="btn btn-primary"> <!-- POST Update computer -->
                             or
-                            <a href="DashboardServlet" class="btn btn-default">Cancel</a>
+                            <a href="Dashboard" class="btn btn-default">Cancel</a>
                         </div>
                     </form>
                 </div>

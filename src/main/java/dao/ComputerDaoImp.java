@@ -69,7 +69,7 @@ public class ComputerDaoImp implements ComputerDao {
     } catch (SQLException e) {
       logger.error(e.getMessage(), e);
     }
-    logger.debug("Listed computers");
+    logger.debug("Size of list: " +  list.size());
     return list;
 
   }

@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html>
@@ -9,25 +9,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="utf-8">
 <!-- Bootstrap -->
-<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
-<link href="css/font-awesome.css" rel="stylesheet" media="screen">
-<link href="css/main.css" rel="stylesheet" media="screen">
+<link href="./css/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="./css/font-awesome.css" rel="stylesheet" media="screen">
+<link href="./css/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="DashboardServlet"> Application - Computer Database </a>
+            <a class="navbar-brand" href="Dashboard"> Application - Computer Database </a>
         </div>
     </header>
 
     <section id="main">
         <div class="container">
             <h1 id="homeTitle">
-                121 Computers found
+              ${fn:length(computers)} Computers found
             </h1>
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
-                    <form id="searchForm" action="#" method="GET" class="form-inline">
+                    <form id="searchForm" action="#" method="GET" class="form-inline"> <!-- GET one computer -->
 
                         <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" />
                         <input type="submit" id="searchsubmit" value="Filter by name"
@@ -35,13 +35,13 @@
                     </form>
                 </div>
                 <div class="pull-right">
-                    <a class="btn btn-success" id="addComputer" href="AddServlet">Add Computer</a> 
-                    <a class="btn btn-default" id="editComputer" href="EditServlet" onclick="$.fn.toggleEditMode();">Edit</a>
+                    <a class="btn btn-success" id="addComputer" href="AddComputer">Add Computer</a> 
+                    <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">Edit</a>
                 </div>
             </div>
         </div>
 
-        <form id="deleteForm" action="#" method="POST">
+        <form id="deleteForm" action="#" method="POST"><!-- Delete computer -->
             <input type="hidden" name="selection" value="">
         </form>
 
@@ -79,17 +79,18 @@
                 </thead>
                 <!-- Browse attribute computers -->
                 <tbody id="results">
-                    <tr>
-                        <td class="editMode">
+				  <c:forEach items="${computers}" var="computer">
+				    <tr>
+				        <td class="editMode">
                             <input type="checkbox" name="cb" class="cb" value="0">
                         </td>
-                        <td>
-                            <a href="EditServlet" onclick="">MacBook Pro</a>
-                        </td>
-                        <td>2006-01-10</td>
-                        <td></td>
-                        <td>Apple Inc.</td>
-                    
+				      <td> <a href="EditComputer" onclick=""><c:out value="${computer.name}" /></a></td><!-- Send that name to Edit Computer -->
+				      <td><c:out value="${computer.dateIntro}" /></td>
+				      <td><c:out value="${computer.dateDiscontinuation}" /></td>
+				      <td><c:out value="${computer.nameManufacturer}" /></td>
+				    </tr>
+				  </c:forEach>
+                    <tr>       
                 </tbody>
             </table>
         </div>
@@ -123,9 +124,9 @@
         </div>
 
     </footer>
-<script src="../js/jquery.min.js"></script>
-<script src="../js/bootstrap.min.js"></script>
-<script src="../js/dashboard.js"></script>
+<script src="./js/jquery.min.js"></script>
+<script src="./js/bootstrap.min.js"></script>
+<script src="./js/dashboard.js"></script>
 
 </body>
 </html>

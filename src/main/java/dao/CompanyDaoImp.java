@@ -8,7 +8,6 @@ import java.sql.Statement;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import model.Company;
 
@@ -70,15 +69,15 @@ public class CompanyDaoImp implements CompanyDao {
    * @see dao.CompanyDao#getCompany(java.lang.String)
    */
   @Override
-  public Optional<Integer> getCompany(String name) {
+  public int getCompany(String name) {
     DaoFactory factory = DaoFactory.getInstance();
-    Optional<Integer> companyId = null;
+    int companyId = 0;
     try (Connection connection = factory.connectDb();
         PreparedStatement statement = connection.prepareStatement(SELECT_ID)) {
       statement.setString(1, "name");
       ResultSet resultat = statement.executeQuery(SELECT_ID);
       if (resultat.next()) {
-        companyId = Optional.ofNullable(resultat.getInt("id"));
+        companyId = resultat.getInt("id");
       }
     } catch (SQLException e) {
       logger.error(e.getMessage(), e);

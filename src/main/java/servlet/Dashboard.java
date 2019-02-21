@@ -9,6 +9,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import controller.Controller;
+import dao.ComputerDaoImp;
 import model.Computer;
 import service.ServiceCompany;
 import service.ServiceComputer;
@@ -16,26 +21,21 @@ import service.ServiceComputer;
 /**
  * Servlet implementation class DashboardServlet
  */
-@WebServlet("/DashboardServlet")
-public class DashboardServlet extends HttpServlet {
+@WebServlet("/Dashboard")
+public class Dashboard extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-  private ServiceComputer serviceComputer;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public DashboardServlet() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
-
+  private static final Logger logger = LoggerFactory.getLogger(Controller.class);
+  
+      
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	  //List<Computer> list = serviceComputer.listComputer();
-	  //request.setAttribute("listComputer", list);
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {  
+	  List<Computer> computers = ServiceComputer.getInstance().listComputer();
+	  logger.debug("Size of computers: "+ computers.size());
+	  request.setAttribute("computers", computers);  
 	  this.getServletContext().getRequestDispatcher( "/views/dashboard.jsp" ).forward( request, response );
+	  
 	}
 
 	/**
@@ -43,6 +43,8 @@ public class DashboardServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+//	  String name = request.getParameter("selection");
+//	  ServiceComputer.getInstance().deleteComputer(name);
 		doGet(request, response);
 	}
 

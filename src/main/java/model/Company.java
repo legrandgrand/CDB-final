@@ -1,7 +1,7 @@
 package model;
 
 public class Company {
-
+//TODO: add id?
   private String nameCompany;
 
   public Company(String nameCompany) {
