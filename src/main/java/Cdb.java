@@ -12,11 +12,6 @@ public class Cdb {
 
   private static final Logger logger = LoggerFactory.getLogger(Cdb.class);
 
-  /**
-   * The main method.
-   *
-   * @param args the arguments
-   */
   public static void main(String[] args) {
     
     logger.debug("Starting program");

@@ -5,18 +5,19 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
 import model.Company;
+import model.Computer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class CompanyDaoImp implements CompanyDao {
 
-  private static final String SELECT_ID = "SELECT id FROM company WHERE name = ?";
+  private static final String SELECT_ID = "SELECT id, name FROM company WHERE name LIKE ";
   private static final String SELECT = "SELECT id, name FROM company";
 
   private static final Logger logger = LoggerFactory.getLogger(CompanyDaoImp.class);
@@ -51,7 +52,8 @@ public class CompanyDaoImp implements CompanyDao {
 
         while (resultat.next()) {
           String name = resultat.getString("name");
-          Company company = new Company(name);
+          int id = resultat.getInt("id");
+          Company company = new Company(name, id);
           list.add(company);
 
         }
@@ -69,20 +71,24 @@ public class CompanyDaoImp implements CompanyDao {
    * @see dao.CompanyDao#getCompany(java.lang.String)
    */
   @Override
-  public int getCompany(String name) {
+  public List<Company> getCompany(String name) {
+    List<Company> list = new ArrayList<Company>();
     DaoFactory factory = DaoFactory.getInstance();
-    int companyId = 0;
+    Company company=null;
+
     try (Connection connection = factory.connectDb();
-        PreparedStatement statement = connection.prepareStatement(SELECT_ID)) {
-      statement.setString(1, "name");
-      ResultSet resultat = statement.executeQuery(SELECT_ID);
-      if (resultat.next()) {
-        companyId = resultat.getInt("id");
+        Statement statement = connection.createStatement()) {
+      ResultSet resultat = statement.executeQuery(SELECT_ID +"'%"+name+"%'" );
+      while (resultat.next()) {
+        name = resultat.getString("name");
+        int companyId = resultat.getInt("id");
+        company = new Company(name, companyId);
+        list.add(company);
       }
     } catch (SQLException e) {
       logger.error(e.getMessage(), e);
     }
-    logger.debug("Returning company id:" + companyId);
-    return companyId;
+    logger.debug("Returning company: " + company);
+    return list;
   }
 }

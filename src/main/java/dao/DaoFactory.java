@@ -13,15 +13,12 @@ public class DaoFactory {
   private static final DaoFactory instance = new DaoFactory();
 
   public static final DaoFactory getInstance() {
-      try
-      {
-          Class.forName("com.mysql.jdbc.Driver");
-      }
-      catch (ClassNotFoundException e)
-      {
-          System.out.println(e.toString());
-      }
-      return instance;
+    try {
+      Class.forName("com.mysql.cj.jdbc.Driver");
+    } catch (ClassNotFoundException e) {
+      System.out.println(e.toString());
+    }
+    return instance;
   }
 
   private DaoFactory() {

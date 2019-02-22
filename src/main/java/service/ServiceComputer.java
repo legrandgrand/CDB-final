@@ -16,11 +16,11 @@ public class ServiceComputer {
   }
 
   /**
-   * Delete company.
+   * Delete computer.
    *
    * @param name the name
    */
-  public void deleteComputer(String name) {
+  public void delete(String name) {
     DaoFactory.getComputerDao().delete(name);
   }
 
@@ -29,7 +29,7 @@ public class ServiceComputer {
    *
    * @return the list
    */
-  public List<Computer> listComputer() {
+  public List<Computer> list() {
     return DaoFactory.getComputerDao().list();
   }
 
@@ -38,7 +38,7 @@ public class ServiceComputer {
    *
    * @param computer the computer
    */
-  public void addComputer(Computer computer) {
+  public void add(Computer computer) {
     DaoFactory.getComputerDao().add(computer);
 
   }
@@ -48,8 +48,12 @@ public class ServiceComputer {
    *
    * @param computer the computer
    */
-  public void updateComputer(Computer computer) {
+  public void update(Computer computer) {
     DaoFactory.getComputerDao().update(computer);
+  }
+  
+  public List<Computer> getComputer(String name) {
+    return DaoFactory.getComputerDao().getComputer(name);
   }
 
 }

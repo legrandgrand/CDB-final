@@ -48,7 +48,7 @@
                             </div>                  
                         </fieldset>
                         <div class="actions pull-right">
-                            <input type="submit" value="Add" class="btn btn-primary"> <!-- POST Add computer -->
+                            <input type="submit" value="Add" class="btn btn-primary">
                             or
                             <a href="Dashboard" class="btn btn-default">Cancel</a>
                         </div>

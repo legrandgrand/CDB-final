@@ -37,7 +37,6 @@ public class View {
     Scanner sc = new Scanner(System.in);
     try {
       int userChoice = sc.nextInt();
-      System.out.println("Choix user: " + userChoice);
       switch (userChoice) { //TODO: enums
         case 1:
           listCompanies();

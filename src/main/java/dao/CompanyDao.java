@@ -18,5 +18,5 @@ public interface CompanyDao {
    * @param name the Company name
    * @return the company
    */
-  public int getCompany(String name);
+  public List<Company> getCompany(String name);
 }

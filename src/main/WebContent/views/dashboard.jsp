@@ -84,7 +84,7 @@
 				        <td class="editMode">
                             <input type="checkbox" name="cb" class="cb" value="0">
                         </td>
-				      <td> <a href="EditComputer" onclick=""><c:out value="${computer.name}" /></a></td><!-- Send that name to Edit Computer -->
+				      <td> <a href="EditComputer?<%-- id=<c:out value="${computer.id}"/>& --%>name=<c:out value="${computer.name}"/>" onclick=""><c:out value="${computer.name}" /></a></td><!-- Send that name to Edit Computer -->
 				      <td><c:out value="${computer.dateIntro}" /></td>
 				      <td><c:out value="${computer.dateDiscontinuation}" /></td>
 				      <td><c:out value="${computer.nameManufacturer}" /></td>

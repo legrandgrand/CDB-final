@@ -24,14 +24,14 @@ public class ComputerDaoImp implements ComputerDao {
   private static final String UPDATE = 
       "UPDATE computer SET introduced = ?, discontinued = ?, company_id = ? WHERE name= ?";
   private static final String SELECT = 
-      "SELECT name, introduced, discontinued, company_id FROM computer"; 
+      "SELECT name, introduced, discontinued, company_id FROM computer";
   private static final String SELECT_ONE = 
-      "SELECT name, introduced, discontinued, company_id FROM computer"; 
+      "SELECT name, introduced, discontinued, company_id FROM computer ";
   private static final String DELETE = 
       "DELETE FROM computer WHERE name= ?";
 
   private static final ComputerDaoImp instance = new ComputerDaoImp();
-  
+
   private static final Logger logger = LoggerFactory.getLogger(ComputerDaoImp.class);
 
   /**
@@ -69,31 +69,33 @@ public class ComputerDaoImp implements ComputerDao {
     } catch (SQLException e) {
       logger.error(e.getMessage(), e);
     }
-    logger.debug("Size of list: " +  list.size());
+    logger.debug("Size of list: " + list.size());
     return list;
 
   }
-  
-  public Computer getComputer(String name) {
+
+  @Override
+  public List<Computer> getComputer(String name) {
+    List<Computer> list = new ArrayList<Computer>();
     DaoFactory factory = DaoFactory.getInstance();
-    Computer computer =  new Computer ("", 1 , null, null);
+    Computer computer=null;
 
     try (Connection connection = factory.connectDb();
-        PreparedStatement statement = connection.prepareStatement(SELECT_ONE)) {
-      statement.setString(1, "name");
-      ResultSet resultat = statement.executeQuery(SELECT_ONE);
-      if (resultat.next()) {
+        Statement statement = connection.createStatement()) {
+      ResultSet resultat = statement.executeQuery(SELECT_ONE + "WHERE name LIKE '%"+ name + "%'");
+      while (resultat.next()) {
         name = resultat.getString("name");
         int companyId = resultat.getInt("company_id");
         Timestamp introduced = resultat.getTimestamp("introduced");
         Timestamp discontinued = resultat.getTimestamp("discontinued");
         computer = new Computer(name, companyId, introduced, discontinued);
+        list.add(computer);
       }
     } catch (SQLException e) {
       logger.error(e.getMessage(), e);
     }
-    logger.debug("Returning computer: "+computer);
-    return computer;
+    logger.debug("Returning computer: " + computer);
+    return list;
 
   }
 

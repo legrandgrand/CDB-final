@@ -26,8 +26,7 @@ public class ServiceCompany {
     return DaoFactory.getCompanyDao().list();
   }
 
-  public int getCompany(String companyIdString) {
-    // TODO Auto-generated method stub
+  public List<Company> getCompany(String companyIdString) {
     return DaoFactory.getCompanyDao().getCompany(companyIdString);
   }
 

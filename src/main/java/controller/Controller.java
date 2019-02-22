@@ -45,7 +45,7 @@ public class Controller {
    */
   public List<Computer> listComputer() {
     logger.debug("Listing computers");
-    return serviceComputer.listComputer();
+    return serviceComputer.list();
   }
 
   /**
@@ -55,7 +55,7 @@ public class Controller {
    */
   public void deleteComputer(String name) {
     logger.debug("Deleting computer named" + name);
-    serviceComputer.deleteComputer(name);
+    serviceComputer.delete(name);
   }
 
   /**
@@ -141,7 +141,7 @@ public class Controller {
   public Computer addComputer(String name, Date intro, Date discontinuation, int companyId) {
     Computer computer = new Computer(name, companyId, intro, discontinuation);
     logger.debug("Adding computer: " + computer);
-    serviceComputer.addComputer(computer);
+    serviceComputer.add(computer);
     return computer;
   }
 
@@ -157,7 +157,7 @@ public class Controller {
   public Computer updateComputer(String name, Date intro, Date discontinuation, int companyId) {
     Computer computer = new Computer(name, companyId, intro, discontinuation);
     logger.debug("Updating computer: " + computer);
-    serviceComputer.updateComputer(computer);
+    serviceComputer.update(computer);
 
     return computer;
   }

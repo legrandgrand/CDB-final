@@ -19,7 +19,7 @@ public class CompanyDaoImpTest {
 
   @Test
   public void testList() {
-    Company company = new Company("OQO");
+    Company company = new Company("OQO",18);
     List<Company> companies = companyDaoImp.list();
     assertEquals(true, companies.contains(company));
   }
