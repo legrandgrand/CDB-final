@@ -34,6 +34,6 @@ public interface ComputerDao {
    */
   public void add(Computer computer);
   
-  public List<Computer> getComputer(String name);
+  public List<Computer> getComputer(int id);
 
 }

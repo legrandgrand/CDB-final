@@ -52,8 +52,8 @@ public class ServiceComputer {
     DaoFactory.getComputerDao().update(computer);
   }
   
-  public List<Computer> getComputer(String name) {
-    return DaoFactory.getComputerDao().getComputer(name);
+  public List<Computer> getComputer(int id) {
+    return DaoFactory.getComputerDao().getComputer(id);
   }
 
 }

@@ -23,33 +23,34 @@
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
                     <div class="label label-default pull-right">
-                        id: 0
+                        id: <c:out value="${computer.id}"/>
                     </div>
                     <h1>Edit Computer</h1>
 
                     <form action="EditComputer" method="POST">
-                        <input type="hidden" value="0" id="id"/> <!-- TODO: Change this value with the computer id -->
+                        <input type="hidden" value="<c:out value="${computer.id}"/> name="id" id="id"/>
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName">Computer name</label>
-								<input type="text" class="form-control" id="computerName" placeholder="Computer name" name="name">
+								<input type="text" class="form-control" id="computerName" placeholder="Computer name" name="name" value="<c:out value="${computer.name}" />">			
                             </div>
                             <div class="form-group">
                                 <label for="introduced">Introduced date</label>
-                                <input type="date" class="form-control" id="introduced" placeholder="Introduced date" name="intro">
+                                <input type="date" class="form-control" id="introduced" placeholder="Introduced date" name="intro" value="<c:out value="${computer.dateIntro}" />">
+                                
                             </div>
                             <div class="form-group">
                                 <label for="discontinued">Discontinued date</label>
-                                <input type="date" class="form-control" id="discontinued" placeholder="Discontinued date" name="disc">
+                                <input type="date" class="form-control" id="discontinued" placeholder="Discontinued date" name="disc" value="<c:out value="${computer.dateDiscontinuation}" />">                 
                             </div>
                             <div class="form-group">
                                 <label for="companyId">Company</label>
-                                <select class="form-control" id="companyId" >
-                                 	<c:forEach items="${companies}" var="company">
+                                <select class="form-control" id="companyId" name="companyname">
+                                   	<c:forEach items="${companies}" var="company">
                                     	<option value="${company.nameCompany}">${company.nameCompany}</option>
-                                    </c:forEach>  
+                                    </c:forEach>   
                                 </select>
-                            </div>            
+                            </div>           
                         </fieldset>
                         <div class="actions pull-right">
                             <input type="submit" value="Edit" class="btn btn-primary"> <!-- POST Update computer -->

@@ -61,19 +61,22 @@ public class AddComputer extends HttpServlet {
     String name = request.getParameter("name");
 
     String intro = request.getParameter("intro");
-    dateIntro = setDate(intro);
+    dateIntro = setComputerIntro(intro);
 
     String disc = request.getParameter("disc");
-    dateDisc = setDate(disc);
+    dateDisc = setComputerIntro(disc);//TODO: handle situation where disc>intro
 
     String companyIdString = request.getParameter("companyname");
+    System.out.println("name:" + name + "Intro:" +intro + "disc: "+ disc +"ID: "+ companyIdString);
     Company company = ServiceCompany.getInstance().getCompany(companyIdString).get(0);
 
     Computer computer = new Computer(name, company, dateIntro, dateDisc, 0);
     ServiceComputer.getInstance().add(computer);
-    doGet(request, response);
+    this.getServletContext().getRequestDispatcher("/Dashboard").forward(request,
+        response);
   }
 
+  
   /**
    * Sets the timestamp.
    *
@@ -86,9 +89,44 @@ public class AddComputer extends HttpServlet {
     try {
       return dt.parse(timestamp);
     } catch (ParseException e) {
-      e.printStackTrace();
-      logger.error("Parse Exception");
+      logger.error(e.getMessage(), e);
     }
     return null;
+  }
+  
+  /**
+   * Sets the computer intro.
+   *
+   * @param sc the scanner
+   * @return the timestamp
+   */
+  public Date setComputerIntro(String disc) {
+    Date intro = null;
+    if (!disc.equals("")) {
+      intro = setDate(disc);
+    }
+    logger.debug("Setting computer date of introduction: " + intro);
+    return intro;
+  }
+  
+  public Date setComputerDisc(Date intro, String disc) {//TODO: to change
+    Date discontinuation = null;
+    do {
+      if (!disc.equals("")) {
+        discontinuation = setDate(disc);
+        if (null != intro) { // TODO: null.equals()null
+          break;
+        }
+        if (discontinuation.before(intro)) {
+          logger.info("The date you entered happened before the date of introduction. "
+              + "Please enter a valid date.");
+        }
+      } else {
+        break;
+      }
+    } while (null != intro || discontinuation.before(intro));
+    logger.debug("Setting computer date of discontinuation: " + discontinuation);
+    return discontinuation;
+
   }
 }

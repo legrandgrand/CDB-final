@@ -55,7 +55,6 @@ public class Dashboard extends HttpServlet {
     // TODO Auto-generated method stub
     // String name = request.getParameter("selection");
     // ServiceComputer.getInstance().deleteComputer(name);
-    doGet(request, response);
   }
 
 }

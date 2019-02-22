@@ -175,8 +175,7 @@ public class Controller {
     try {
       return dt.parse(timestamp);
     } catch (ParseException e) {
-      e.printStackTrace();
-      logger.error("Parse Exception");
+      logger.error(e.getMessage(), e);
     }
     return null;
   }
