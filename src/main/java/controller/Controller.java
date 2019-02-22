@@ -123,10 +123,11 @@ public class Controller {
    * @param sc the scanner
    * @return the Company Id
    */
-  public int setComputerCompanyId(Scanner sc) {
-    int companyId = sc.nextInt();
+  public Company setComputerCompany(Scanner sc) {
+    String companyId = sc.nextLine();
     logger.debug("Setting company Id: " + companyId);
-    return companyId;
+    Company company = (Company) serviceCompany.getCompany(companyId).get(0);
+    return company;
   }
 
   /**
@@ -138,8 +139,8 @@ public class Controller {
    * @param companyId       the company id
    * @return the computer
    */
-  public Computer addComputer(String name, Date intro, Date discontinuation, int companyId) {
-    Computer computer = new Computer(name, companyId, intro, discontinuation);
+  public Computer addComputer(String name, Date intro, Date discontinuation, Company companyId) {
+    Computer computer = new Computer(name, companyId, intro, discontinuation, 0);
     logger.debug("Adding computer: " + computer);
     serviceComputer.add(computer);
     return computer;
@@ -154,8 +155,8 @@ public class Controller {
    * @param companyId       the company id
    * @return the computer
    */
-  public Computer updateComputer(String name, Date intro, Date discontinuation, int companyId) {
-    Computer computer = new Computer(name, companyId, intro, discontinuation);
+  public Computer updateComputer(String name, Date intro, Date discontinuation, Company companyId) {
+    Computer computer = new Computer(name, companyId, intro, discontinuation, 0);
     logger.debug("Updating computer: " + computer);
     serviceComputer.update(computer);
 

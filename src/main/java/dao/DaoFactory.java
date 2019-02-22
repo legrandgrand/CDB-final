@@ -12,6 +12,9 @@ public class DaoFactory {
 
   private static final DaoFactory instance = new DaoFactory();
 
+  /**
+   * Get instance of a new dao factory.
+   */
   public static final DaoFactory getInstance() {
     try {
       Class.forName("com.mysql.cj.jdbc.Driver");

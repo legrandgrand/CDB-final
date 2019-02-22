@@ -54,6 +54,7 @@ public class View {
           updateComputer();
           break;
         case 6:
+          System.out.println("Exiting program"); 
           sc.close();
           System.exit(0);
           break;
@@ -113,7 +114,7 @@ public class View {
 
       Date discontinuation = addComputerDateDisc(sc, intro);
 
-      int companyId = setComputerCompanyId(sc);
+      Company companyId = setComputerCompanyId(sc);
 
       Computer computer = controller.addComputer(name, intro, discontinuation, companyId);
 
@@ -174,9 +175,9 @@ public class View {
    * @param sc the sc
    * @return the int
    */
-  public int setComputerCompanyId(Scanner sc) {
-    System.out.println("Please enter the company's number");
-    return controller.setComputerCompanyId(sc);
+  public Company setComputerCompanyId(Scanner sc) {
+    System.out.println("Please enter the company's name");
+    return controller.setComputerCompany(sc);
   }
 
   /**
@@ -207,7 +208,7 @@ public class View {
 
       Date discontinuation = addComputerDateDisc(sc, intro);
 
-      int companyId = setComputerCompanyId(sc);
+      Company companyId = setComputerCompanyId(sc);
 
       Computer computer = controller.updateComputer(name, intro, discontinuation, companyId);
       System.out.println(computer + " was updated");

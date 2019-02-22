@@ -5,23 +5,32 @@ import java.util.Date;
 public class Computer {
 
   private String name;// Compulsory
-  private int nameManufacturer;// TODO: pas entier, mais company
+  private Company company;// TODO: pas entier, mais company
   private Date dateIntro;
   private Date dateDiscontinuation;// Has to be higher than date B
+  private int id;
 
   /**
    * Instantiates a new computer.
    *
    * @param name              the name PC
-   * @param nameManufacturer    the name manufacturer
    * @param dateIntro           the date intro
    * @param dateDiscontinuation the date discontinuation
    */
-  public Computer(String name, int nameManufacturer, Date dateIntro, Date dateDiscontinuation) {
+  public Computer(String name, Company company, Date dateIntro, Date dateDiscontinuation, int id) {
     this.setName(name);
-    this.setNameManufacturer(nameManufacturer);
+    this.setCompany(company);
     this.setDateIntro(dateIntro);
     this.setDateDiscontinuation(dateDiscontinuation);
+    this.setId(id);
+  }
+
+  public int getId() {
+    return id;
+  }
+
+  public void setId(int id) {
+    this.id = id;
   }
 
   /**
@@ -46,12 +55,12 @@ public class Computer {
     this.dateDiscontinuation = dateF;
   }
 
-  public int getNameManufacturer() {
-    return nameManufacturer;
+  public Company getCompany() {
+    return company;
   }
 
-  public void setNameManufacturer(int nameManuf) {
-    this.nameManufacturer = nameManuf;
+  public void setCompany(Company company) {
+    this.company = company;
   }
 
   public String getName() {
@@ -70,7 +79,7 @@ public class Computer {
   @Override
   public String toString() {
     return "Name: " + name + "\n Introduction : " + dateIntro + "\n Discontinuation: "
-        + dateDiscontinuation + "\n Company Number: " + nameManufacturer;
+        + dateDiscontinuation + "\n Company: " + company;
   }
 
   /*

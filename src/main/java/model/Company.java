@@ -1,22 +1,26 @@
 package model;
 
 public class Company {
-  //TODO: add id?
   private String nameCompany;
   private int companyId;
 
+  /**
+   * Instantiates a new company.
+   *
+   * @param nameCompany the name company
+   * @param companyId   the company id
+   */
   public Company(String nameCompany, int companyId) {
     super();
     this.nameCompany = nameCompany;
     this.companyId = companyId;
   }
-  
+
   /**
    * Instantiates a new company.
    */
   public Company() {
   }
-
 
   public int getCompanyId() {
     return companyId;
@@ -25,7 +29,6 @@ public class Company {
   public void setCompanyId(int companyId) {
     this.companyId = companyId;
   }
-
 
   public String getNameCompany() {
     return nameCompany;
@@ -42,9 +45,14 @@ public class Company {
    */
   @Override
   public String toString() {
-    return companyId + ". Company: " + nameCompany;
+    return nameCompany;
   }
 
+  /*
+   * (non-Javadoc)
+   * 
+   * @see java.lang.Object#hashCode()
+   */
   @Override
   public int hashCode() {
     final int prime = 31;
@@ -54,22 +62,33 @@ public class Company {
     return result;
   }
 
+  /*
+   * (non-Javadoc)
+   * 
+   * @see java.lang.Object#equals(java.lang.Object)
+   */
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
+    if (this == obj) {
       return true;
-    if (obj == null)
+    }
+    if (obj == null) {
       return false;
-    if (getClass() != obj.getClass())
+    }
+    if (getClass() != obj.getClass()) {
       return false;
+    }
     Company other = (Company) obj;
-    if (companyId != other.companyId)
+    if (companyId != other.companyId) {
       return false;
+    }
     if (nameCompany == null) {
-      if (other.nameCompany != null)
+      if (other.nameCompany != null) {
         return false;
-    } else if (!nameCompany.equals(other.nameCompany))
+      }
+    } else if (!nameCompany.equals(other.nameCompany)) {
       return false;
+    }
     return true;
   }
 

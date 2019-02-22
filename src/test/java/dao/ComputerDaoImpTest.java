@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import model.Company;
 import model.Computer;
 
 import org.junit.Before;
@@ -18,6 +19,7 @@ public class ComputerDaoImpTest {
   private static final String DATE_2 = "1997-10-03 00:00:00";
   private ComputerDaoImp computerDaoImp;
   SimpleDateFormat dt = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+  Company company = null;
 
   @Before
   public void setUp() throws Exception {
@@ -26,7 +28,8 @@ public class ComputerDaoImpTest {
 
   @Test
   public void testList() {
-    Computer computer = new Computer("Lenovo Thinkpad Edge 11", 36, null, null);
+    Company company = null;
+    Computer computer = new Computer("Lenovo Thinkpad Edge 11", company, null, null, 571);
     List<Computer> computers = computerDaoImp.list();
     assertEquals(true, computers.contains(computer));
   }
@@ -36,7 +39,9 @@ public class ComputerDaoImpTest {
 
     
     // Case 1: have company number, no dates
-    Computer computer = new Computer("MacBook Pro 15.4 inch", 1, null, null);
+    company.setCompanyId(1);
+    company.setNameCompany("Apple Inc.");
+    Computer computer = new Computer("MacBook Pro 15.4 inch", company, null, null, 1);
     computerDaoImp.update(computer);
 
     List<Computer> computers = computerDaoImp.list();
@@ -45,14 +50,14 @@ public class ComputerDaoImpTest {
     // Case 2: have company number, date of intro
     Date date1 = dt.parse(DATE_1);
     
-    computer = new Computer("MacBook Pro 15.4 inch", 1, date1, null);
+    computer = new Computer("MacBook Pro 15.4 inch", company, date1, null, 1);
     computerDaoImp.update(computer);
     computers = computerDaoImp.list();
     assertEquals(true, computers.contains(computer));
 
     // Case 3: have company number, date of intro and disc superior to date of intro
     Date date2 = dt.parse(DATE_2);
-    computer = new Computer("MacBook Pro 15.4 inch", 1, date1, date2);
+    computer = new Computer("MacBook Pro 15.4 inch", company, date1, date2, 1);
     computerDaoImp.update(computer);
 
     computers = computerDaoImp.list();
@@ -63,7 +68,7 @@ public class ComputerDaoImpTest {
   public void testAdd() throws ParseException {
     Date date1 = dt.parse(DATE_1);
     // Case 1: have company number, no dates
-    Computer computer = new Computer("TestComputer", 1, null, null);
+    Computer computer = new Computer("TestComputer", company, null, null, 580);
 
     computerDaoImp.add(computer);
 
@@ -71,7 +76,7 @@ public class ComputerDaoImpTest {
     assertEquals(true, computers.contains(computer));
 
     // Case 2: have company number, date of intro
-    computer = new Computer("TestComputer2", 1, date1, null);
+    computer = new Computer("TestComputer2", company, date1, null, 580);
     computerDaoImp.add(computer);
 
     computers = computerDaoImp.list();
@@ -79,7 +84,7 @@ public class ComputerDaoImpTest {
 
     // Case 3: have company number, date of intro and disc superior to date of intro
     Date date2 = dt.parse(DATE_2);
-    computer = new Computer("TestComputer3", 1, date1, date2);
+    computer = new Computer("TestComputer3", company, date1, date2, 580);
 
     computerDaoImp.add(computer);
 
@@ -87,7 +92,7 @@ public class ComputerDaoImpTest {
     assertEquals(true, computers.contains(computer));
 
     // Case 4: have company number, date of disc
-    computer = new Computer("TestComputer3", 1, null, date2);
+    computer = new Computer("TestComputer3", company, null, date2, 580);
 
     computerDaoImp.add(computer);
 
@@ -98,7 +103,7 @@ public class ComputerDaoImpTest {
   @Test
   public void testDelete() {
     // Case 1: successfull delete
-    Computer computer = new Computer("testComputer", 1, null, null);
+    Computer computer = new Computer("testComputer", company, null, null, 580);
     String computerName = computer.getName();
 
     computerDaoImp.delete(computerName);

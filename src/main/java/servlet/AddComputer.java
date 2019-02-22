@@ -27,6 +27,12 @@ public class AddComputer extends HttpServlet {
   private static final Logger logger = LoggerFactory.getLogger(AddComputer.class);
 
   /**
+   * Do get.
+   *
+   * @param request the request
+   * @param response the response
+   * @throws ServletException the servlet exception
+   * @throws IOException Signals that an I/O exception has occurred.
    * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
    */
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -39,6 +45,12 @@ public class AddComputer extends HttpServlet {
   }
 
   /**
+   * Do post.
+   *
+   * @param request the request
+   * @param response the response
+   * @throws ServletException the servlet exception
+   * @throws IOException Signals that an I/O exception has occurred.
    * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
    */
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -57,7 +69,7 @@ public class AddComputer extends HttpServlet {
     String companyIdString = request.getParameter("companyname");
     Company company = ServiceCompany.getInstance().getCompany(companyIdString).get(0);
 
-    Computer computer = new Computer(name, company.getCompanyId(), dateIntro, dateDisc);
+    Computer computer = new Computer(name, company, dateIntro, dateDisc, 0);
     ServiceComputer.getInstance().add(computer);
     doGet(request, response);
   }

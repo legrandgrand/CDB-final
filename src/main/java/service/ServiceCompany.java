@@ -2,7 +2,6 @@ package service;
 
 import dao.DaoFactory;
 import java.util.List;
-import java.util.Optional;
 
 import model.Company;
 
@@ -28,6 +27,10 @@ public class ServiceCompany {
 
   public List<Company> getCompany(String companyIdString) {
     return DaoFactory.getCompanyDao().getCompany(companyIdString);
+  }
+  
+  public List<Company> getCompanyFromId(int companyId) {
+    return DaoFactory.getCompanyDao().getCompanyFromId(companyId);
   }
 
 }

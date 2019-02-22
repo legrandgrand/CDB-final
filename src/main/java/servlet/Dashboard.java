@@ -1,7 +1,5 @@
 package servlet;
 
-import dao.ComputerDaoImp;
-
 import java.io.IOException;
 
 import java.util.List;
@@ -17,7 +15,6 @@ import model.Computer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import service.ServiceCompany;
 import service.ServiceComputer;
 
 @WebServlet("/Dashboard")
@@ -26,6 +23,12 @@ public class Dashboard extends HttpServlet {
   private static final Logger logger = LoggerFactory.getLogger(Dashboard.class);
 
   /**
+   * Do get.
+   *
+   * @param request the request
+   * @param response the response
+   * @throws ServletException the servlet exception
+   * @throws IOException Signals that an I/O exception has occurred.
    * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
    */
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -39,13 +42,19 @@ public class Dashboard extends HttpServlet {
   }
 
   /**
+   * Do post.
+   *
+   * @param request the request
+   * @param response the response
+   * @throws ServletException the servlet exception
+   * @throws IOException Signals that an I/O exception has occurred.
    * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
    */
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
     // TODO Auto-generated method stub
-    //	  String name = request.getParameter("selection");
-    //	  ServiceComputer.getInstance().deleteComputer(name);
+    // String name = request.getParameter("selection");
+    // ServiceComputer.getInstance().deleteComputer(name);
     doGet(request, response);
   }
 

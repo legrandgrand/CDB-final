@@ -22,7 +22,7 @@ import service.ServiceCompany;
 import service.ServiceComputer;
 
 /**
- * Servlet implementation class EditServlet
+ * Servlet implementation class EditServlet.
  */
 @WebServlet("/EditComputer")
 public class EditComputer extends HttpServlet {
@@ -30,6 +30,12 @@ public class EditComputer extends HttpServlet {
   private static final Logger logger = LoggerFactory.getLogger(EditComputer.class);
 
   /**
+   * Do get.
+   *
+   * @param request the request
+   * @param response the response
+   * @throws ServletException the servlet exception
+   * @throws IOException Signals that an I/O exception has occurred.
    * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
    */
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -42,6 +48,12 @@ public class EditComputer extends HttpServlet {
   }
 
   /**
+   * Do post.
+   *
+   * @param request the request
+   * @param response the response
+   * @throws ServletException the servlet exception
+   * @throws IOException Signals that an I/O exception has occurred.
    * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
    */
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -60,7 +72,7 @@ public class EditComputer extends HttpServlet {
     String companyIdString = request.getParameter("companyname");
     Company company = ServiceCompany.getInstance().getCompany(companyIdString).get(0);
 
-    Computer computer = new Computer(name, company.getCompanyId(), dateIntro, dateDisc);
+    Computer computer = new Computer(name, company, dateIntro, dateDisc, 0);//TODO: get Id
     ServiceComputer.getInstance().update(computer);
     doGet(request, response);
   }
