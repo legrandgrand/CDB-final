@@ -97,7 +97,7 @@ public class AddComputer extends HttpServlet {
   /**
    * Sets the computer intro.
    *
-   * @param sc the scanner
+   * @param disc the disc
    * @return the timestamp
    */
   public Date setComputerIntro(String disc) {
@@ -109,7 +109,14 @@ public class AddComputer extends HttpServlet {
     return intro;
   }
   
-  public Date setComputerDisc(Date intro, String disc) {//TODO: to change
+  /**
+   * Sets the computer disc.
+   *
+   * @param intro the intro
+   * @param disc the disc
+   * @return the date
+   */
+  public Date setComputerDisc(Date intro, String disc) { //TODO: to change
     Date discontinuation = null;
     do {
       if (!disc.equals("")) {

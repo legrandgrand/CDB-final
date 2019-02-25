@@ -24,51 +24,52 @@ public class Dashboard extends HttpServlet {
 
   /**
    * Do get.
-   *         <c:forEach items="${computers}" var="computer">
-   * @param request the request
+   * 
+   * @param request  the request
    * @param response the response
    * @throws ServletException the servlet exception
-   * @throws IOException Signals that an I/O exception has occurred.
+   * @throws IOException      Signals that an I/O exception has occurred.
    * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
    */
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
-      String pageString= null;
-      int page = 0;
-      try {
-        pageString = request.getQueryString();
-        if (!pageString.equals("")) {
-          page = Integer.parseInt(pageString);
-        }
-      } catch (NullPointerException e) {
+    String pageString = null;
+    int page = 0;
+    try {
+      pageString = request.getQueryString();
+      if (!pageString.equals("")) {
+        page = Integer.parseInt(pageString);
       }
+    } catch (NullPointerException e) {
+      logger.error("PageString not valid");
+    }
 
-      List<Computer> computers = ServiceComputer.getInstance().listPage(page);
-      logger.debug("Size of computers: " + computers.size());
-      request.setAttribute("computers", computers);
-      this.getServletContext().getRequestDispatcher("/views/dashboard.jsp").forward(request,
-          response);
+    List<Computer> computers = ServiceComputer.getInstance().listPage(page);
+    logger.debug("Size of computers: " + computers.size());
+    request.setAttribute("computers", computers);
+    this.getServletContext().getRequestDispatcher("/views/dashboard.jsp").forward(request,
+        response);
   }
 
   /**
    * Do post.
    *
-   * @param request the request
+   * @param request  the request
    * @param response the response
    * @throws ServletException the servlet exception
-   * @throws IOException Signals that an I/O exception has occurred.
+   * @throws IOException      Signals that an I/O exception has occurred.
    * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
    */
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
-     String idString = request.getParameter("selection");
-     String[] idStringTable =  idString.split(",");
-     for(String c : idStringTable) {
-       int id = Integer.parseInt(c);
-       Computer computer = ServiceComputer.getInstance().getComputer(id).get(0);
-       logger.debug("Deleting computer: " + computer.getName());
-       ServiceComputer.getInstance().delete(computer.getName());
-     }
+    String idString = request.getParameter("selection");
+    String[] idStringTable = idString.split(",");
+    for (String c : idStringTable) {
+      int id = Integer.parseInt(c);
+      Computer computer = ServiceComputer.getInstance().getComputer(id).get(0);
+      logger.debug("Deleting computer: " + computer.getName());
+      ServiceComputer.getInstance().delete(computer.getName());
+    }
   }
 
 }
