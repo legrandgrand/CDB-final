@@ -67,10 +67,10 @@ public class AddComputer extends HttpServlet {
     dateDisc = setComputerIntro(disc);//TODO: handle situation where disc>intro
 
     String companyIdString = request.getParameter("companyname");
-    System.out.println("name:" + name + "Intro:" +intro + "disc: "+ disc +"ID: "+ companyIdString);
     Company company = ServiceCompany.getInstance().getCompany(companyIdString).get(0);
 
     Computer computer = new Computer(name, company, dateIntro, dateDisc, 0);
+    logger.debug("Adding computer" + computer);
     ServiceComputer.getInstance().add(computer);
     this.getServletContext().getRequestDispatcher("/Dashboard").forward(request,
         response);

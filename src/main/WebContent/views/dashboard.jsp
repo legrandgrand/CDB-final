@@ -41,7 +41,7 @@
             </div>
         </div>
 
-        <form id="deleteForm" action="#" method="POST"><!-- Delete computer -->
+        <form id="deleteForm" action="Dashboard" method="POST">
             <input type="hidden" name="selection" value="">
         </form>
 
@@ -55,7 +55,7 @@
                         <th class="editMode" style="width: 60px; height: 22px;">
                             <input type="checkbox" id="selectall" /> 
                             <span style="vertical-align: top;">
-                                 -  <a href="#" id="deleteSelected" onclick="$.fn.deleteSelected();">
+                                 -  <a href="Dashboard" id="deleteSelected" onclick="$.fn.deleteSelected();">
                                         <i class="fa fa-trash-o fa-lg"></i>
                                     </a>
                             </span>
@@ -82,9 +82,9 @@
 				  <c:forEach items="${computers}" var="computer">
 				    <tr>
 				        <td class="editMode">
-                            <input type="checkbox" name="cb" class="cb" value="0">
+                            <input type="checkbox" class="cb" value="${computer.id}">
                         </td>
-				      <td> <a href="EditComputer?<c:out value="${computer.id}"/>" onclick=""><c:out value="${computer.name}" /></a></td><!-- Send that name to Edit Computer -->
+				      <td> <a href="EditComputer?<c:out value="${computer.id}"/>" onclick=""><c:out value="${computer.name}" /></a></td>
 				      <td><c:out value="${computer.dateIntro}" /></td>
 				      <td><c:out value="${computer.dateDiscontinuation}" /></td>
 				      <td><c:out value="${computer.company}" /></td>
@@ -100,17 +100,40 @@
         <div class="container text-center">
             <ul class="pagination">
                 <li>
-                    <a href="#" aria-label="Previous">
+                    <a href="Dashboard?0" aria-label="Previous">
                       <span aria-hidden="true">&laquo;</span>
                   </a>
               </li>
-              <li><a href="#">1</a></li>
-              <li><a href="#">2</a></li>
-              <li><a href="#">3</a></li>
-              <li><a href="#">4</a></li>
-              <li><a href="#">5</a></li>
+              <li><a href="Dashboard?0">1</a></li>
+              <li><a href="Dashboard?20">2</a></li>
+              <li><a href="Dashboard?40">3</a></li>
+              <li><a href="Dashboard?60">4</a></li>
+              <li><a href="Dashboard?80">5</a></li>
+              <li><a href="Dashboard?100">6</a></li>
+              <li><a href="Dashboard?120">7</a></li>
+              <li><a href="Dashboard?140">8</a></li>
+              <li><a href="Dashboard?160">9</a></li>
+              <li><a href="Dashboard?180">10</a></li>
+              <li><a href="Dashboard?200">11</a></li>
+              <li><a href="Dashboard?220">12</a></li>
+              <li><a href="Dashboard?240">13</a></li>
+              <li><a href="Dashboard?260">14</a></li>
+              <li><a href="Dashboard?280">15</a></li>
+              <li><a href="Dashboard?300">16</a></li>
+              <li><a href="Dashboard?320">17</a></li>
+              <li><a href="Dashboard?340">18</a></li>
+              <li><a href="Dashboard?360">19</a></li>
+              <li><a href="Dashboard?380">20</a></li>
+              <li><a href="Dashboard?400">21</a></li>
+              <li><a href="Dashboard?420">22</a></li>
+              <li><a href="Dashboard?440">23</a></li>
+              <li><a href="Dashboard?460">24</a></li>
+              <li><a href="Dashboard?480">25</a></li>
+              <li><a href="Dashboard?500">26</a></li>
+              <li><a href="Dashboard?520">27</a></li>
+              <li><a href="Dashboard?540">28</a></li>
               <li>
-                <a href="#" aria-label="Next">
+                <a href="Dashboard?540" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>

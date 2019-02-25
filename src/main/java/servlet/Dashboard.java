@@ -24,7 +24,7 @@ public class Dashboard extends HttpServlet {
 
   /**
    * Do get.
-   *
+   *         <c:forEach items="${computers}" var="computer">
    * @param request the request
    * @param response the response
    * @throws ServletException the servlet exception
@@ -33,12 +33,21 @@ public class Dashboard extends HttpServlet {
    */
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
-    List<Computer> computers = ServiceComputer.getInstance().list();
-    logger.debug("Size of computers: " + computers.size());
-    request.setAttribute("computers", computers);
-    this.getServletContext().getRequestDispatcher("/views/dashboard.jsp").forward(request,
-        response);
+      String pageString= null;
+      int page = 0;
+      try {
+        pageString = request.getQueryString();
+        if (!pageString.equals("")) {
+          page = Integer.parseInt(pageString);
+        }
+      } catch (NullPointerException e) {
+      }
 
+      List<Computer> computers = ServiceComputer.getInstance().listPage(page);
+      logger.debug("Size of computers: " + computers.size());
+      request.setAttribute("computers", computers);
+      this.getServletContext().getRequestDispatcher("/views/dashboard.jsp").forward(request,
+          response);
   }
 
   /**
@@ -52,9 +61,14 @@ public class Dashboard extends HttpServlet {
    */
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
-    // TODO Auto-generated method stub
-    // String name = request.getParameter("selection");
-    // ServiceComputer.getInstance().deleteComputer(name);
+     String idString = request.getParameter("selection");
+     String[] idStringTable =  idString.split(",");
+     for(String c : idStringTable) {
+       int id = Integer.parseInt(c);
+       Computer computer = ServiceComputer.getInstance().getComputer(id).get(0);
+       logger.debug("Deleting computer: " + computer.getName());
+       ServiceComputer.getInstance().delete(computer.getName());
+     }
   }
 
 }

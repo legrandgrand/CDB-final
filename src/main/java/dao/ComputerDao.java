@@ -36,4 +36,6 @@ public interface ComputerDao {
   
   public List<Computer> getComputer(int id);
 
+  public List<Computer> listPage(int page);
+
 }

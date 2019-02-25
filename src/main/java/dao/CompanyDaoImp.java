@@ -113,7 +113,7 @@ public class CompanyDaoImp implements CompanyDao {
     } catch (SQLException e) {
       logger.error(e.getMessage(), e);
     }
-    logger.debug("Returning company: " + company);
+    //logger.debug("Returning company: " + company);
     return list;
   }
 }

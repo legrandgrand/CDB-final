@@ -77,10 +77,11 @@ public class EditComputer extends HttpServlet {
     dateDisc = setComputerIntro(disc);//TODO: handle situation where disc>intro
 
     String companyIdString = request.getParameter("companyname");
-    System.out.println("name:" + name + "Intro:" +intro + "disc: "+ disc +"ID: "+ companyIdString);
-    Company company = ServiceCompany.getInstance().getCompany(companyIdString).get(0);//TODO: ça marche pas ici
 
-    Computer computer = new Computer(name, company, dateIntro, dateDisc, 0);//TODO: get Id
+    Company company = ServiceCompany.getInstance().getCompany(companyIdString).get(0);
+
+    Computer computer = new Computer(name, company, dateIntro, dateDisc, 0);
+    logger.debug("Updating computer" + computer);
     ServiceComputer.getInstance().update(computer);
     this.getServletContext().getRequestDispatcher("/Dashboard").forward(request,
         response);
