@@ -1,12 +1,10 @@
 package servlet;
 
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Scanner;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -46,8 +44,8 @@ public class EditComputer extends HttpServlet {
     logger.debug("Size of companies: " + companies.size());
     request.setAttribute("companies", companies);
     
-    String StringId = request.getQueryString();
-    int id = Integer.parseInt(StringId);  
+    String stringId = request.getQueryString();
+    int id = Integer.parseInt(stringId);  
     Computer computer = ServiceComputer.getInstance().getComputer(id).get(0);
     request.setAttribute("computer", computer);
     this.getServletContext().getRequestDispatcher("/views/editComputer.jsp").forward(request,
@@ -107,7 +105,7 @@ public class EditComputer extends HttpServlet {
   /**
    * Sets the computer intro.
    *
-   * @param sc the scanner
+   * @param disc the disc
    * @return the timestamp
    */
   public Date setComputerIntro(String disc) {
@@ -119,7 +117,14 @@ public class EditComputer extends HttpServlet {
     return intro;
   }
   
-  public Date setComputerDisc(Date intro, String disc) {//TODO: to change
+  /**
+   * Sets the computer disc.
+   *
+   * @param intro the intro
+   * @param disc the disc
+   * @return the date
+   */
+  public Date setComputerDisc(Date intro, String disc) { //TODO: to change
     Date discontinuation = null;
     do {
       if (!disc.equals("")) {
