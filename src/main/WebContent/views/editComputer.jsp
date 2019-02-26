@@ -36,19 +36,26 @@
                             </div>
                             <div class="form-group">
                                 <label for="introduced">Introduced date</label>
-                                <input type="date" class="form-control" id="introduced" placeholder="Introduced date" name="intro" value="<c:out value="${computer.dateIntro}" />">
+                                <input type="date" class="form-control" id="introduced" placeholder="Introduced date" name="intro" value='${fn:substringBefore(computer.dateIntro," 00:00:00.0")}'>
                                 
                             </div>
                             <div class="form-group">
                                 <label for="discontinued">Discontinued date</label>
-                                <input type="date" class="form-control" id="discontinued" placeholder="Discontinued date" name="disc" value="<c:out value="${computer.dateDiscontinuation}" />">                 
+                                <input type="date" class="form-control" id="discontinued" placeholder="Discontinued date" name="disc" value='${fn:substringBefore(computer.dateDiscontinuation," 00:00:00.0")}'>               
                             </div>
                             <div class="form-group">
                                 <label for="companyId">Company</label>
                                 <select class="form-control" id="companyId" name="companyname">
-                                   	<c:forEach items="${companies}" var="company">
+                                <c:forEach items="${companies}" var="company">
+                                	<c:choose>
+									  <c:when test="${computer.company.companyId == company.companyId}">
+									    <option selected="selected" value="${company.nameCompany}">${company.nameCompany}</option>
+									  </c:when>
+									  <c:otherwise>
                                     	<option value="${company.nameCompany}">${company.nameCompany}</option>
-                                    </c:forEach>   
+                                   	  </c:otherwise>
+									</c:choose>
+                                </c:forEach> 
                                 </select>
                             </div>           
                         </fieldset>
