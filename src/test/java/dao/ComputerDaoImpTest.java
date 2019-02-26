@@ -19,7 +19,6 @@ public class ComputerDaoImpTest {
   private static final String DATE_2 = "1997-10-03 00:00:00";
   private ComputerDaoImp computerDaoImp;
   SimpleDateFormat dt = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
-  Company company = null;
 
   @Before
   public void setUp() throws Exception {
@@ -28,7 +27,7 @@ public class ComputerDaoImpTest {
 
   @Test
   public void testList() {
-    Company company = null;
+    Company company = new Company ("Apple Inc.", 1);
     Computer computer = new Computer("Lenovo Thinkpad Edge 11", company, null, null, 571);
     List<Computer> computers = computerDaoImp.list();
     assertEquals(true, computers.contains(computer));
@@ -37,10 +36,8 @@ public class ComputerDaoImpTest {
   @Test
   public void testUpdate() throws ParseException {
 
-    
+    Company company = new Company ("Apple Inc.", 1);
     // Case 1: have company number, no dates
-    company.setCompanyId(1);
-    company.setNameCompany("Apple Inc.");
     Computer computer = new Computer("MacBook Pro 15.4 inch", company, null, null, 1);
     computerDaoImp.update(computer);
 
@@ -68,6 +65,7 @@ public class ComputerDaoImpTest {
   public void testAdd() throws ParseException {
     Date date1 = dt.parse(DATE_1);
     // Case 1: have company number, no dates
+    Company company = new Company ("Apple Inc.", 1);
     Computer computer = new Computer("TestComputer", company, null, null, 580);
 
     computerDaoImp.add(computer);
@@ -103,6 +101,7 @@ public class ComputerDaoImpTest {
   @Test
   public void testDelete() {
     // Case 1: successfull delete
+    Company company = new Company ("Apple Inc.", 1);
     Computer computer = new Computer("testComputer", company, null, null, 580);
     String computerName = computer.getName();
 

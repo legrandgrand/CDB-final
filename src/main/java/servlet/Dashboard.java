@@ -1,7 +1,6 @@
 package servlet;
 
 import java.io.IOException;
-
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -42,6 +41,8 @@ public class Dashboard extends HttpServlet {
       }
     } catch (NullPointerException e) {
       logger.error("PageString not valid");
+    } catch (NumberFormatException e) {
+      logger.error("PageString not valid");
     }
 
     List<Computer> computers = ServiceComputer.getInstance().listPage(page);
@@ -62,14 +63,8 @@ public class Dashboard extends HttpServlet {
    */
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
-    String idString = request.getParameter("selection");
-    String[] idStringTable = idString.split(",");
-    for (String c : idStringTable) {
-      int id = Integer.parseInt(c);
-      Computer computer = ServiceComputer.getInstance().getComputer(id).get(0);
-      logger.debug("Deleting computer: " + computer.getName());
-      ServiceComputer.getInstance().delete(computer.getName());
-    }
+
+    
   }
 
 }

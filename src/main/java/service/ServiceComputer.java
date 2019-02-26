@@ -56,6 +56,10 @@ public class ServiceComputer {
     return DaoFactory.getComputerDao().getComputer(id);
   }
   
+  public List<Computer> getComputerFromName(String name) {
+    return DaoFactory.getComputerDao().getComputerFromName(name);
+  }
+  
   public List<Computer> listPage(int page) {
     return DaoFactory.getComputerDao().listPage(page);
   }

@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 
 import service.ServiceCompany;
 import service.ServiceComputer;
-
 import view.View;
 
 public class Cdb {

@@ -155,6 +155,38 @@ public class ComputerDaoImp implements ComputerDao {
 
   }
   
+  @Override
+  public List<Computer> getComputerFromName(String name) {
+    List<Computer> list = new ArrayList<Computer>();
+    DaoFactory factory = DaoFactory.getInstance();
+    Company company = null;
+    Computer computer = null;
+    try (Connection connection = factory.connectDb();
+        Statement statement = connection.createStatement()) {
+      ResultSet resultat = statement.executeQuery(SELECT_ONE + "WHERE name LIKE '%" + name + "%'");
+      while (resultat.next()) {
+        name = resultat.getString("name");
+
+        Timestamp introduced = resultat.getTimestamp("introduced");
+        Timestamp discontinued = resultat.getTimestamp("discontinued");
+        int id = resultat.getInt("id");
+        int companyId = resultat.getInt("company_id");
+        if (companyId != 0) {
+          company = DaoFactory.getCompanyDao().getCompanyFromId(companyId).get(0);
+        } else {
+          company = null;
+        }
+        computer = new Computer(name, company, introduced, discontinued, id);
+        list.add(computer);
+      }
+    } catch (SQLException e) {
+      logger.error(e.getMessage(), e);
+    }
+    logger.debug("Returning computer: " + computer);
+    return list;
+
+  }
+  
   
 
   /*
