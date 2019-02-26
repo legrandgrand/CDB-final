@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import service.ServiceCompany;
 import service.ServiceComputer;
+import validator.Validator;
 
 public class Controller {
   private ServiceComputer serviceComputer;
@@ -63,8 +64,9 @@ public class Controller {
    *
    * @param sc the scanner
    * @return the ComputerName
+   * @throws Exception 
    */
-  public String setComputerName(Scanner sc) {
+  public String setComputerName(Scanner sc) throws Exception {
     String name = sc.nextLine();
     logger.debug("Setting computer name: " + name);
     return name;
@@ -101,7 +103,7 @@ public class Controller {
       timestamp = sc.nextLine();
       if (!timestamp.equals("")) {
         discontinuation = setDate(timestamp);
-        if (null != intro) { // TODO: null.equals()null
+        if (null != intro) {
           break;
         }
         if (discontinuation.before(intro)) {

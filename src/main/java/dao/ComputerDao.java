@@ -38,4 +38,6 @@ public interface ComputerDao {
 
   public List<Computer> listPage(int page);
 
+  List<Computer> getComputerFromName(String name);
+
 }

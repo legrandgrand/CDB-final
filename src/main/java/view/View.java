@@ -121,14 +121,17 @@ public class View {
       System.out.println(computer + " a été rajouté");
       mainMenu();
     } catch (IllegalArgumentException e) {
-      System.out
-          .println("The argument you entered doesn't have the correct format. Please try again.");
+      System.out.println(
+          "The argument you entered doesn't have the correct format. Please try again.");
 
       addComputer();
     } catch (InputMismatchException e) {
       System.out.println("Not a valid input. Please try again.");
       addComputer();
 
+    } catch (Exception e) {
+      System.out.println(e);
+      addComputer();
     }
   }
 
@@ -149,8 +152,9 @@ public class View {
    *
    * @param sc the sc
    * @return the string
+   * @throws Exception 
    */
-  public String setComputerName(Scanner sc) {
+  public String setComputerName(Scanner sc) throws Exception {
     System.out.println("Please enter the computer's name you want to add or update");
     return controller.setComputerName(sc);
   }
@@ -220,6 +224,10 @@ public class View {
       updateComputer();
     } catch (InputMismatchException e) {
       System.out.println("Not a valid input. Please try again.");
+      updateComputer();
+    }
+    catch (Exception e) {
+      System.out.println(e);
       updateComputer();
     }
   }

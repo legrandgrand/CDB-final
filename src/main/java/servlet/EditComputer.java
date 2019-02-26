@@ -45,9 +45,10 @@ public class EditComputer extends HttpServlet {
     request.setAttribute("companies", companies);
     
     String stringId = request.getQueryString();
-    int id = Integer.parseInt(stringId);  
+    int id = Integer.parseInt(stringId);   
     Computer computer = ServiceComputer.getInstance().getComputer(id).get(0);
     request.setAttribute("computer", computer);
+    
     this.getServletContext().getRequestDispatcher("/views/editComputer.jsp").forward(request,
         response);
   }
@@ -67,7 +68,7 @@ public class EditComputer extends HttpServlet {
     Date dateIntro = null;
 
     String name = request.getParameter("name");
-
+    
     String intro = request.getParameter("intro");
     dateIntro = setComputerIntro(intro);
 
@@ -75,7 +76,6 @@ public class EditComputer extends HttpServlet {
     dateDisc = setComputerIntro(disc);//TODO: handle situation where disc>intro
 
     String companyIdString = request.getParameter("companyname");
-
     Company company = ServiceCompany.getInstance().getCompany(companyIdString).get(0);
 
     Computer computer = new Computer(name, company, dateIntro, dateDisc, 0);
