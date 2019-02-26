@@ -32,10 +32,10 @@ public class EditComputer extends HttpServlet {
   /**
    * Do get.
    *
-   * @param request the request
+   * @param request  the request
    * @param response the response
    * @throws ServletException the servlet exception
-   * @throws IOException Signals that an I/O exception has occurred.
+   * @throws IOException      Signals that an I/O exception has occurred.
    * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
    */
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -43,12 +43,12 @@ public class EditComputer extends HttpServlet {
     List<Company> companies = ServiceCompany.getInstance().listCompany();
     logger.debug("Size of companies: " + companies.size());
     request.setAttribute("companies", companies);
-    
+
     String stringId = request.getQueryString();
-    int id = Integer.parseInt(stringId);   
+    int id = Integer.parseInt(stringId);
     Computer computer = ServiceComputer.getInstance().getComputer(id).get(0);
     request.setAttribute("computer", computer);
-    
+
     this.getServletContext().getRequestDispatcher("/views/editComputer.jsp").forward(request,
         response);
   }
@@ -56,10 +56,10 @@ public class EditComputer extends HttpServlet {
   /**
    * Do post.
    *
-   * @param request the request
+   * @param request  the request
    * @param response the response
    * @throws ServletException the servlet exception
-   * @throws IOException Signals that an I/O exception has occurred.
+   * @throws IOException      Signals that an I/O exception has occurred.
    * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
    */
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -68,21 +68,21 @@ public class EditComputer extends HttpServlet {
     Date dateIntro = null;
 
     String name = request.getParameter("name");
-    
+
     String intro = request.getParameter("intro");
     dateIntro = setComputerIntro(intro);
 
     String disc = request.getParameter("disc");
-    dateDisc = setComputerIntro(disc);//TODO: handle situation where disc>intro
+    dateDisc = setComputerIntro(disc);// TODO: handle situation where disc>intro
 
     String companyIdString = request.getParameter("companyname");
-    Company company = ServiceCompany.getInstance().getCompany(companyIdString).get(0);
+    int companyId = Integer.parseInt(companyIdString);
+    Company company = ServiceCompany.getInstance().getCompanyFromId(companyId).get(0);
 
     Computer computer = new Computer(name, company, dateIntro, dateDisc, 0);
     logger.debug("Updating computer" + computer);
     ServiceComputer.getInstance().update(computer);
-    this.getServletContext().getRequestDispatcher("/Dashboard").forward(request,
-        response);
+    this.getServletContext().getRequestDispatcher("/Dashboard").forward(request, response);
   }
 
   /**
@@ -101,7 +101,7 @@ public class EditComputer extends HttpServlet {
     }
     return null;
   }
-  
+
   /**
    * Sets the computer intro.
    *
@@ -116,15 +116,15 @@ public class EditComputer extends HttpServlet {
     logger.debug("Setting computer date of introduction: " + intro);
     return intro;
   }
-  
+
   /**
    * Sets the computer disc.
    *
    * @param intro the intro
-   * @param disc the disc
+   * @param disc  the disc
    * @return the date
    */
-  public Date setComputerDisc(Date intro, String disc) { //TODO: to change
+  public Date setComputerDisc(Date intro, String disc) { // TODO: to change
     Date discontinuation = null;
     do {
       if (!disc.equals("")) {

@@ -29,10 +29,10 @@ public class AddComputer extends HttpServlet {
   /**
    * Do get.
    *
-   * @param request the request
+   * @param request  the request
    * @param response the response
    * @throws ServletException the servlet exception
-   * @throws IOException Signals that an I/O exception has occurred.
+   * @throws IOException      Signals that an I/O exception has occurred.
    * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
    */
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -47,10 +47,10 @@ public class AddComputer extends HttpServlet {
   /**
    * Do post.
    *
-   * @param request the request
+   * @param request  the request
    * @param response the response
    * @throws ServletException the servlet exception
-   * @throws IOException Signals that an I/O exception has occurred.
+   * @throws IOException      Signals that an I/O exception has occurred.
    * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
    */
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -64,19 +64,18 @@ public class AddComputer extends HttpServlet {
     dateIntro = setComputerIntro(intro);
 
     String disc = request.getParameter("disc");
-    dateDisc = setComputerIntro(disc);//TODO: handle situation where disc>intro
+    dateDisc = setComputerIntro(disc);// TODO: handle situation where disc>intro
 
     String companyIdString = request.getParameter("companyname");
-    Company company = ServiceCompany.getInstance().getCompany(companyIdString).get(0);
+    int companyId = Integer.parseInt(companyIdString);
+    Company company = ServiceCompany.getInstance().getCompanyFromId(companyId).get(0);
 
     Computer computer = new Computer(name, company, dateIntro, dateDisc, 0);
     logger.debug("Adding computer" + computer);
     ServiceComputer.getInstance().add(computer);
-    this.getServletContext().getRequestDispatcher("/Dashboard").forward(request,
-        response);
+    this.getServletContext().getRequestDispatcher("/Dashboard").forward(request, response);
   }
 
-  
   /**
    * Sets the timestamp.
    *
@@ -93,7 +92,7 @@ public class AddComputer extends HttpServlet {
     }
     return null;
   }
-  
+
   /**
    * Sets the computer intro.
    *
@@ -108,15 +107,15 @@ public class AddComputer extends HttpServlet {
     logger.debug("Setting computer date of introduction: " + intro);
     return intro;
   }
-  
+
   /**
    * Sets the computer disc.
    *
    * @param intro the intro
-   * @param disc the disc
+   * @param disc  the disc
    * @return the date
    */
-  public Date setComputerDisc(Date intro, String disc) { //TODO: to change
+  public Date setComputerDisc(Date intro, String disc) { // TODO: to change
     Date discontinuation = null;
     do {
       if (!disc.equals("")) {
