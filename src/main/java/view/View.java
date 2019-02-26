@@ -37,7 +37,7 @@ public class View {
     Scanner sc = new Scanner(System.in);
     try {
       int userChoice = sc.nextInt();
-      switch (userChoice) { //TODO: enums
+      switch (userChoice) { // TODO: enums
         case 1:
           listCompanies();
           break;
@@ -54,7 +54,7 @@ public class View {
           updateComputer();
           break;
         case 6:
-          System.out.println("Exiting program"); 
+          System.out.println("Exiting program");
           sc.close();
           System.exit(0);
           break;
@@ -121,8 +121,8 @@ public class View {
       System.out.println(computer + " a été rajouté");
       mainMenu();
     } catch (IllegalArgumentException e) {
-      System.out.println(
-          "The argument you entered doesn't have the correct format. Please try again.");
+      System.out
+          .println("The argument you entered doesn't have the correct format. Please try again.");
 
       addComputer();
     } catch (InputMismatchException e) {
@@ -141,7 +141,7 @@ public class View {
    * @param sc the sc
    * @return the date
    */
-  public Date addComputerDateIntro(Scanner sc) {
+  public Date addComputerDateIntro(Scanner sc) throws Exception {
     System.out.println("Please enter the date of introduction. "
         + "Format should be YYYY-MM-DD. (If the date is unknown, just press enter.)");
     return controller.setComputerIntro(sc);
@@ -152,7 +152,7 @@ public class View {
    *
    * @param sc the sc
    * @return the string
-   * @throws Exception 
+   * @throws Exception exception
    */
   public String setComputerName(Scanner sc) throws Exception {
     System.out.println("Please enter the computer's name you want to add or update");
@@ -166,7 +166,7 @@ public class View {
    * @param intro the intro
    * @return the date
    */
-  public Date addComputerDateDisc(Scanner sc, Date intro) {
+  public Date addComputerDateDisc(Scanner sc, Date intro) throws Exception {
     System.out
         .println("Please enter the date of discontinuation. " + "Format should be YYYY-MM-DD. "
             + "(If the date is unknown or the computer is still continuing, just press enter.)");
@@ -225,8 +225,7 @@ public class View {
     } catch (InputMismatchException e) {
       System.out.println("Not a valid input. Please try again.");
       updateComputer();
-    }
-    catch (Exception e) {
+    } catch (Exception e) {
       System.out.println(e);
       updateComputer();
     }

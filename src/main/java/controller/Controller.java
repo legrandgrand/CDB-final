@@ -64,12 +64,16 @@ public class Controller {
    *
    * @param sc the scanner
    * @return the ComputerName
-   * @throws Exception 
+   * @throws Exception exception
    */
   public String setComputerName(Scanner sc) throws Exception {
     String name = sc.nextLine();
-    logger.debug("Setting computer name: " + name);
-    return name;
+    if (Validator.validateName(name)) {
+      logger.debug("Setting computer name: " + name);
+      return name;
+    } else {
+      throw new Exception("Invalid computer name");
+    }
   }
 
   /**
@@ -78,12 +82,16 @@ public class Controller {
    * @param sc the scanner
    * @return the timestamp
    */
-  public Date setComputerIntro(Scanner sc) {
+  public Date setComputerIntro(Scanner sc) throws Exception {
     Date intro = null;
     String timestamp = null;
     timestamp = sc.nextLine();
-    if (!timestamp.equals("")) {
-      intro = setDate(timestamp);
+    if (Validator.validateIntro(timestamp)) {
+      if (!timestamp.equals("")) {
+        intro = setDate(timestamp);
+      }
+    } else {
+      throw new Exception("Invalid computer name");
     }
     logger.debug("Setting computer date of introduction: " + intro);
     return intro;
@@ -96,24 +104,30 @@ public class Controller {
    * @param intro the date of introduction
    * @return the date of discontinuation
    */
-  public Date setComputerDisc(Scanner sc, Date intro) {
+  public Date setComputerDisc(Scanner sc, Date intro) throws Exception {
     Date discontinuation = null;
     String timestamp = null;
     do {
       timestamp = sc.nextLine();
-      if (!timestamp.equals("")) {
-        discontinuation = setDate(timestamp);
-        if (null != intro) {
+      if (Validator.validateIntro(timestamp)) {
+        if (!timestamp.equals("")) {
+          discontinuation = setDate(timestamp);
+          if (null != intro) {
+            break;
+          }
+          if (discontinuation.before(intro)) {
+            logger.info("The date you entered happened before the date of introduction. "
+                + "Please enter a valid date.");
+          }
+        } else {
           break;
         }
-        if (discontinuation.before(intro)) {
-          logger.info("The date you entered happened before the date of introduction. "
-              + "Please enter a valid date.");
-        }
       } else {
-        break;
+        throw new Exception("Invalid computer name");
       }
+
     } while (null != intro || discontinuation.before(intro));
+
     logger.debug("Setting computer date of discontinuation: " + discontinuation);
     return discontinuation;
 
@@ -126,9 +140,9 @@ public class Controller {
    * @return the Company Id
    */
   public Company setComputerCompany(Scanner sc) {
-    String companyId = sc.nextLine();
-    logger.debug("Setting company Id: " + companyId);
-    Company company = (Company) serviceCompany.getCompany(companyId).get(0);
+    String companyName = sc.nextLine();
+    logger.debug("Setting company Id: " + companyName);
+    Company company = (Company) serviceCompany.getCompany(companyName).get(0);
     return company;
   }
 
