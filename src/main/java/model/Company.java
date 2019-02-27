@@ -112,7 +112,7 @@ public class Company {
     public CompanyBuilder setCompanyId(int companyId) {
       this.companyId = companyId;
       return this;
-    }
+    } 
   }
 
 }

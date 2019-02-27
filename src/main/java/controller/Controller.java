@@ -190,7 +190,7 @@ public class Controller {
     try {
       return dt.parse(timestamp);
     } catch (ParseException e) {
-      logger.error(e.getMessage(), e);
+      logger.error(e.getMessage(), e); 
     }
     return null;
   }

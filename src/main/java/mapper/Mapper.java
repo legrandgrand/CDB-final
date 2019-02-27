@@ -15,7 +15,7 @@ public class Mapper {
 
   public static final Mapper getInstance() {
     return instance;
-  }
+  } 
 
   /**
    * Instantiates a new company dao imp.

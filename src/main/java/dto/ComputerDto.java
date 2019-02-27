@@ -77,7 +77,7 @@ public class ComputerDto {
   public void setCompanyName(String companyName) {
     this.companyName = companyName;
   }
-
+ 
   @Override
   public String toString() {
     return "ComputerDto [idComputer=" + idComputer + ", name=" + name
