@@ -33,5 +33,11 @@ public interface ComputerDao {
    * @param computer the computer
    */
   public void add(Computer computer);
+  
+  public List<Computer> getComputer(int id);
+
+  public List<Computer> listPage(int page);
+
+  List<Computer> getComputerFromName(String name);
 
 }

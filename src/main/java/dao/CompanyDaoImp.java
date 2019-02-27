@@ -1,14 +1,12 @@
 package dao;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import model.Company;
 
@@ -17,7 +15,8 @@ import org.slf4j.LoggerFactory;
 
 public class CompanyDaoImp implements CompanyDao {
 
-  private static final String SELECT_ID = "SELECT id FROM company WHERE name = ?";
+  private static final String SELECT_ID = "SELECT id, name FROM company WHERE name LIKE ";
+  private static final String SELECT_NAME = "SELECT id, name FROM company WHERE id= ";
   private static final String SELECT = "SELECT id, name FROM company";
 
   private static final Logger logger = LoggerFactory.getLogger(CompanyDaoImp.class);
@@ -52,7 +51,8 @@ public class CompanyDaoImp implements CompanyDao {
 
         while (resultat.next()) {
           String name = resultat.getString("name");
-          Company company = new Company(name);
+          int id = resultat.getInt("id");
+          Company company = new Company(name, id);
           list.add(company);
 
         }
@@ -70,20 +70,51 @@ public class CompanyDaoImp implements CompanyDao {
    * @see dao.CompanyDao#getCompany(java.lang.String)
    */
   @Override
-  public Optional<Integer> getCompany(String name) {
+  public List<Company> getCompany(String name) {
+    List<Company> list = new ArrayList<Company>();
     DaoFactory factory = DaoFactory.getInstance();
-    Optional<Integer> companyId = null;
+    Company company = null;
+
     try (Connection connection = factory.connectDb();
-        PreparedStatement statement = connection.prepareStatement(SELECT_ID)) {
-      statement.setString(1, "name");
-      ResultSet resultat = statement.executeQuery(SELECT_ID);
-      if (resultat.next()) {
-        companyId = Optional.ofNullable(resultat.getInt("id"));
+        Statement statement = connection.createStatement()) {
+      ResultSet resultat = statement.executeQuery(SELECT_ID + "'%" + name + "%'");
+      while (resultat.next()) {
+        name = resultat.getString("name");
+        int companyId = resultat.getInt("id");
+        company = new Company(name, companyId);
+        list.add(company);
       }
     } catch (SQLException e) {
       logger.error(e.getMessage(), e);
     }
-    logger.debug("Returning company id:" + companyId);
-    return companyId;
+    logger.debug("Returning company: " + company);
+    return list;
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see dao.CompanyDao#getCompany(java.lang.String)
+   */
+  @Override
+  public List<Company> getCompanyFromId(int id) {
+    List<Company> list = new ArrayList<Company>();
+    DaoFactory factory = DaoFactory.getInstance();
+    Company company = null;
+
+    try (Connection connection = factory.connectDb();
+        Statement statement = connection.createStatement()) {
+      ResultSet resultat = statement.executeQuery(SELECT_NAME + id);
+      while (resultat.next()) {
+        String name = resultat.getString("name");
+        id = resultat.getInt("id");
+        company = new Company(name, id);
+        list.add(company);
+      }
+    } catch (SQLException e) {
+      logger.error(e.getMessage(), e);
+    }
+    //logger.debug("Returning company: " + company);
+    return list;
   }
 }

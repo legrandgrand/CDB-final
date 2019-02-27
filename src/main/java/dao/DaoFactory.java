@@ -11,8 +11,15 @@ public class DaoFactory {
   private final String password = "qwerty1234";
 
   private static final DaoFactory instance = new DaoFactory();
-
+  /**
+   * Get instance of a new dao factory.
+   */
   public static final DaoFactory getInstance() {
+    try {
+      Class.forName("com.mysql.cj.jdbc.Driver");
+    } catch (ClassNotFoundException e) {
+      System.out.println(e.toString());
+    }
     return instance;
   }
 

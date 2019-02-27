@@ -37,8 +37,7 @@ public class View {
     Scanner sc = new Scanner(System.in);
     try {
       int userChoice = sc.nextInt();
-      System.out.println("Choix user: " + userChoice);
-      switch (userChoice) { //TODO: enums
+      switch (userChoice) { // TODO: enums
         case 1:
           listCompanies();
           break;
@@ -55,6 +54,7 @@ public class View {
           updateComputer();
           break;
         case 6:
+          System.out.println("Exiting program");
           sc.close();
           System.exit(0);
           break;
@@ -114,7 +114,7 @@ public class View {
 
       Date discontinuation = addComputerDateDisc(sc, intro);
 
-      int companyId = setComputerCompanyId(sc);
+      Company companyId = setComputerCompanyId(sc);
 
       Computer computer = controller.addComputer(name, intro, discontinuation, companyId);
 
@@ -129,6 +129,9 @@ public class View {
       System.out.println("Not a valid input. Please try again.");
       addComputer();
 
+    } catch (Exception e) {
+      System.out.println(e);
+      addComputer();
     }
   }
 
@@ -138,7 +141,7 @@ public class View {
    * @param sc the sc
    * @return the date
    */
-  public Date addComputerDateIntro(Scanner sc) {
+  public Date addComputerDateIntro(Scanner sc) throws Exception {
     System.out.println("Please enter the date of introduction. "
         + "Format should be YYYY-MM-DD. (If the date is unknown, just press enter.)");
     return controller.setComputerIntro(sc);
@@ -149,8 +152,9 @@ public class View {
    *
    * @param sc the sc
    * @return the string
+   * @throws Exception exception
    */
-  public String setComputerName(Scanner sc) {
+  public String setComputerName(Scanner sc) throws Exception {
     System.out.println("Please enter the computer's name you want to add or update");
     return controller.setComputerName(sc);
   }
@@ -162,7 +166,7 @@ public class View {
    * @param intro the intro
    * @return the date
    */
-  public Date addComputerDateDisc(Scanner sc, Date intro) {
+  public Date addComputerDateDisc(Scanner sc, Date intro) throws Exception {
     System.out
         .println("Please enter the date of discontinuation. " + "Format should be YYYY-MM-DD. "
             + "(If the date is unknown or the computer is still continuing, just press enter.)");
@@ -175,9 +179,9 @@ public class View {
    * @param sc the sc
    * @return the int
    */
-  public int setComputerCompanyId(Scanner sc) {
-    System.out.println("Please enter the company's number");
-    return controller.setComputerCompanyId(sc);
+  public Company setComputerCompanyId(Scanner sc) {
+    System.out.println("Please enter the company's name");
+    return controller.setComputerCompany(sc);
   }
 
   /**
@@ -208,7 +212,7 @@ public class View {
 
       Date discontinuation = addComputerDateDisc(sc, intro);
 
-      int companyId = setComputerCompanyId(sc);
+      Company companyId = setComputerCompanyId(sc);
 
       Computer computer = controller.updateComputer(name, intro, discontinuation, companyId);
       System.out.println(computer + " was updated");
@@ -220,6 +224,9 @@ public class View {
       updateComputer();
     } catch (InputMismatchException e) {
       System.out.println("Not a valid input. Please try again.");
+      updateComputer();
+    } catch (Exception e) {
+      System.out.println(e);
       updateComputer();
     }
   }

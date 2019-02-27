@@ -59,8 +59,10 @@ target/
 
 # eclipse project file
 .settings/
+.setting
 .classpath
 .project
+.tern-project
 
 # NetBeans specific
 nbproject/private/

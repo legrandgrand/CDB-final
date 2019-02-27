@@ -1,17 +1,33 @@
 package model;
 
 public class Company {
-
   private String nameCompany;
+  private int companyId;
 
-  public Company(String nameCompany) {
-    this.setNameCompany(nameCompany);
+  /**
+   * Instantiates a new company.
+   *
+   * @param nameCompany the name company
+   * @param companyId   the company id
+   */
+  public Company(String nameCompany, int companyId) {
+    super();
+    this.nameCompany = nameCompany;
+    this.companyId = companyId;
   }
 
   /**
    * Instantiates a new company.
    */
   public Company() {
+  }
+
+  public int getCompanyId() {
+    return companyId;
+  }
+
+  public void setCompanyId(int companyId) {
+    this.companyId = companyId;
   }
 
   public String getNameCompany() {
@@ -29,9 +45,14 @@ public class Company {
    */
   @Override
   public String toString() {
-    return "Company:" + nameCompany;
+    return nameCompany;
   }
 
+  /*
+   * (non-Javadoc)
+   * 
+   * @see java.lang.Object#hashCode()
+   */
   @Override
   public int hashCode() {
     final int prime = 31;
@@ -40,6 +61,11 @@ public class Company {
     return result;
   }
 
+  /*
+   * (non-Javadoc)
+   * 
+   * @see java.lang.Object#equals(java.lang.Object)
+   */
   @Override
   public boolean equals(Object obj) {
     if (this == obj) {
@@ -52,6 +78,9 @@ public class Company {
       return false;
     }
     Company other = (Company) obj;
+    if (companyId != other.companyId) {
+      return false;
+    }
     if (nameCompany == null) {
       if (other.nameCompany != null) {
         return false;

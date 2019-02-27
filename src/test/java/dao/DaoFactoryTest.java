@@ -33,7 +33,7 @@ public class DaoFactoryTest {
 
   @Test
   public void testConnectDb() throws SQLException {
-    assertEquals(mockConnection, daoFactory.connectDb());
+    assertEquals(true, mockConnection.equals(daoFactory.connectDb()));
     // Case 1: can't connect to DB
     // Case 2:
 

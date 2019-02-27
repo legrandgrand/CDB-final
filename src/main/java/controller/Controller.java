@@ -16,6 +16,8 @@ import org.slf4j.LoggerFactory;
 import service.ServiceCompany;
 import service.ServiceComputer;
 
+import validator.Validator;
+
 public class Controller {
   private ServiceComputer serviceComputer;
   private ServiceCompany serviceCompany;
@@ -45,7 +47,7 @@ public class Controller {
    */
   public List<Computer> listComputer() {
     logger.debug("Listing computers");
-    return serviceComputer.listComputer();
+    return serviceComputer.list();
   }
 
   /**
@@ -55,7 +57,7 @@ public class Controller {
    */
   public void deleteComputer(String name) {
     logger.debug("Deleting computer named" + name);
-    serviceComputer.deleteComputer(name);
+    serviceComputer.delete(name);
   }
 
   /**
@@ -63,11 +65,16 @@ public class Controller {
    *
    * @param sc the scanner
    * @return the ComputerName
+   * @throws Exception exception
    */
-  public String setComputerName(Scanner sc) {
+  public String setComputerName(Scanner sc) throws Exception {
     String name = sc.nextLine();
-    logger.debug("Setting computer name: " + name);
-    return name;
+    if (Validator.validateName(name)) {
+      logger.debug("Setting computer name: " + name);
+      return name;
+    } else {
+      throw new Exception("Invalid computer name");
+    }
   }
 
   /**
@@ -76,12 +83,16 @@ public class Controller {
    * @param sc the scanner
    * @return the timestamp
    */
-  public Date setComputerIntro(Scanner sc) {
+  public Date setComputerIntro(Scanner sc) throws Exception {
     Date intro = null;
     String timestamp = null;
     timestamp = sc.nextLine();
-    if (!timestamp.equals("")) {
-      intro = setDate(timestamp);
+    if (Validator.validateIntro(timestamp)) {
+      if (!timestamp.equals("")) {
+        intro = setDate(timestamp);
+      }
+    } else {
+      throw new Exception("Invalid computer name");
     }
     logger.debug("Setting computer date of introduction: " + intro);
     return intro;
@@ -94,23 +105,28 @@ public class Controller {
    * @param intro the date of introduction
    * @return the date of discontinuation
    */
-  public Date setComputerDisc(Scanner sc, Date intro) {
+  public Date setComputerDisc(Scanner sc, Date intro) throws Exception {
     Date discontinuation = null;
     String timestamp = null;
     do {
       timestamp = sc.nextLine();
-      if (!timestamp.equals("")) {
-        discontinuation = setDate(timestamp);
-        if (null != intro) { // TODO: null.equals()null
+      if (Validator.validateIntro(timestamp)) {
+        if (!timestamp.equals("")) {
+          discontinuation = setDate(timestamp);
+          if (null != intro) {
+            break;
+          }
+          if (discontinuation.before(intro)) {
+            logger.info("The date you entered happened before the date of introduction. "
+                + "Please enter a valid date.");
+          }
+        } else {
           break;
         }
-        if (discontinuation.before(intro)) {
-          logger.info("The date you entered happened before the date of introduction. "
-              + "Please enter a valid date.");
-        }
       } else {
-        break;
+        throw new Exception("Invalid computer name");
       }
+
     } while (null != intro || discontinuation.before(intro));
     logger.debug("Setting computer date of discontinuation: " + discontinuation);
     return discontinuation;
@@ -123,10 +139,11 @@ public class Controller {
    * @param sc the scanner
    * @return the Company Id
    */
-  public int setComputerCompanyId(Scanner sc) {
-    int companyId = sc.nextInt();
-    logger.debug("Setting company Id: " + companyId);
-    return companyId;
+  public Company setComputerCompany(Scanner sc) {
+    String companyName = sc.nextLine();
+    logger.debug("Setting company Id: " + companyName);
+    Company company = (Company) serviceCompany.getCompany(companyName).get(0);
+    return company;
   }
 
   /**
@@ -138,10 +155,10 @@ public class Controller {
    * @param companyId       the company id
    * @return the computer
    */
-  public Computer addComputer(String name, Date intro, Date discontinuation, int companyId) {
-    Computer computer = new Computer(name, companyId, intro, discontinuation);
+  public Computer addComputer(String name, Date intro, Date discontinuation, Company companyId) {
+    Computer computer = new Computer(name, companyId, intro, discontinuation, 0);
     logger.debug("Adding computer: " + computer);
-    serviceComputer.addComputer(computer);
+    serviceComputer.add(computer);
     return computer;
   }
 
@@ -154,11 +171,10 @@ public class Controller {
    * @param companyId       the company id
    * @return the computer
    */
-  public Computer updateComputer(String name, Date intro, Date discontinuation, int companyId) {
-    Computer computer = new Computer(name, companyId, intro, discontinuation);
+  public Computer updateComputer(String name, Date intro, Date discontinuation, Company companyId) {
+    Computer computer = new Computer(name, companyId, intro, discontinuation, 0);
     logger.debug("Updating computer: " + computer);
-    serviceComputer.updateComputer(computer);
-
+    serviceComputer.update(computer);
     return computer;
   }
 
@@ -174,8 +190,7 @@ public class Controller {
     try {
       return dt.parse(timestamp);
     } catch (ParseException e) {
-      e.printStackTrace();
-      logger.error("Parse Exception");
+      logger.error(e.getMessage(), e);
     }
     return null;
   }
