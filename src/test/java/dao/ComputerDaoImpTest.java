@@ -59,7 +59,6 @@ public class ComputerDaoImpTest {
 
   @Test
   public void testUpdate() throws ParseException {
-
     Company company = new Company("Apple Inc.", 1);
     // Case 1: have company number, no dates
     Computer computer = new Computer("MacBook Pro 15.4 inch", company, null, null, 1);
@@ -125,6 +124,7 @@ public class ComputerDaoImpTest {
   @Test
   public void testDelete() {
     // Case 1: successfull delete
+
     Company company = new Company("Apple Inc.", 1);
     Computer computer = new Computer("testComputer", company, null, null, 580);
     String computerName = computer.getName();
@@ -132,6 +132,7 @@ public class ComputerDaoImpTest {
     computerDaoImp.delete(computerName);
 
     List<Computer> computers = computerDaoImp.list();
+    
     assertTrue(!computers.contains(computer));
   }
 

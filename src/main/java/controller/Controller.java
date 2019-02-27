@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import service.ServiceCompany;
 import service.ServiceComputer;
+
 import validator.Validator;
 
 public class Controller {
@@ -127,7 +128,6 @@ public class Controller {
       }
 
     } while (null != intro || discontinuation.before(intro));
-
     logger.debug("Setting computer date of discontinuation: " + discontinuation);
     return discontinuation;
 
@@ -175,7 +175,6 @@ public class Controller {
     Computer computer = new Computer(name, companyId, intro, discontinuation, 0);
     logger.debug("Updating computer: " + computer);
     serviceComputer.update(computer);
-
     return computer;
   }
 

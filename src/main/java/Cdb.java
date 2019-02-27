@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import service.ServiceCompany;
 import service.ServiceComputer;
+
 import view.View;
 
 public class Cdb {
@@ -17,7 +18,6 @@ public class Cdb {
    * @param args the arguments
    */
   public static void main(String[] args) {
-    
     logger.debug("Starting program");
     ServiceComputer s1 = ServiceComputer.getInstance();
     ServiceCompany s2 = ServiceCompany.getInstance();
