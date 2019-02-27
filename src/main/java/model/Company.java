@@ -91,5 +91,29 @@ public class Company {
     }
     return true;
   }
+  
+  public static class CompanyBuilder{
+    private String nameCompany;
+    private int companyId;
+    
+    public Company build() {
+      Company company = new Company();
+      
+      company.setCompanyId(this.companyId);
+      company.setNameCompany(this.nameCompany);
+      
+      return company;
+    }
+
+    public CompanyBuilder setNameCompany(String nameCompany) {
+      this.nameCompany = nameCompany;
+      return this;
+    }
+
+    public CompanyBuilder setCompanyId(int companyId) {
+      this.companyId = companyId;
+      return this;
+    }
+  }
 
 }

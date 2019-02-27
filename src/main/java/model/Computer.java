@@ -108,5 +108,55 @@ public class Computer {
     }
     return true;
   }
+  
+  public static class ComputerBuilder{
+    private String name;// Compulsory
+    private Company company;// TODO: pas entier, mais company
+    private Date dateIntro;
+    private Date dateDiscontinuation;// Has to be higher than date B
+    private int id;
+    
+    public Computer build() {
+      Computer computer = new Computer();
+      
+      computer.setId(this.id);
+      computer.setCompany(this.company);
+      computer.setDateIntro(this.dateIntro);
+      computer.setDateDiscontinuation(this.dateDiscontinuation);
+      computer.setName(this.name);
+      
+      return computer;
+    }
+
+    public ComputerBuilder setName(String name) {
+      this.name = name;
+      return this;
+    }
+
+    public ComputerBuilder setCompany(Company company) {
+      this.company = company;
+      return this;
+    }
+
+    public ComputerBuilder setDateIntro(Date dateIntro) {
+      this.dateIntro = dateIntro;
+      return this;
+    }
+
+    public ComputerBuilder setDateDiscontinuation(Date dateDiscontinuation) {
+      this.dateDiscontinuation = dateDiscontinuation;
+      return this;
+    }
+
+    public ComputerBuilder setId(int id) {
+      this.id = id;
+      return this;
+    }
+    
+    
+  }
 
 }
+
+
+
