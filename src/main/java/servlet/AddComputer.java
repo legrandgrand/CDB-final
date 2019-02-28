@@ -60,21 +60,22 @@ public class AddComputer extends HttpServlet {
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
 
-    String name = request.getParameter("name");
+    Computer computer = new Computer();
+    computer.setName(request.getParameter("name"));
 
-    String intro = request.getParameter("intro");
+    String introString = request.getParameter("intro");
+    Date intro = setComputerIntro(introString);
+    computer.setDateIntro(intro);
 
     String disc = request.getParameter("disc"); // TODO: handle situation where disc>intro
-
+    computer.setDateDiscontinuation(setComputerDisc(intro, disc));
+    
     Company company = new Company();
     company.setName(request.getParameter("companyname"));
 
     company = ServiceCompany.getInstance().getCompany(company).get(0);
 
-    ComputerDto computerDto = new ComputerDto(null, name, intro, disc, company.getName(),
-        company.getId());
-
-    Computer computer = Mapper.getInstance().mapComputer(computerDto);
+    computer.setCompany(company);
     logger.debug("Adding computer" + computer);
     ServiceComputer.getInstance().add(computer);
     this.getServletContext().getRequestDispatcher("/Dashboard").forward(request, response);
@@ -103,10 +104,10 @@ public class AddComputer extends HttpServlet {
    * @param disc the disc
    * @return the timestamp
    */
-  public Date setComputerIntro(String disc) {
+  public Date setComputerIntro(String introString) {
     Date intro = null;
-    if (!disc.equals("")) {
-      intro = setDate(disc);
+    if (!introString.equals("")) {
+      intro = setDate(introString);
     }
     logger.debug("Setting computer date of introduction: " + intro);
     return intro;

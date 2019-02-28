@@ -66,20 +66,22 @@ public class EditComputer extends HttpServlet {
    */
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
-    String intro = request.getParameter("intro");
-    Date dateIntro = setComputerIntro(intro);
+    Computer computer = new Computer();
+    computer.setName(request.getParameter("name"));
 
-    String disc = request.getParameter("disc");
-    Date dateDisc = setComputerIntro(disc);// TODO: handle situation where disc>intro
+    String introString = request.getParameter("intro");
+    Date intro = setComputerIntro(introString);
+    computer.setDateIntro(intro);
 
+    String disc = request.getParameter("disc"); // TODO: handle situation where disc>intro
+    computer.setDateDiscontinuation(setComputerDisc(intro, disc));
+    
     Company company = new Company();
-    String companyIdString = request.getParameter("companyname");
-    company.setId(Integer.parseInt(companyIdString));
-    company = ServiceCompany.getInstance().getCompanyFromId(company).get(0);
+    company.setName(request.getParameter("companyname"));
 
-    String name = request.getParameter("name");
+    company = ServiceCompany.getInstance().getCompany(company).get(0);
 
-    Computer computer = new Computer(name, company, dateIntro, dateDisc, 0);
+    computer.setCompany(company);
     logger.debug("Updating computer" + computer);
     ServiceComputer.getInstance().update(computer);
     this.getServletContext().getRequestDispatcher("/Dashboard").forward(request, response);

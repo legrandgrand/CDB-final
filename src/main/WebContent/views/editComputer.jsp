@@ -11,6 +11,8 @@
 <link href="./css/bootstrap.min.css" rel="stylesheet" media="screen">
 <link href="./css/font-awesome.css" rel="stylesheet" media="screen">
 <link href="./css/main.css" rel="stylesheet" media="screen">
+<script type="text/javascript" src="jquery-xxxx.min.js"></script>
+<script type="text/javascript" src="jquery.validate.min.js"></script>
 </head>
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">

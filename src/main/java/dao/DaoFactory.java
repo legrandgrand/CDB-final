@@ -4,15 +4,20 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class DaoFactory {
 
-  Config config = new Config();
+  private Config config = new Config();
 
-  String url = config.getProperty("url");
-  String user = config.getProperty("user");
-  String password = config.getProperty("password");
+  private final String url = config.getProperty("url");
+  private final String user = config.getProperty("user");
+  private final String password = config.getProperty("password");
   
   private static final DaoFactory instance = new DaoFactory();
+  
+  private static final Logger logger = LoggerFactory.getLogger(ComputerDaoImp.class);
   
   /**
    * Get instance of a new dao factory.
@@ -21,7 +26,7 @@ public class DaoFactory {
     try {
       Class.forName("com.mysql.cj.jdbc.Driver");
     } catch (ClassNotFoundException e) {
-      System.out.println(e.toString());
+      logger.error(e.getMessage(), e);
     }
     return instance;
   }
