@@ -20,8 +20,10 @@ public class CompanyDaoImp implements CompanyDao {
   private static final String SELECT = "SELECT id, name FROM company";
 
   private static final Logger logger = LoggerFactory.getLogger(CompanyDaoImp.class);
+  
 
-  // TODO Pagination
+  private DaoFactory factory = DaoFactory.getInstance();
+
   // TODO: stream
   private static final CompanyDaoImp instance = new CompanyDaoImp();
 
@@ -43,7 +45,6 @@ public class CompanyDaoImp implements CompanyDao {
   @Override
   public List<Company> list() {
     List<Company> list = new ArrayList<Company>();
-    DaoFactory factory = DaoFactory.getInstance();
     try (Connection connection = factory.connectDb();
         Statement statement = connection.createStatement()) {
 
@@ -70,18 +71,15 @@ public class CompanyDaoImp implements CompanyDao {
    * @see dao.CompanyDao#getCompany(java.lang.String)
    */
   @Override
-  public List<Company> getCompany(String name) {
+  public List<Company> getCompany(Company company) {
     List<Company> list = new ArrayList<Company>();
-    DaoFactory factory = DaoFactory.getInstance();
-    Company company = null;
 
     try (Connection connection = factory.connectDb();
         Statement statement = connection.createStatement()) {
-      ResultSet resultat = statement.executeQuery(SELECT_ID + "'%" + name + "%'");
+      ResultSet resultat = statement.executeQuery(SELECT_ID + "'%" + company.getName() + "%'");
       while (resultat.next()) {
-        name = resultat.getString("name");
-        int companyId = resultat.getInt("id");
-        company = new Company(name, companyId);
+        company.setName(resultat.getString("name"));
+        company.setId(resultat.getInt("id"));
         list.add(company);
       }
     } catch (SQLException e) {
@@ -97,18 +95,15 @@ public class CompanyDaoImp implements CompanyDao {
    * @see dao.CompanyDao#getCompany(java.lang.String)
    */
   @Override
-  public List<Company> getCompanyFromId(int id) {
+  public List<Company> getCompanyFromId(Company company) {
     List<Company> list = new ArrayList<Company>();
-    DaoFactory factory = DaoFactory.getInstance();
-    Company company = null;
 
     try (Connection connection = factory.connectDb();
         Statement statement = connection.createStatement()) {
-      ResultSet resultat = statement.executeQuery(SELECT_NAME + id);
+      ResultSet resultat = statement.executeQuery(SELECT_NAME + company.getId());
       while (resultat.next()) {
-        String name = resultat.getString("name");
-        id = resultat.getInt("id");
-        company = new Company(name, id);
+        company.setName(resultat.getString("name"));
+        company.setId(resultat.getInt("id"));
         list.add(company);
       }
     } catch (SQLException e) {

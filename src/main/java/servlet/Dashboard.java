@@ -46,7 +46,6 @@ public class Dashboard extends HttpServlet {
     }
 
     List<Computer> computers = ServiceComputer.getInstance().listPage(page);
-    logger.debug("Size of computers: " + computers.size());
     request.setAttribute("computers", computers);
     this.getServletContext().getRequestDispatcher("/views/dashboard.jsp").forward(request,
         response);

@@ -11,6 +11,7 @@ public class DaoFactory {
   private final String password = "qwerty1234";
 
   private static final DaoFactory instance = new DaoFactory();
+  
   /**
    * Get instance of a new dao factory.
    */
@@ -24,14 +25,6 @@ public class DaoFactory {
   }
 
   private DaoFactory() {
-  }
-
-  public static CompanyDaoImp getCompanyDao() {
-    return CompanyDaoImp.getInstance();
-  }
-
-  public static ComputerDao getComputerDao() {
-    return ComputerDaoImp.getInstance();
   }
 
   /**

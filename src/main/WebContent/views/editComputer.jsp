@@ -48,11 +48,11 @@
                                 <select class="form-control" id="companyId" name="companyname">
                                 <c:forEach items="${companies}" var="company">
                                 	<c:choose>
-									  <c:when test="${computer.company.companyId == company.companyId}">
-									    <option selected="selected" value="${company.nameCompany}">${company.nameCompany}</option>
+									  <c:when test="${computer.company.id == company.id}">
+									    <option selected="selected" value="${company.name}">${company.name}</option>
 									  </c:when>
 									  <c:otherwise>
-                                    	<option value="${company.nameCompany}">${company.nameCompany}</option>
+                                    	<option value="${company.name}">${company.name}</option>
                                    	  </c:otherwise>
 									</c:choose>
                                 </c:forEach> 

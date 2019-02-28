@@ -13,9 +13,11 @@ public class Computer {
   /**
    * Instantiates a new computer.
    *
-   * @param name              the name PC
+   * @param name                the name PC
+   * @param company             the company
    * @param dateIntro           the date intro
    * @param dateDiscontinuation the date discontinuation
+   * @param id                  the id
    */
   public Computer(String name, Company company, Date dateIntro, Date dateDiscontinuation, int id) {
     this.setName(name);
@@ -28,7 +30,7 @@ public class Computer {
   public int getId() {
     return id;
   }
- 
+
   public void setId(int id) {
     this.id = id;
   }
@@ -108,55 +110,86 @@ public class Computer {
     }
     return true;
   }
-  
-  public static class ComputerBuilder{
+
+  public static class ComputerBuilder {
     private String name;// Compulsory
     private Company company;// TODO: pas entier, mais company
     private Date dateIntro;
     private Date dateDiscontinuation;// Has to be higher than date B
     private int id;
-    
+
+    /**
+     * Builds the Computer.
+     *
+     * @return the computer
+     */
     public Computer build() {
       Computer computer = new Computer();
-      
+
       computer.setId(this.id);
       computer.setCompany(this.company);
       computer.setDateIntro(this.dateIntro);
       computer.setDateDiscontinuation(this.dateDiscontinuation);
       computer.setName(this.name);
-      
+
       return computer;
     }
 
+    /**
+     * Sets the name.
+     *
+     * @param name the name
+     * @return the computer builder
+     */
     public ComputerBuilder setName(String name) {
       this.name = name;
       return this;
     }
 
+    /**
+     * Sets the company.
+     *
+     * @param company the company
+     * @return the computer builder
+     */
     public ComputerBuilder setCompany(Company company) {
       this.company = company;
       return this;
     }
 
+    /**
+     * Sets the date intro.
+     *
+     * @param dateIntro the date intro
+     * @return the computer builder
+     */
     public ComputerBuilder setDateIntro(Date dateIntro) {
       this.dateIntro = dateIntro;
       return this;
     }
 
+    /**
+     * Sets the date discontinuation.
+     *
+     * @param dateDiscontinuation the date discontinuation
+     * @return the computer builder
+     */
     public ComputerBuilder setDateDiscontinuation(Date dateDiscontinuation) {
       this.dateDiscontinuation = dateDiscontinuation;
       return this;
     }
 
+    /**
+     * Sets the id.
+     *
+     * @param id the id
+     * @return the computer builder
+     */
     public ComputerBuilder setId(int id) {
       this.id = id;
       return this;
     }
-    
-    
+
   }
 
 }
-
-
-

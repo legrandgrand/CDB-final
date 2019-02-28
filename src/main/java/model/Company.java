@@ -1,19 +1,19 @@
 package model;
 
 public class Company {
-  private String nameCompany;
-  private int companyId;
+  private String name;
+  private int id;
 
   /**
    * Instantiates a new company.
    *
-   * @param nameCompany the name company
-   * @param companyId   the company id
+   * @param name the name company
+   * @param id   the company id
    */
-  public Company(String nameCompany, int companyId) {
+  public Company(String name, int id) {
     super();
-    this.nameCompany = nameCompany;
-    this.companyId = companyId;
+    this.name = name;
+    this.id = id;
   }
 
   /**
@@ -22,20 +22,20 @@ public class Company {
   public Company() {
   }
 
-  public int getCompanyId() {
-    return companyId;
+  public int getId() {
+    return id;
   }
 
-  public void setCompanyId(int companyId) {
-    this.companyId = companyId;
+  public void setId(int id) {
+    this.id = id;
   }
 
-  public String getNameCompany() {
-    return nameCompany;
+  public String getName() {
+    return name;
   }
 
-  public void setNameCompany(String nameCompany) {
-    this.nameCompany = nameCompany;
+  public void setName(String name) {
+    this.name = name;
   }
 
   /*
@@ -45,7 +45,7 @@ public class Company {
    */
   @Override
   public String toString() {
-    return nameCompany;
+    return name;
   }
 
   /*
@@ -57,7 +57,7 @@ public class Company {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((nameCompany == null) ? 0 : nameCompany.hashCode());
+    result = prime * result + ((name == null) ? 0 : name.hashCode());
     return result;
   }
 
@@ -78,41 +78,58 @@ public class Company {
       return false;
     }
     Company other = (Company) obj;
-    if (companyId != other.companyId) {
+    if (id != other.id) {
       return false;
     }
-    if (nameCompany == null) {
-      if (other.nameCompany != null) {
+    if (name == null) {
+      if (other.name != null) {
         return false;
       }
-    } else if (!nameCompany.equals(other.nameCompany)) {
+    } else if (!name.equals(other.name)) {
       return false;
     }
     return true;
   }
-  
-  public static class CompanyBuilder{
-    private String nameCompany;
-    private int companyId;
-    
+
+  public static class CompanyBuilder {
+    private String name;
+    private int id;
+
+    /**
+     * Builds the company.
+     *
+     * @return the company
+     */
     public Company build() {
       Company company = new Company();
-      
-      company.setCompanyId(this.companyId);
-      company.setNameCompany(this.nameCompany);
-      
+
+      company.setId(this.id);
+      company.setName(this.name);
+
       return company;
     }
 
-    public CompanyBuilder setNameCompany(String nameCompany) {
-      this.nameCompany = nameCompany;
+    /**
+     * Sets the name company.
+     *
+     * @param name the name
+     * @return the company builder
+     */
+    public CompanyBuilder setNameCompany(String name) {
+      this.name = name;
       return this;
     }
 
-    public CompanyBuilder setCompanyId(int companyId) {
-      this.companyId = companyId;
+    /**
+     * Sets the company id.
+     *
+     * @param id the id
+     * @return the company builder
+     */
+    public CompanyBuilder setCompanyId(int id) {
+      this.id = id;
       return this;
-    } 
+    }
   }
 
 }

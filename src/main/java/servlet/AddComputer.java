@@ -1,5 +1,7 @@
 package servlet;
 
+import dto.ComputerDto;
+
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -11,6 +13,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import mapper.Mapper;
 
 import model.Company;
 import model.Computer;
@@ -55,22 +59,22 @@ public class AddComputer extends HttpServlet {
    */
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
-    Date dateDisc = null;
-    Date dateIntro = null;
 
     String name = request.getParameter("name");
 
     String intro = request.getParameter("intro");
-    dateIntro = setComputerIntro(intro);
 
-    String disc = request.getParameter("disc");
-    dateDisc = setComputerIntro(disc);// TODO: handle situation where disc>intro
+    String disc = request.getParameter("disc"); // TODO: handle situation where disc>intro
 
-    String companyIdString = request.getParameter("companyname");
-    int companyId = Integer.parseInt(companyIdString);
-    Company company = ServiceCompany.getInstance().getCompanyFromId(companyId).get(0);
+    Company company = new Company();
+    company.setName(request.getParameter("companyname"));
 
-    Computer computer = new Computer(name, company, dateIntro, dateDisc, 0);
+    company = ServiceCompany.getInstance().getCompany(company).get(0);
+
+    ComputerDto computerDto = new ComputerDto(null, name, intro, disc, company.getName(),
+        company.getId());
+
+    Computer computer = Mapper.getInstance().mapComputer(computerDto);
     logger.debug("Adding computer" + computer);
     ServiceComputer.getInstance().add(computer);
     this.getServletContext().getRequestDispatcher("/Dashboard").forward(request, response);

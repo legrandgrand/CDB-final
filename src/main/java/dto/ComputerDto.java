@@ -2,7 +2,7 @@ package dto;
 
 public class ComputerDto {
   
-  private int idComputer;
+  private String idComputer;
   private int idCompany; 
   private String name;// Compulsory
   private String dateIntro;
@@ -17,9 +17,9 @@ public class ComputerDto {
    * @param dateIntro the date intro
    * @param dateDiscontinuation the date discontinuation
    * @param companyName the company name
-   * @param companyId the company id
+   * @param idCompany the id company
    */
-  public ComputerDto(int idComputer, String name, String dateIntro, String dateDiscontinuation,
+  public ComputerDto(String idComputer, String name, String dateIntro, String dateDiscontinuation,
       String companyName, int idCompany) {
     super();
     this.idComputer = idComputer;
@@ -30,20 +30,20 @@ public class ComputerDto {
     this.idCompany = idCompany;
   }
   
-  public int getIdComputer() {
+  public String getIdComputer() {
     return idComputer;
   }
 
-  public void setIdComputer(int idComputer) {
+  public void setIdComputer(String idComputer) {
     this.idComputer = idComputer;
   }
   
   public int getIdCompany() {
-    return idComputer;
+    return idCompany;
   }
 
-  public void setIdCompany(int idComputer) {
-    this.idComputer = idComputer;
+  public void setIdCompany(int idCompany) {
+    this.idCompany = idCompany;
   }
 
   public String getName() {
@@ -78,6 +78,9 @@ public class ComputerDto {
     this.companyName = companyName;
   }
  
+  /* (non-Javadoc)
+   * @see java.lang.Object#toString()
+   */
   @Override
   public String toString() {
     return "ComputerDto [idComputer=" + idComputer + ", name=" + name

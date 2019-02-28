@@ -1,6 +1,6 @@
 package service;
 
-import dao.DaoFactory;
+import dao.ComputerDaoImp;
 import java.util.List;
 
 import model.Computer;
@@ -14,6 +14,8 @@ public class ServiceComputer {
 
   private static final Logger logger = LoggerFactory.getLogger(ServiceComputer.class);
   private static final ServiceComputer instance = new ServiceComputer();
+  
+  private ComputerDaoImp computerDao = ComputerDaoImp.getInstance(); 
 
   /**
    * Instantiates a new service computer.
@@ -28,10 +30,10 @@ public class ServiceComputer {
   /**
    * Delete computer.
    *
-   * @param name the name
+   * @param computer the computer
    */
-  public void delete(String name) {
-    DaoFactory.getComputerDao().delete(name);
+  public void delete(Computer computer) {
+    computerDao.delete(computer);
   }
 
   /**
@@ -40,7 +42,7 @@ public class ServiceComputer {
    * @return the list
    */
   public List<Computer> list() {
-    return DaoFactory.getComputerDao().list();
+    return computerDao.list();
   }
 
   /**
@@ -50,7 +52,7 @@ public class ServiceComputer {
    */
   public void add(Computer computer) {
     if (Validator.validateName(computer.getName()) && Validator.validateId(computer.getId())) {
-      DaoFactory.getComputerDao().add(computer);
+      computerDao.add(computer);
     } else {
       logger.error("Invalid computer name");
     }
@@ -64,7 +66,7 @@ public class ServiceComputer {
    */
   public void update(Computer computer) {
     if (Validator.validateName(computer.getName()) && Validator.validateId(computer.getId())) {
-      DaoFactory.getComputerDao().update(computer);
+      computerDao.update(computer);
     } else {
       logger.error("Invalid computer name");
     }
@@ -73,23 +75,23 @@ public class ServiceComputer {
   /**
    * Gets the computer.
    *
-   * @param id the id
+   * @param computer the computer
    * @return the computer
    */
-  public List<Computer> getComputer(int id) {
-    return DaoFactory.getComputerDao().getComputer(id);
+  public List<Computer> getComputer(Computer computer) {
+    return computerDao.getComputer(computer);
   }
 
   /**
    * Gets the computer from name.
    *
-   * @param name the name
+   * @param computer the computer
    * @return the computer from name
    */
-  public List<Computer> getComputerFromName(String name) {
-    if (Validator.validateName(name)) {
+  public List<Computer> getComputerFromName(Computer computer) {
+    if (Validator.validateName(computer.getName())) {
       logger.error("Valid computer name");
-      return DaoFactory.getComputerDao().getComputerFromName(name);
+      return computerDao.getComputerFromName(computer);
     } else {
       logger.error("Invalid computer name");
       return null;
@@ -103,7 +105,7 @@ public class ServiceComputer {
    * @return the list
    */
   public List<Computer> listPage(int page) {
-    return DaoFactory.getComputerDao().listPage(page);
+    return computerDao.listPage(page);
   }
 
 }

@@ -35,8 +35,9 @@ public class GetComputer extends HttpServlet {
    */
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
-    String computerName = request.getParameter("search");
-    List<Computer> computers = ServiceComputer.getInstance().getComputerFromName(computerName);
+    Computer computer = new Computer();
+    computer.setName(request.getParameter("search"));
+    List<Computer> computers = ServiceComputer.getInstance().getComputerFromName(computer);
     logger.debug("Size of computers: " + computers.size());
     request.setAttribute("computers", computers);
     this.getServletContext().getRequestDispatcher("/views/dashboard.jsp").forward(request,

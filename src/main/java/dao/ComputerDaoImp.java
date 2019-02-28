@@ -29,13 +29,14 @@ public class ComputerDaoImp implements ComputerDao {
   private static final String SELECT_ONE = 
       "SELECT id, name, introduced, discontinued, company_id FROM computer ";
   private static final String PAGING = "LIMIT 20 OFFSET ";
-  private static final String DELETE = 
-      "DELETE FROM computer WHERE name= ?";
-  
+  private static final String DELETE = "DELETE FROM computer WHERE name= ?";
 
   private static final ComputerDaoImp instance = new ComputerDaoImp();
 
   private static final Logger logger = LoggerFactory.getLogger(ComputerDaoImp.class);
+
+  private CompanyDaoImp companyDao = CompanyDaoImp.getInstance();
+  private DaoFactory factory = DaoFactory.getInstance();
 
   /**
    * Instantiates a new computer dao imp.
@@ -56,25 +57,24 @@ public class ComputerDaoImp implements ComputerDao {
   // TODO: stream
   public List<Computer> list() {
     List<Computer> list = new ArrayList<Computer>();
-    DaoFactory factory = DaoFactory.getInstance();
-    Company company = null;
 
     try (Connection connection = factory.connectDb();
         Statement statement = connection.createStatement()) {
       ResultSet resultat = statement.executeQuery(SELECT);
       while (resultat.next()) {
-        String name = resultat.getString("name");
-
-        Timestamp introduced = resultat.getTimestamp("introduced");
-        Timestamp discontinued = resultat.getTimestamp("discontinued");
-        int id = resultat.getInt("id");
-        int companyId = resultat.getInt("company_id");
-        if (companyId != 0) {
-          company = DaoFactory.getCompanyDao().getCompanyFromId(companyId).get(0);
-        } else {
-          company = null;
+        Computer computer = new Computer();
+        computer.setName(resultat.getString("name"));
+        computer.setDateIntro(resultat.getTimestamp("introduced"));
+        computer.setDateDiscontinuation(resultat.getTimestamp("discontinued"));
+        computer.setId(resultat.getInt("id"));
+        
+        Company company = new Company();
+        company.setId(resultat.getInt("company_id"));
+        logger.debug(company.getId() + "");
+        if (company.getId() != 0) {
+          company = companyDao.getCompanyFromId(company).get(0);
         }
-        Computer computer = new Computer(name, company, introduced, discontinued, id);
+        computer.setCompany(company);
         list.add(computer);
       }
     } catch (SQLException e) {
@@ -84,7 +84,7 @@ public class ComputerDaoImp implements ComputerDao {
     return list;
 
   }
-  
+
   /*
    * (non-Javadoc)
    * 
@@ -94,25 +94,23 @@ public class ComputerDaoImp implements ComputerDao {
   // TODO: stream
   public List<Computer> listPage(int page) {
     List<Computer> list = new ArrayList<Computer>();
-    DaoFactory factory = DaoFactory.getInstance();
-    Company company = null;
 
     try (Connection connection = factory.connectDb();
         Statement statement = connection.createStatement()) {
       ResultSet resultat = statement.executeQuery(SELECT + PAGING + page);
       while (resultat.next()) {
-        String name = resultat.getString("name");
-
-        Timestamp introduced = resultat.getTimestamp("introduced");
-        Timestamp discontinued = resultat.getTimestamp("discontinued");
-        int id = resultat.getInt("id");
-        int companyId = resultat.getInt("company_id");
-        if (companyId != 0) {
-          company = DaoFactory.getCompanyDao().getCompanyFromId(companyId).get(0);
-        } else {
-          company = null;
+        Computer computer = new Computer();
+        computer.setName(resultat.getString("name"));
+        computer.setDateIntro(resultat.getTimestamp("introduced"));
+        computer.setDateDiscontinuation(resultat.getTimestamp("discontinued"));
+        computer.setId(resultat.getInt("id"));
+        
+        Company company = new Company();
+        company.setId(resultat.getInt("company_id"));
+        if (company.getId() != 0) {
+          company = companyDao.getCompanyFromId(company).get(0);
         }
-        Computer computer = new Computer(name, company, introduced, discontinued, id);
+        computer.setCompany(company);
         list.add(computer);
       }
     } catch (SQLException e) {
@@ -124,28 +122,26 @@ public class ComputerDaoImp implements ComputerDao {
   }
 
   @Override
-  public List<Computer> getComputer(int id) {
+  public List<Computer> getComputer(Computer computer) {
     List<Computer> list = new ArrayList<Computer>();
-    DaoFactory factory = DaoFactory.getInstance();
-    Company company = null;
-    Computer computer = null;
+
     try (Connection connection = factory.connectDb();
         Statement statement = connection.createStatement()) {
-      ResultSet resultat = statement.executeQuery(SELECT_ONE + "WHERE id=" + id);
+      ResultSet resultat = statement.executeQuery(SELECT_ONE + "WHERE id=" + computer.getId());
       while (resultat.next()) {
-        String name = resultat.getString("name");
-
-        Timestamp introduced = resultat.getTimestamp("introduced");
-        Timestamp discontinued = resultat.getTimestamp("discontinued");
-        id = resultat.getInt("id");
-        int companyId = resultat.getInt("company_id");
-        if (companyId != 0) {
-          company = DaoFactory.getCompanyDao().getCompanyFromId(companyId).get(0);
-        } else {
-          company = null;
+        Computer computer2 = new Computer();
+        computer2.setName(resultat.getString("name"));
+        computer2.setDateIntro(resultat.getTimestamp("introduced"));
+        computer2.setDateDiscontinuation(resultat.getTimestamp("discontinued"));
+        computer2.setId(resultat.getInt("id"));
+        
+        Company company = new Company();
+        company.setId(resultat.getInt("company_id"));
+        if (company.getId() != 0) {
+          computer2.setCompany(companyDao.getCompanyFromId(company).get(0));
         }
-        computer = new Computer(name, company, introduced, discontinued, id);
-        list.add(computer);
+        computer2.setCompany(company);
+        list.add(computer2);
       }
     } catch (SQLException e) {
       logger.error(e.getMessage(), e);
@@ -154,30 +150,29 @@ public class ComputerDaoImp implements ComputerDao {
     return list;
 
   }
-  
+
   @Override
-  public List<Computer> getComputerFromName(String name) {
+  public List<Computer> getComputerFromName(Computer computer) {
     List<Computer> list = new ArrayList<Computer>();
-    DaoFactory factory = DaoFactory.getInstance();
-    Company company = null;
-    Computer computer = null;
+
     try (Connection connection = factory.connectDb();
         Statement statement = connection.createStatement()) {
-      ResultSet resultat = statement.executeQuery(SELECT_ONE + "WHERE name LIKE '%" + name + "%'");
+      ResultSet resultat = statement
+          .executeQuery(SELECT_ONE + "WHERE name LIKE '%" + computer.getName() + "%'");
       while (resultat.next()) {
-        name = resultat.getString("name");
-
-        Timestamp introduced = resultat.getTimestamp("introduced");
-        Timestamp discontinued = resultat.getTimestamp("discontinued");
-        int id = resultat.getInt("id");
-        int companyId = resultat.getInt("company_id");
-        if (companyId != 0) {
-          company = DaoFactory.getCompanyDao().getCompanyFromId(companyId).get(0);
-        } else {
-          company = null;
+        Computer computer2 = new Computer();
+        computer2.setName(resultat.getString("name"));
+        computer2.setDateIntro(resultat.getTimestamp("introduced"));
+        computer2.setDateDiscontinuation(resultat.getTimestamp("discontinued"));
+        computer2.setId(resultat.getInt("id"));
+        
+        Company company = new Company();
+        company.setId(resultat.getInt("company_id"));
+        if (company.getId() != 0) {
+          computer2.setCompany(companyDao.getCompanyFromId(company).get(0));
         }
-        computer = new Computer(name, company, introduced, discontinued, id);
-        list.add(computer);
+        computer2.setCompany(company);
+        list.add(computer2);
       }
     } catch (SQLException e) {
       logger.error(e.getMessage(), e);
@@ -186,8 +181,6 @@ public class ComputerDaoImp implements ComputerDao {
     return list;
 
   }
-  
-  
 
   /*
    * (non-Javadoc)
@@ -195,14 +188,13 @@ public class ComputerDaoImp implements ComputerDao {
    * @see dao.ComputerDao#deleteComputer(java.lang.String)
    */
   @Override
-  public void delete(String computerName) {
-    DaoFactory factory = DaoFactory.getInstance();
+  public void delete(Computer computer) {
 
     try (Connection connection = factory.connectDb();
         PreparedStatement statement = connection.prepareStatement(DELETE)) {
-      statement.setString(1, computerName);
+      statement.setString(1, computer.getName());
       statement.executeUpdate();
-      logger.debug("Deleted computer:" + computerName);
+      logger.debug("Deleted computer:" + computer.getName());
     } catch (SQLException e) {
       logger.error(e.getMessage(), e);
     }
@@ -216,10 +208,9 @@ public class ComputerDaoImp implements ComputerDao {
    */
   @Override
   public void update(Computer computer) {
-    DaoFactory factory = DaoFactory.getInstance();
 
     String name = computer.getName();
-    int companyId = computer.getCompany().getCompanyId();
+    int companyId = computer.getCompany().getId();
     Date date1 = computer.getDateIntro();
     Date date2 = computer.getDateDiscontinuation();
 
@@ -246,10 +237,9 @@ public class ComputerDaoImp implements ComputerDao {
    */
   @Override
   public void add(Computer computer) {
-    DaoFactory factory = DaoFactory.getInstance();
 
     String name = computer.getName();
-    int companyId = computer.getCompany().getCompanyId();
+    int companyId = computer.getCompany().getId();
     Date date1 = computer.getDateIntro();
     Date date2 = computer.getDateDiscontinuation();
 

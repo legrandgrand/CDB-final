@@ -87,7 +87,7 @@
 				      <td> <a href="EditComputer?<c:out value="${computer.id}"/>" onclick=""><c:out value="${computer.name}" /></a></td>
 				      <td><c:out value="${computer.dateIntro}" /></td>
 				      <td><c:out value="${computer.dateDiscontinuation}" /></td>
-				      <td><c:out value="${computer.company}" /></td>
+				      <td><c:out value="${computer.company.name}" /></td>
 				    </tr>
 				  </c:forEach>
                     <tr>       

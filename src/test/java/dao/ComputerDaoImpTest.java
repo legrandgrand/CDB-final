@@ -37,7 +37,7 @@ public class ComputerDaoImpTest {
   public void testGetComputer() {
     Company company = new Company("Thinking Machines", 2);
     Computer computer = new Computer("CM-2a", company, null, null, 2);
-    List<Computer> computers = computerDaoImp.getComputer(2);
+    List<Computer> computers = computerDaoImp.getComputer(computer);
     assertTrue(computers.contains(computer));
   }
 
@@ -45,7 +45,7 @@ public class ComputerDaoImpTest {
   public void testGetComputerFromName() {
     Company company = new Company("Thinking Machines", 2);
     Computer computer = new Computer("CM-2a", company, null, null, 2);
-    List<Computer> computers = computerDaoImp.getComputerFromName("CM-2a");
+    List<Computer> computers = computerDaoImp.getComputerFromName(computer);
     assertTrue(computers.contains(computer));
   }
 
@@ -127,9 +127,8 @@ public class ComputerDaoImpTest {
 
     Company company = new Company("Apple Inc.", 1);
     Computer computer = new Computer("testComputer", company, null, null, 580);
-    String computerName = computer.getName();
 
-    computerDaoImp.delete(computerName);
+    computerDaoImp.delete(computer);
 
     List<Computer> computers = computerDaoImp.list();
     

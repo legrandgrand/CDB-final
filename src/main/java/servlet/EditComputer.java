@@ -44,9 +44,11 @@ public class EditComputer extends HttpServlet {
     logger.debug("Size of companies: " + companies.size());
     request.setAttribute("companies", companies);
 
+    Computer computer = new Computer();
     String stringId = request.getQueryString();
-    int id = Integer.parseInt(stringId);
-    Computer computer = ServiceComputer.getInstance().getComputer(id).get(0);
+    computer.setId(Integer.parseInt(stringId));
+    
+    computer = ServiceComputer.getInstance().getComputer(computer).get(0);
     request.setAttribute("computer", computer);
 
     this.getServletContext().getRequestDispatcher("/views/editComputer.jsp").forward(request,
@@ -64,20 +66,18 @@ public class EditComputer extends HttpServlet {
    */
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
-    Date dateDisc = null;
-    Date dateIntro = null;
-
-    String name = request.getParameter("name");
-
     String intro = request.getParameter("intro");
-    dateIntro = setComputerIntro(intro);
+    Date dateIntro = setComputerIntro(intro);
 
     String disc = request.getParameter("disc");
-    dateDisc = setComputerIntro(disc);// TODO: handle situation where disc>intro
+    Date dateDisc = setComputerIntro(disc);// TODO: handle situation where disc>intro
 
+    Company company = new Company();
     String companyIdString = request.getParameter("companyname");
-    int companyId = Integer.parseInt(companyIdString);
-    Company company = ServiceCompany.getInstance().getCompanyFromId(companyId).get(0);
+    company.setId(Integer.parseInt(companyIdString));
+    company = ServiceCompany.getInstance().getCompanyFromId(company).get(0);
+
+    String name = request.getParameter("name");
 
     Computer computer = new Computer(name, company, dateIntro, dateDisc, 0);
     logger.debug("Updating computer" + computer);

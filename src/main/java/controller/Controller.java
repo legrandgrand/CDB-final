@@ -56,8 +56,10 @@ public class Controller {
    * @param name the name
    */
   public void deleteComputer(String name) {
+    Computer computer = new Computer();
+    computer.setName(name);
     logger.debug("Deleting computer named" + name);
-    serviceComputer.delete(name);
+    serviceComputer.delete(computer);
   }
 
   /**
@@ -140,9 +142,10 @@ public class Controller {
    * @return the Company Id
    */
   public Company setComputerCompany(Scanner sc) {
-    String companyName = sc.nextLine();
-    logger.debug("Setting company Id: " + companyName);
-    Company company = (Company) serviceCompany.getCompany(companyName).get(0);
+    Company company = new Company();
+    company.setName(sc.nextLine());
+    logger.debug("Setting company Id: " + company.getName());
+    company = (Company) serviceCompany.getCompany(company).get(0);
     return company;
   }
 
@@ -190,7 +193,7 @@ public class Controller {
     try {
       return dt.parse(timestamp);
     } catch (ParseException e) {
-      logger.error(e.getMessage(), e); 
+      logger.error(e.getMessage(), e);
     }
     return null;
   }
