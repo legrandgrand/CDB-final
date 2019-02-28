@@ -11,6 +11,7 @@
     <log4j.version>2.7</log4j.version>
     <servlet.version>3.1.0</servlet.version>
     <jstl.version>1.2</jstl.version>
+    <HikariCP.version>3.2.0</HikariCP.version>
   </properties>
    
   <groupId>computer-database</groupId>
@@ -80,6 +81,14 @@
         <artifactId>jstl</artifactId>
         <version>${jstl.version}</version>
     </dependency>
+    
+	<!-- https://mvnrepository.com/artifact/com.zaxxer/HikariCP -->
+	<dependency>
+	    <groupId>com.zaxxer</groupId>
+	    <artifactId>HikariCP</artifactId>
+	    <version>${HikariCP.version}</version>
+	</dependency>
+    
   </dependencies>
     
      <reporting>

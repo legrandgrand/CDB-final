@@ -53,12 +53,12 @@ public class ServiceCompany {
    * @return the company from id
    */
   public List<Company> getCompanyFromId(Company company) {
-    if (Validator.validateId(company.getId())) {
-      return companyDao.getCompanyFromId(company);
-    } else {
-      logger.error("Invalid computer name");
-      return null;
+    try {
+      Validator.validateId(company.getId());
+    } catch (Exception e) {
+      logger.error(e.getMessage(), e);
     }
+    return companyDao.getCompanyFromId(company);
 
   }
 }

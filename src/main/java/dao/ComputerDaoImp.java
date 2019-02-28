@@ -70,7 +70,6 @@ public class ComputerDaoImp implements ComputerDao {
         
         Company company = new Company();
         company.setId(resultat.getInt("company_id"));
-        logger.debug(company.getId() + "");
         if (company.getId() != 0) {
           company = companyDao.getCompanyFromId(company).get(0);
         }

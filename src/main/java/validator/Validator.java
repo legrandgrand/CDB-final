@@ -15,14 +15,13 @@ public class Validator {
    * Validate name.
    *
    * @param name the name
-   * @return true, if successful
+   * @throws Exception the exception
    */
-  public static boolean validateName(String name) {
+  public static void validateName(String name) throws Exception {
     if (!name.equals("")) {
       logger.info("valid");
-      return true;
     } else {
-      return false;
+      throw new Exception("Invalid name");
     }
   }
 
@@ -30,42 +29,41 @@ public class Validator {
    * Validate intro.
    *
    * @param intro the intro
-   * @return true, if successful
+   * @throws Exception the exception
    */
-  public static boolean validateIntro(String intro) {
+  public static void validateIntro(String intro) throws Exception {
     SimpleDateFormat dt = new SimpleDateFormat("yyyy-mm-dd");
     try {
       if (!intro.equals("")) {
         dt.parse(intro);
       }
-      return true;
     } catch (ParseException e) {
-      return false;
+      throw new Exception("Invalid date of introduction");
     }
   }
 
   /**
    * Validate disc.
    *
-   * @param disc the disc
+   * @param disc  the disc
    * @param intro the intro
-   * @return true, if successful
+   * @throws Exception the exception
    */
-  public static boolean validateDisc(String disc, Date intro) {
+  public static void validateDisc(String disc, Date intro) throws Exception {
     SimpleDateFormat dt = new SimpleDateFormat("yyyy-mm-dd");
     Date discDate = null;
     try {
       if (!disc.equals("")) {
         discDate = dt.parse(disc);
+        
         if (discDate.before(intro)) {
-          logger.info("The date you entered happened before the date of introduction. "
+          logger.info("");
+          throw new Exception("The date you entered happened before the date of introduction. "
               + "Please enter a valid date.");
-          return false;
         }
       }
-      return true;
     } catch (ParseException e) {
-      return false;
+      throw new Exception(e);
     }
   }
 
@@ -73,13 +71,11 @@ public class Validator {
    * Validate id.
    *
    * @param id the id
-   * @return true, if successful
+   * @throws Exception the exception
    */
-  public static boolean validateId(int id) {
+  public static void validateId(int id) throws Exception {
     if (id > 43 || id < 0) {
-      return false;
-    } else {
-      return true;
+      throw new Exception("Invalid company Id");
     }
   }
 

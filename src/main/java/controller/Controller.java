@@ -36,6 +36,8 @@ public class Controller {
 
   /**
    * List company.
+   *
+   * @return the list
    */
   public List<Company> listCompany() {
     logger.debug("Listing companies");
@@ -44,6 +46,8 @@ public class Controller {
 
   /**
    * List computer.
+   *
+   * @return the list
    */
   public List<Computer> listComputer() {
     logger.debug("Listing computers");
@@ -71,11 +75,12 @@ public class Controller {
    */
   public String setComputerName(Scanner sc) throws Exception {
     String name = sc.nextLine();
-    if (Validator.validateName(name)) {
+    try {
+      Validator.validateName(name);
       logger.debug("Setting computer name: " + name);
       return name;
-    } else {
-      throw new Exception("Invalid computer name");
+    } catch (Exception e) {
+      throw new Exception(e);
     }
   }
 
@@ -84,17 +89,19 @@ public class Controller {
    *
    * @param sc the scanner
    * @return the timestamp
+   * @throws Exception the exception
    */
   public Date setComputerIntro(Scanner sc) throws Exception {
     Date intro = null;
     String timestamp = null;
     timestamp = sc.nextLine();
-    if (Validator.validateIntro(timestamp)) {
+    try {
+      Validator.validateIntro(timestamp);
       if (!timestamp.equals("")) {
         intro = setDate(timestamp);
       }
-    } else {
-      throw new Exception("Invalid computer name");
+    } catch (Exception e) {
+      throw new Exception(e);
     }
     logger.debug("Setting computer date of introduction: " + intro);
     return intro;
@@ -106,13 +113,15 @@ public class Controller {
    * @param sc    the scanner
    * @param intro the date of introduction
    * @return the date of discontinuation
+   * @throws Exception the exception
    */
   public Date setComputerDisc(Scanner sc, Date intro) throws Exception {
     Date discontinuation = null;
     String timestamp = null;
     do {
       timestamp = sc.nextLine();
-      if (Validator.validateIntro(timestamp)) {
+      try { 
+        Validator.validateDisc(timestamp, intro);
         if (!timestamp.equals("")) {
           discontinuation = setDate(timestamp);
           if (null != intro) {
@@ -125,8 +134,8 @@ public class Controller {
         } else {
           break;
         }
-      } else {
-        throw new Exception("Invalid computer name");
+      } catch (Exception e) {
+        throw new Exception(e);
       }
 
     } while (null != intro || discontinuation.before(intro));

@@ -50,12 +50,7 @@ tomcat
 
 # Maven 
 target/
-
-# IntelliJ project files 
-*.iml
-*.iws
-*.ipr
-.idea/
+config.properties
 
 # eclipse project file
 .settings/

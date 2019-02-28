@@ -6,10 +6,12 @@ import java.sql.SQLException;
 
 public class DaoFactory {
 
-  private final String url = "jdbc:mysql://localhost:3306/computer-database-db";
-  private final String user = "admincdb";
-  private final String password = "qwerty1234";
+  Config config = new Config();
 
+  String url = config.getProperty("url");
+  String user = config.getProperty("user");
+  String password = config.getProperty("password");
+  
   private static final DaoFactory instance = new DaoFactory();
   
   /**

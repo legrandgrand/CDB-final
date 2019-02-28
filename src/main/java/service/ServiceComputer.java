@@ -14,8 +14,8 @@ public class ServiceComputer {
 
   private static final Logger logger = LoggerFactory.getLogger(ServiceComputer.class);
   private static final ServiceComputer instance = new ServiceComputer();
-  
-  private ComputerDaoImp computerDao = ComputerDaoImp.getInstance(); 
+
+  private ComputerDaoImp computerDao = ComputerDaoImp.getInstance();
 
   /**
    * Instantiates a new service computer.
@@ -51,12 +51,13 @@ public class ServiceComputer {
    * @param computer the computer
    */
   public void add(Computer computer) {
-    if (Validator.validateName(computer.getName()) && Validator.validateId(computer.getId())) {
+    try {
+      Validator.validateName(computer.getName());
+      Validator.validateId(computer.getId());
       computerDao.add(computer);
-    } else {
-      logger.error("Invalid computer name");
+    } catch (Exception e) {
+      logger.error(e.getMessage(), e);
     }
-
   }
 
   /**
@@ -65,10 +66,12 @@ public class ServiceComputer {
    * @param computer the computer
    */
   public void update(Computer computer) {
-    if (Validator.validateName(computer.getName()) && Validator.validateId(computer.getId())) {
+    try {
+      Validator.validateName(computer.getName());
+      Validator.validateId(computer.getId());
       computerDao.update(computer);
-    } else {
-      logger.error("Invalid computer name");
+    } catch (Exception e) {
+      logger.error(e.getMessage(), e);
     }
   }
 
@@ -89,13 +92,14 @@ public class ServiceComputer {
    * @return the computer from name
    */
   public List<Computer> getComputerFromName(Computer computer) {
-    if (Validator.validateName(computer.getName())) {
+    try {
+      Validator.validateName(computer.getName());
       logger.error("Valid computer name");
-      return computerDao.getComputerFromName(computer);
-    } else {
+    } catch (Exception e) {
       logger.error("Invalid computer name");
       return null;
     }
+    return computerDao.getComputerFromName(computer);
   }
 
   /**
