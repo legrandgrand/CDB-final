@@ -10,18 +10,9 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 public class DaoFactory {
-
-  
-  
-  private Config config = new Config();
   
   private static final HikariConfig hikariConfig = new HikariConfig("/config.properties");
   HikariDataSource ds = new HikariDataSource (hikariConfig);
-  
-
-  private final String url = config.getProperty("url");
-  private final String user = config.getProperty("user");
-  private final String password = config.getProperty("password");
   
   private static final DaoFactory instance = new DaoFactory();
   
