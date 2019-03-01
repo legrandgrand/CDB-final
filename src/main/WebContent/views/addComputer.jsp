@@ -21,7 +21,6 @@
             <a class="navbar-brand" href="Dashboard"> Application - Computer Database </a>
         </div>
     </header>
-<!-- TODO: transform companyName into companyId -->
     <section id="main">
         <div class="container">
             <div class="row">

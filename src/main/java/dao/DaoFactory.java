@@ -1,15 +1,23 @@
 package dao;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+
 public class DaoFactory {
 
+  
+  
   private Config config = new Config();
+  
+  private static final HikariConfig hikariConfig = new HikariConfig("/config.properties");
+  HikariDataSource ds = new HikariDataSource (hikariConfig);
+  
 
   private final String url = config.getProperty("url");
   private final String user = config.getProperty("user");
@@ -41,6 +49,6 @@ public class DaoFactory {
    * @throws SQLException the SQL exception
    */
   public Connection connectDb() throws SQLException {
-    return DriverManager.getConnection(url, user, password);
+    return ds.getConnection();
   }
 }
