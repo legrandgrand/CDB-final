@@ -101,7 +101,7 @@ public class AddComputer extends HttpServlet {
   /**
    * Sets the computer intro.
    *
-   * @param disc the disc
+   * @param introString the intro string
    * @return the timestamp
    */
   public Date setComputerIntro(String introString) {

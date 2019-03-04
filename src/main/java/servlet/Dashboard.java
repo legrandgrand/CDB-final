@@ -20,6 +20,8 @@ import service.ServiceComputer;
 public class Dashboard extends HttpServlet {
   private static final long serialVersionUID = 1L;
   private static final Logger logger = LoggerFactory.getLogger(Dashboard.class);
+  
+  private ServiceComputer serviceComputer = ServiceComputer.getInstance();
 
   /**
    * Do get.
@@ -44,9 +46,14 @@ public class Dashboard extends HttpServlet {
     } catch (NumberFormatException e) {
       logger.error("PageString not valid");
     }
+    
+    request.setAttribute("maxId", serviceComputer.getMaxId());
 
-    List<Computer> computers = ServiceComputer.getInstance().listPage(page);
+    List<Computer> computers = serviceComputer.listPage(page);
     request.setAttribute("computers", computers);
+    String ascend = "Ascend"; 
+    request.setAttribute("Order", ascend);
+
     this.getServletContext().getRequestDispatcher("/views/dashboard.jsp").forward(request,
         response);
   }

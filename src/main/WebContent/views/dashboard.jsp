@@ -23,11 +23,11 @@
     <section id="main">
         <div class="container">
             <h1 id="homeTitle">
-              ${fn:length(computers)} Computers found
+              <c:out value="${maxId}"/> Computers found
             </h1>
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
-                    <form id="searchForm" action="GetComputer" method="GET" class="form-inline"> <!-- GET one computer -->
+                    <form id="searchForm" action="GetComputer" method="GET" class="form-inline">
 
                         <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" />
                         <input type="submit" id="searchsubmit" value="Filter by name"
@@ -61,18 +61,46 @@
                             </span>
                         </th>
                         <th>
-                            Computer name
+	                         <c:choose>
+	                         	<c:when test = "${'Order' == Ascend}"><!-- TODO: Condition always false -->
+	                            	<a href="OrderByName?ASC">Computer name</a>
+	                            </c:when>
+	                            <c:otherwise>
+							        <a href="OrderByName?DESC">Computer name</a>
+							    </c:otherwise>
+							 </c:choose>
                         </th>
                         <th>
-                            Introduced date
+	                        <c:choose>
+	                         	<c:when test = "${'Order' == Ascend}">
+		                            <a href="OrderByIntro?ASC">Introduced date </a>
+		                        </c:when>
+		                        <c:otherwise>
+								    <a href="OrderByIntro?DESC">Introduced date</a>
+								</c:otherwise>
+							</c:choose>
                         </th>
                         <!-- Table header for Discontinued Date -->
                         <th>
-                            Discontinued date
+	                        <c:choose>
+	                         	<c:when test = "${'Order' == Ascend}">
+	                            	<a href="OrderByDisc?ASC">Discontinued date </a>
+	                            </c:when>
+	                             <c:otherwise>
+							        <a href="OrderByDisc?DESC">Discontinued date</a>
+							    </c:otherwise>
+							 </c:choose>
                         </th>
                         <!-- Table header for Company -->
                         <th>
-                            Company
+                        	 <c:choose>
+	                        	<c:when test = "${Order.equals(Ascend)}">
+	                            	<a href="OrderByCompany?ASC">Company</a>
+	                            </c:when>
+	                             <c:otherwise>
+							        <a href="OrderByCompany?DESC">Company</a>
+							    </c:otherwise>
+							 </c:choose>
                         </th>
 
                     </tr>

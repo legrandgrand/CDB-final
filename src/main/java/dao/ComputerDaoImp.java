@@ -20,15 +20,18 @@ import org.slf4j.LoggerFactory;
 //TODO Pagination
 public class ComputerDaoImp implements ComputerDao {
 
-  private static final String INSERT = 
-      "INSERT INTO computer (name,introduced,discontinued,company_id) VALUES (?,?,?,?)";
-  private static final String UPDATE = 
-      "UPDATE computer SET introduced = ?, discontinued = ?, company_id = ? WHERE name= ?";
-  private static final String SELECT = 
-      "SELECT id, name, introduced, discontinued, company_id FROM computer ";
-  private static final String SELECT_ONE = 
-      "SELECT id, name, introduced, discontinued, company_id FROM computer ";
+  private static final String INSERT = "INSERT INTO computer "
+      + "(name,introduced,discontinued,company_id) VALUES (?,?,?,?)";
+  private static final String UPDATE = "UPDATE computer "
+      + "SET introduced = ?, discontinued = ?, company_id = ? WHERE name= ?";
+  private static final String SELECT = "SELECT id, name, introduced, discontinued, company_id "
+      + "FROM computer ";
+  private static final String SELECT_ONE = "SELECT id, name, introduced, discontinued, company_id "
+      + "FROM computer ";
+  private static final String SELECT_ORDER_BY = "SELECT id, name, introduced, discontinued, company_id "
+      + "FROM computer ORDER BY ";
   private static final String PAGING = "LIMIT 20 OFFSET ";
+  private static final String GET_MAX_ID = "SELECT MAX(id) FROM computer";
   private static final String DELETE = "DELETE FROM computer WHERE name= ?";
 
   private static final ComputerDaoImp instance = new ComputerDaoImp();
@@ -48,40 +51,20 @@ public class ComputerDaoImp implements ComputerDao {
     return instance;
   }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see dao.ComputerDao#listComputers()
-   */
   @Override
   // TODO: stream
   public List<Computer> list() {
     List<Computer> list = new ArrayList<Computer>();
     List<Company> companyList = new ArrayList<Company>();
-      companyList = companyDao.list();
-    
+    companyList = companyDao.list();
+
     try (Connection connection = factory.connectDb();
         Statement statement = connection.createStatement()) {
       ResultSet resultat = statement.executeQuery(SELECT);
       while (resultat.next()) {
-        Computer computer = new Computer();
-        computer.setName(resultat.getString("name"));
-        computer.setDateIntro(resultat.getTimestamp("introduced"));
-        computer.setDateDiscontinuation(resultat.getTimestamp("discontinued"));
-        computer.setId(resultat.getInt("id"));
-        
-        Company company = new Company();
-        company.setId(resultat.getInt("company_id"));
-
-        if (company.getId() != 0 && company.getId()<companyList.size()+1) {
-
-          company.setName(companyList.get(company.getId()-1).getName());
-
-        }
-        computer.setCompany(company);
-        list.add(computer);
+        list.add(setComputerData(resultat, companyList));
       }
-      
+
     } catch (SQLException e) {
       logger.error(e.getMessage(), e);
     }
@@ -90,11 +73,27 @@ public class ComputerDaoImp implements ComputerDao {
 
   }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see dao.ComputerDao#listComputers()
-   */
+  @Override
+  // TODO: stream
+  public List<Computer> orderBy(String column, String type) {
+    List<Computer> list = new ArrayList<Computer>();
+    List<Company> companyList = new ArrayList<Company>();
+    companyList = companyDao.list();
+
+    try (Connection connection = factory.connectDb();
+        Statement statement = connection.createStatement()) {
+      ResultSet resultat = statement.executeQuery(SELECT_ORDER_BY + column + " " + type);
+      while (resultat.next()) {
+        list.add(setComputerData(resultat, companyList));
+      }
+
+    } catch (SQLException e) {
+      logger.error(e.getMessage(), e);
+    }
+    logger.debug("Size of list: " + list.size());
+    return list;
+  }
+
   @Override
   // TODO: stream
   public List<Computer> listPage(int page) {
@@ -102,25 +101,11 @@ public class ComputerDaoImp implements ComputerDao {
     List<Company> companyList = new ArrayList<Company>();
     companyList = companyDao.list();
 
-
     try (Connection connection = factory.connectDb();
         Statement statement = connection.createStatement()) {
       ResultSet resultat = statement.executeQuery(SELECT + PAGING + page);
       while (resultat.next()) {
-        Computer computer = new Computer();
-        computer.setName(resultat.getString("name"));
-        computer.setDateIntro(resultat.getTimestamp("introduced"));
-        computer.setDateDiscontinuation(resultat.getTimestamp("discontinued"));
-        computer.setId(resultat.getInt("id"));
-        Company company = new Company();
-        company.setId(resultat.getInt("company_id"));
-        if (company.getId() != 0 && company.getId()<companyList.size()+1) {
-
-          company.setName(companyList.get(company.getId()-1).getName());
-
-        }
-        computer.setCompany(company);
-        list.add(computer);
+        list.add(setComputerData(resultat, companyList));
       }
     } catch (SQLException e) {
       logger.error(e.getMessage(), e);
@@ -130,65 +115,63 @@ public class ComputerDaoImp implements ComputerDao {
 
   }
 
+  // TODO: Upgrade the company lookup to only lookup for 1 company
   @Override
   public List<Computer> getComputer(Computer computer) {
     List<Computer> list = new ArrayList<Computer>();
+    List<Company> companyList = new ArrayList<Company>();
+    companyList = companyDao.list();
 
     try (Connection connection = factory.connectDb();
         Statement statement = connection.createStatement()) {
       ResultSet resultat = statement.executeQuery(SELECT_ONE + "WHERE id=" + computer.getId());
       while (resultat.next()) {
-        Computer computer2 = new Computer();
-        computer2.setName(resultat.getString("name"));
-        computer2.setDateIntro(resultat.getTimestamp("introduced"));
-        computer2.setDateDiscontinuation(resultat.getTimestamp("discontinued"));
-        computer2.setId(resultat.getInt("id"));
-        
-        Company company = new Company();
-        company.setId(resultat.getInt("company_id"));
-        if (company.getId() != 0) {
-          computer2.setCompany(companyDao.getCompanyFromId(company).get(0));
-        }
-        computer2.setCompany(company);
-        list.add(computer2);
+        list.add(setComputerData(resultat, companyList));
       }
     } catch (SQLException e) {
       logger.error(e.getMessage(), e);
     }
     logger.debug("Returning computer: " + computer);
     return list;
-
+  }
+  
+  
+  
+  @Override
+  public int getMaxId() {
+    int id=0;
+    try (Connection connection = factory.connectDb();
+        Statement statement = connection.createStatement()) {
+      ResultSet resultat = statement.executeQuery(GET_MAX_ID);
+      while (resultat.next()) {
+        id=resultat.getInt("MAX(id)");
+      }
+    } catch (SQLException e) {
+      logger.error(e.getMessage(), e);
+    }
+    logger.debug("Returning max id: " + id);
+    return id;
   }
 
+  // TODO: Upgrade the company lookup to only lookup for 1 company
   @Override
   public List<Computer> getComputerFromName(Computer computer) {
     List<Computer> list = new ArrayList<Computer>();
+    List<Company> companyList = new ArrayList<Company>();
+    companyList = companyDao.list();
 
     try (Connection connection = factory.connectDb();
         Statement statement = connection.createStatement()) {
       ResultSet resultat = statement
           .executeQuery(SELECT_ONE + "WHERE name LIKE '%" + computer.getName() + "%'");
       while (resultat.next()) {
-        Computer computer2 = new Computer();
-        computer2.setName(resultat.getString("name"));
-        computer2.setDateIntro(resultat.getTimestamp("introduced"));
-        computer2.setDateDiscontinuation(resultat.getTimestamp("discontinued"));
-        computer2.setId(resultat.getInt("id"));
-        
-        Company company = new Company();
-        company.setId(resultat.getInt("company_id"));
-        if (company.getId() != 0) {
-          computer2.setCompany(companyDao.getCompanyFromId(company).get(0));
-        }
-        computer2.setCompany(company);
-        list.add(computer2);
+        list.add(setComputerData(resultat, companyList));
       }
     } catch (SQLException e) {
       logger.error(e.getMessage(), e);
     }
     logger.debug("Returning computer: " + computer);
     return list;
-
   }
 
   /*
@@ -268,6 +251,33 @@ public class ComputerDaoImp implements ComputerDao {
 
       logger.error(e.getMessage(), e);
     }
+  }
+
+  /**
+   * Sets the computer data.
+   *
+   * @param resultat the resultat
+   * @param companyList the company list
+   * @return the computer
+   * @throws SQLException the SQL exception
+   */
+  public Computer setComputerData(ResultSet resultat, List<Company> companyList)
+      throws SQLException {
+    Computer computer = new Computer();
+    computer.setName(resultat.getString("name"));
+    computer.setDateIntro(resultat.getTimestamp("introduced"));
+    computer.setDateDiscontinuation(resultat.getTimestamp("discontinued"));
+    computer.setId(resultat.getInt("id"));
+    Company company = new Company();
+    company.setId(resultat.getInt("company_id"));
+    if (company.getId() != 0 && company.getId() < companyList.size() + 1) {
+
+      company.setName(companyList.get(company.getId() - 1).getName());
+
+    }
+    computer.setCompany(company);
+
+    return computer;
   }
 
   /**

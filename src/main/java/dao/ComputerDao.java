@@ -58,4 +58,8 @@ public interface ComputerDao {
    */
   List<Computer> getComputerFromName(Computer computer);
 
+  int getMaxId();
+
+  List<Computer> orderBy(String column, String type);
+
 }
