@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 public class Validator {
 
   private static final Logger logger = LoggerFactory.getLogger(Validator.class);
+  private static final int MIN_ID = 0;
+  private static final int MAX_ID = 43;
 
   /**
    * Validate name.
@@ -74,7 +76,7 @@ public class Validator {
    * @throws Exception the exception
    */
   public static void validateId(int id) throws Exception {
-    if (id > 43 || id < 0) {
+    if (id > MAX_ID || id < MIN_ID) {
       throw new Exception("Invalid company Id");
     }
   }

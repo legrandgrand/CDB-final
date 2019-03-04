@@ -57,7 +57,9 @@ public class ComputerDaoImp implements ComputerDao {
   // TODO: stream
   public List<Computer> list() {
     List<Computer> list = new ArrayList<Computer>();
-
+    List<Company> companyList = new ArrayList<Company>();
+      companyList = companyDao.list();
+    
     try (Connection connection = factory.connectDb();
         Statement statement = connection.createStatement()) {
       ResultSet resultat = statement.executeQuery(SELECT);
@@ -70,12 +72,16 @@ public class ComputerDaoImp implements ComputerDao {
         
         Company company = new Company();
         company.setId(resultat.getInt("company_id"));
-        if (company.getId() != 0) {
-          company = companyDao.getCompanyFromId(company).get(0);
+
+        if (company.getId() != 0 && company.getId()<companyList.size()+1) {
+
+          company.setName(companyList.get(company.getId()-1).getName());
+
         }
         computer.setCompany(company);
         list.add(computer);
       }
+      
     } catch (SQLException e) {
       logger.error(e.getMessage(), e);
     }
@@ -93,6 +99,9 @@ public class ComputerDaoImp implements ComputerDao {
   // TODO: stream
   public List<Computer> listPage(int page) {
     List<Computer> list = new ArrayList<Computer>();
+    List<Company> companyList = new ArrayList<Company>();
+    companyList = companyDao.list();
+
 
     try (Connection connection = factory.connectDb();
         Statement statement = connection.createStatement()) {
@@ -103,11 +112,12 @@ public class ComputerDaoImp implements ComputerDao {
         computer.setDateIntro(resultat.getTimestamp("introduced"));
         computer.setDateDiscontinuation(resultat.getTimestamp("discontinued"));
         computer.setId(resultat.getInt("id"));
-        
         Company company = new Company();
         company.setId(resultat.getInt("company_id"));
-        if (company.getId() != 0) {
-          company = companyDao.getCompanyFromId(company).get(0);
+        if (company.getId() != 0 && company.getId()<companyList.size()+1) {
+
+          company.setName(companyList.get(company.getId()-1).getName());
+
         }
         computer.setCompany(company);
         list.add(computer);

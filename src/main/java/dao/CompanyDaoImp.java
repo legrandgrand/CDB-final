@@ -42,6 +42,7 @@ public class CompanyDaoImp implements CompanyDao {
    * 
    * @see dao.CompanyDao#listCompanies()
    */
+
   @Override
   public List<Company> list() {
     List<Company> list = new ArrayList<Company>();
@@ -55,8 +56,8 @@ public class CompanyDaoImp implements CompanyDao {
           int id = resultat.getInt("id");
           Company company = new Company(name, id);
           list.add(company);
-
         }
+        
       }
     } catch (SQLException e) {
       logger.error(e.getMessage(), e);
