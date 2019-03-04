@@ -39,18 +39,22 @@ public class Dashboard extends HttpServlet {
     try {
       pageString = request.getQueryString();
       if (!pageString.equals("")) {
-        page = Integer.parseInt(pageString);
+        page = Integer.parseInt(pageString) * 20;
       }
     } catch (NullPointerException e) {
       logger.error("PageString not valid");
     } catch (NumberFormatException e) {
       logger.error("PageString not valid");
     }
+
     
     request.setAttribute("maxId", serviceComputer.getMaxId());
 
     List<Computer> computers = serviceComputer.listPage(page);
     request.setAttribute("computers", computers);
+    
+    Math.floor(page);
+    request.setAttribute("page", page/20);
     String ascend = "Ascend"; 
     request.setAttribute("Order", ascend);
 

@@ -132,36 +132,13 @@
                       <span aria-hidden="true">&laquo;</span>
                   </a>
               </li>
-              <li><a href="Dashboard?0">1</a></li>
-              <li><a href="Dashboard?20">2</a></li>
-              <li><a href="Dashboard?40">3</a></li>
-              <li><a href="Dashboard?60">4</a></li>
-              <li><a href="Dashboard?80">5</a></li>
-              <li><a href="Dashboard?100">6</a></li>
-              <li><a href="Dashboard?120">7</a></li>
-              <li><a href="Dashboard?140">8</a></li>
-              <li><a href="Dashboard?160">9</a></li>
-              <li><a href="Dashboard?180">10</a></li>
-              <li><a href="Dashboard?200">11</a></li>
-              <li><a href="Dashboard?220">12</a></li>
-              <li><a href="Dashboard?240">13</a></li>
-              <li><a href="Dashboard?260">14</a></li>
-              <li><a href="Dashboard?280">15</a></li>
-              <li><a href="Dashboard?300">16</a></li>
-              <li><a href="Dashboard?320">17</a></li>
-              <li><a href="Dashboard?340">18</a></li>
-              <li><a href="Dashboard?360">19</a></li>
-              <li><a href="Dashboard?380">20</a></li>
-              <li><a href="Dashboard?400">21</a></li>
-              <li><a href="Dashboard?420">22</a></li>
-              <li><a href="Dashboard?440">23</a></li>
-              <li><a href="Dashboard?460">24</a></li>
-              <li><a href="Dashboard?480">25</a></li>
-              <li><a href="Dashboard?500">26</a></li>
-              <li><a href="Dashboard?520">27</a></li>
-              <li><a href="Dashboard?540">28</a></li>
+              <c:if test="${(page - 2)>0}"><li><a href="Dashboard?${page - 2}">${page-2}</a></li></c:if>
+              <c:if test="${(page - 1)>0}"><li><a href="Dashboard?${page - 1}">${page-1}</a></li></c:if>
+              <c:if test="${page>0}"><li><a href="Dashboard?${page}">${page}</a></li></c:if>
+              <li><a href="Dashboard?${page + 1}">${page + 1}</a></li>
+              <li><a href="Dashboard?${page + 2}">${page + 2}</a></li>
               <li>
-                <a href="Dashboard?540" aria-label="Next">
+                <a href="Dashboard?${fn:substringBefore((maxId/20)-1, '.')}" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>
