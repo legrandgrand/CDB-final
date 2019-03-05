@@ -26,12 +26,18 @@ public class OrderByIntro extends HttpServlet {
   private ServiceComputer serviceComputer = ServiceComputer.getInstance();
   
 	/**
+	 * Do get.
+	 *
+	 * @param request the request
+	 * @param response the response
+	 * @throws ServletException the servlet exception
+	 * @throws IOException Signals that an I/O exception has occurred.
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	  String type = request.getQueryString();
     logger.debug("request is order by: " + type);
-    List<Computer> computers = serviceComputer.orderByIntro("ASC");//TODO: VERY BUGGY! need to find the correct syntax
+    List<Computer> computers = serviceComputer.orderByIntro("ASC");
     
     logger.debug("Size of computers: " + computers.size());
     request.setAttribute("computers", computers);
@@ -50,10 +56,15 @@ public class OrderByIntro extends HttpServlet {
 	}
 
 	/**
+	 * Do post.
+	 *
+	 * @param request the request
+	 * @param response the response
+	 * @throws ServletException the servlet exception
+	 * @throws IOException Signals that an I/O exception has occurred.
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub orderByName
 		doGet(request, response);
 	}
 

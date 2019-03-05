@@ -55,7 +55,7 @@ public class Controller {
   }
 
   /**
-   * Delete company.
+   * Delete computer.
    *
    * @param name the name
    */
@@ -64,6 +64,13 @@ public class Controller {
     computer.setName(name);
     logger.debug("Deleting computer named" + name);
     serviceComputer.delete(computer);
+  }
+  
+  public void deleteCompany(int id) {
+    Company company = new Company();
+    company.setId(id);
+    logger.debug("Deleting company of id: " + id);
+    serviceCompany.delete(company);
   }
 
   /**
@@ -155,6 +162,7 @@ public class Controller {
     company.setName(sc.nextLine());
     logger.debug("Setting company Id: " + company.getName());
     company = (Company) serviceCompany.getCompany(company).get(0);
+    //sc.nextLine();
     return company;
   }
 

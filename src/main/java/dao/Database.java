@@ -9,20 +9,20 @@ import java.sql.SQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DaoFactory {
+public class Database {
   
   private static final HikariConfig hikariConfig = new HikariConfig("/config.properties");
   HikariDataSource ds = new HikariDataSource(hikariConfig);
   private static Connection connection;
 
-  private static final DaoFactory instance = new DaoFactory();
+  private static final Database instance = new Database();
 
   private static final Logger logger = LoggerFactory.getLogger(ComputerDaoImp.class);
 
   /**
    * Get instance of a new dao factory.
    */
-  public static final DaoFactory getInstance() {
+  public static final Database getInstance() {
     try {
       Class.forName("com.mysql.cj.jdbc.Driver");
     } catch (ClassNotFoundException e) {
@@ -31,7 +31,7 @@ public class DaoFactory {
     return instance;
   }
 
-  private DaoFactory() {
+  private Database() {
   }
 
   /**

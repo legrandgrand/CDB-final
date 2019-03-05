@@ -38,7 +38,7 @@ public class ComputerDaoImp implements ComputerDao {
   private static final Logger logger = LoggerFactory.getLogger(ComputerDaoImp.class);
 
   private CompanyDaoImp companyDao = CompanyDaoImp.getInstance();
-  private DaoFactory factory = DaoFactory.getInstance();
+  private Database database = Database.getInstance();
 
   /**
    * Instantiates a new computer dao imp.
@@ -57,7 +57,7 @@ public class ComputerDaoImp implements ComputerDao {
     List<Company> companyList = new ArrayList<Company>();
     companyList = companyDao.list();
 
-    try (Connection connection = factory.connectDb();
+    try (Connection connection = database.connectDb();
         Statement statement = connection.createStatement()) {
       ResultSet resultat = statement.executeQuery(SELECT);
       while (resultat.next()) {
@@ -79,7 +79,7 @@ public class ComputerDaoImp implements ComputerDao {
     List<Company> companyList = new ArrayList<Company>();
     companyList = companyDao.list();
 
-    try (Connection connection = factory.connectDb();
+    try (Connection connection = database.connectDb();
         Statement statement = connection.createStatement()) {
       ResultSet resultat = statement.executeQuery(SELECT_ORDER_BY + column + ") , " + column + " " +  type);
       while (resultat.next()) {
@@ -100,7 +100,7 @@ public class ComputerDaoImp implements ComputerDao {
     List<Company> companyList = new ArrayList<Company>();
     companyList = companyDao.list();
 
-    try (Connection connection = factory.connectDb();
+    try (Connection connection = database.connectDb();
         Statement statement = connection.createStatement()) {
       ResultSet resultat = statement.executeQuery(SELECT + PAGING + page);
       while (resultat.next()) {
@@ -121,7 +121,7 @@ public class ComputerDaoImp implements ComputerDao {
     List<Company> companyList = new ArrayList<Company>();
     companyList = companyDao.list();
 
-    try (Connection connection = factory.connectDb();
+    try (Connection connection = database.connectDb();
         Statement statement = connection.createStatement()) {
       ResultSet resultat = statement.executeQuery(SELECT_ONE + "WHERE id=" + computer.getId());
       while (resultat.next()) {
@@ -139,7 +139,7 @@ public class ComputerDaoImp implements ComputerDao {
   @Override
   public int getMaxId() {
     int id=0;
-    try (Connection connection = factory.connectDb();
+    try (Connection connection = database.connectDb();
         Statement statement = connection.createStatement()) {
       ResultSet resultat = statement.executeQuery(GET_MAX_ID);
       while (resultat.next()) {
@@ -159,7 +159,7 @@ public class ComputerDaoImp implements ComputerDao {
     List<Company> companyList = new ArrayList<Company>();
     companyList = companyDao.list();
 
-    try (Connection connection = factory.connectDb();
+    try (Connection connection = database.connectDb();
         Statement statement = connection.createStatement()) {
       ResultSet resultat = statement
           .executeQuery(SELECT_ONE + "WHERE name LIKE '%" + computer.getName() + "%'");
@@ -181,7 +181,7 @@ public class ComputerDaoImp implements ComputerDao {
   @Override
   public void delete(Computer computer) {
 
-    try (Connection connection = factory.connectDb();
+    try (Connection connection = database.connectDb();
         PreparedStatement statement = connection.prepareStatement(DELETE)) {
       statement.setString(1, computer.getName());
       statement.executeUpdate();
@@ -208,7 +208,7 @@ public class ComputerDaoImp implements ComputerDao {
     Timestamp introduced = toTimestamp(date1);
     Timestamp discontinued = toTimestamp(date2);
 
-    try (Connection connection = factory.connectDb();
+    try (Connection connection = database.connectDb();
         PreparedStatement statement = connection.prepareStatement(UPDATE)) {
       statement.setTimestamp(1, introduced);
       statement.setTimestamp(2, discontinued);
@@ -237,7 +237,7 @@ public class ComputerDaoImp implements ComputerDao {
     Timestamp introduced = toTimestamp(date1);
     Timestamp discontinued = toTimestamp(date2);
 
-    try (Connection connection = factory.connectDb();
+    try (Connection connection = database.connectDb();
         PreparedStatement statement = connection.prepareStatement(INSERT)) {
       statement.setString(1, name);
       statement.setTimestamp(2, introduced);

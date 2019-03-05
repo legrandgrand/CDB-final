@@ -1,6 +1,7 @@
 package service;
 
 import dao.CompanyDaoImp;
+
 import java.util.List;
 
 import model.Company;
@@ -13,7 +14,7 @@ import validator.Validator;
 public class ServiceCompany {
 
   private static final ServiceCompany instance = new ServiceCompany();
-  private static final Logger logger = LoggerFactory.getLogger(ServiceComputer.class);
+  private static final Logger logger = LoggerFactory.getLogger(ServiceCompany.class);
   
   private CompanyDaoImp companyDao = CompanyDaoImp.getInstance(); 
 
@@ -59,6 +60,9 @@ public class ServiceCompany {
       logger.error(e.getMessage(), e);
     }
     return companyDao.getCompanyFromId(company);
-
+  }
+  
+  public void delete(Company company) {
+    companyDao.delete(company);  
   }
 }

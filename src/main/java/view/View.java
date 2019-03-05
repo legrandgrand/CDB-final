@@ -8,11 +8,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import model.Company;
 import model.Computer;
 
 public class View {
 
+  
+  private static final Logger logger = LoggerFactory.getLogger(View.class);
   private Controller controller;
 
   /**
@@ -30,13 +35,18 @@ public class View {
    * Main menu.
    */
   public void mainMenu() {
-    System.out.println("What would you like to do?" + "\n1. List Manufacturer companies."
-        + "\n2. List Computer database." + "\n3. Add a Computer to the database."
-        + "\n4. Delete a Computer from the database." + "\n5. Update a Computer in the database."
-        + "\n6. Exit program.");
+    System.out.println("What would you like to do?"
+        + "\n1. List Manufacturer companies."
+        + "\n2. List Computer database."
+        + "\n3. Add a Computer to the database."
+        + "\n4. Delete a Computer from the database."
+        + "\n5. Delete a Company (and associated Computers) from the database."
+        + "\n6. Update a Computer in the database."
+        + "\n7. Exit program.");
     Scanner sc = new Scanner(System.in);
     try {
       int userChoice = sc.nextInt();
+      logger.debug("User choice is: "+userChoice); 
       switch (userChoice) { // TODO: enums
         case 1:
           listCompanies();
@@ -51,9 +61,12 @@ public class View {
           deleteComputer();
           break;
         case 5:
-          updateComputer();
+          deleteCompany();
           break;
         case 6:
+          updateComputer();
+          break;
+        case 7:
           System.out.println("Exiting program");
           sc.close();
           System.exit(0);
@@ -196,6 +209,20 @@ public class View {
       System.out.println(computerName + "a été supprimé");
       mainMenu();
     }
+
+  }
+  
+  public void deleteCompany() {
+    System.out.println("We will now delete a company (and associated Computers) from the database."
+        + "Please enter the company's id you want to delete.");
+    try (Scanner sc = new Scanner(System.in)) {
+      int companyId = sc.nextInt();
+      controller.deleteCompany(companyId);
+      System.out.println(companyId + "a été supprimé");
+      sc.nextLine();
+      mainMenu();
+    }
+
   }
 
   /**
