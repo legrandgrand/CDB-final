@@ -47,7 +47,8 @@ public class Dashboard extends HttpServlet {
       logger.error("PageString not valid");
     }
 
-    
+    Math.floor(page);
+    request.setAttribute("page", page/20);
     request.setAttribute("maxId", serviceComputer.getMaxId());
 
     List<Computer> computers = serviceComputer.listPage(page);

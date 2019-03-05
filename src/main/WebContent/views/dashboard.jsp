@@ -104,11 +104,11 @@
                   <span aria-hidden="true">&laquo;</span>
                 </a>
               </li>
-            <c:forEach var="i" begin="0" end="10" step="1">
-    		  <c:if test="${page - 5 + i >0 && page -5 +i <(maxId/20)-1}">
-    			<li><a href="Dashboard?${page -5 + i}">${page -5 +i}</a></li>
-    		  </c:if>
-			</c:forEach>
+	            <c:forEach var="i" begin="0" end="10" step="1">
+	    		  <c:if test="${page - 5 + i >0 && page -5 +i <(maxId/20)-1}">
+	    			<li><a href="Dashboard?${page -5 + i}">${page -5 +i}</a></li>
+	    		  </c:if>
+				</c:forEach>
               <li>
 	            <a href="Dashboard?${fn:substringBefore((maxId/20)-1, '.')}" aria-label="Next">
 	              <span aria-hidden="true">&raquo;</span>
