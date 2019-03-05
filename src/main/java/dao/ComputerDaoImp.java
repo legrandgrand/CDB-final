@@ -17,7 +17,6 @@ import model.Computer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//TODO Pagination
 public class ComputerDaoImp implements ComputerDao {
 
   private static final String INSERT = "INSERT INTO computer "
@@ -29,7 +28,7 @@ public class ComputerDaoImp implements ComputerDao {
   private static final String SELECT_ONE = "SELECT id, name, introduced, discontinued, company_id "
       + "FROM computer ";
   private static final String SELECT_ORDER_BY = "SELECT id, name, introduced, discontinued, company_id "
-      + "FROM computer ORDER BY ";
+      + "FROM computer ORDER BY ISNULL(";
   private static final String PAGING = "LIMIT 20 OFFSET ";
   private static final String GET_MAX_ID = "SELECT MAX(id) FROM computer";
   private static final String DELETE = "DELETE FROM computer WHERE name= ?";
@@ -82,7 +81,7 @@ public class ComputerDaoImp implements ComputerDao {
 
     try (Connection connection = factory.connectDb();
         Statement statement = connection.createStatement()) {
-      ResultSet resultat = statement.executeQuery(SELECT_ORDER_BY + column + " " + type);
+      ResultSet resultat = statement.executeQuery(SELECT_ORDER_BY + column + ") , " + column + " " +  type);
       while (resultat.next()) {
         list.add(setComputerData(resultat, companyList));
       }

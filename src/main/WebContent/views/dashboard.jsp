@@ -61,46 +61,18 @@
                             </span>
                         </th>
                         <th>
-	                         <c:choose>
-	                         	<c:when test = "${'Order' == Ascend}"><!-- TODO: Condition always false -->
-	                            	<a href="OrderByName?ASC">Computer name</a>
-	                            </c:when>
-	                            <c:otherwise>
-							        <a href="OrderByName?DESC">Computer name</a>
-							    </c:otherwise>
-							 </c:choose>
+	                      <a href="OrderByName?${Order}">Computer name</a>
                         </th>
                         <th>
-	                        <c:choose>
-	                         	<c:when test = "${'Order' == Ascend}">
-		                            <a href="OrderByIntro?ASC">Introduced date </a>
-		                        </c:when>
-		                        <c:otherwise>
-								    <a href="OrderByIntro?DESC">Introduced date</a>
-								</c:otherwise>
-							</c:choose>
+	                        <a href="OrderByIntro?${Order}">Introduced date </a>
                         </th>
                         <!-- Table header for Discontinued Date -->
                         <th>
-	                        <c:choose>
-	                         	<c:when test = "${'Order' == Ascend}">
-	                            	<a href="OrderByDisc?ASC">Discontinued date </a>
-	                            </c:when>
-	                             <c:otherwise>
-							        <a href="OrderByDisc?DESC">Discontinued date</a>
-							    </c:otherwise>
-							 </c:choose>
+	                      <a href="OrderByDisc?${Order}">Discontinued date </a>
                         </th>
                         <!-- Table header for Company -->
                         <th>
-                        	 <c:choose>
-	                        	<c:when test = "${Order.equals(Ascend)}">
-	                            	<a href="OrderByCompany?ASC">Company</a>
-	                            </c:when>
-	                             <c:otherwise>
-							        <a href="OrderByCompany?DESC">Company</a>
-							    </c:otherwise>
-							 </c:choose>
+	                      <a href="OrderByCompany?${Order}">Company</a>
                         </th>
 
                     </tr>
@@ -127,22 +99,22 @@
     <footer class="navbar-fixed-bottom">
         <div class="container text-center">
             <ul class="pagination">
-                <li>
-                    <a href="Dashboard?0" aria-label="Previous">
-                      <span aria-hidden="true">&laquo;</span>
-                  </a>
-              </li>
-              <c:if test="${(page - 2)>0}"><li><a href="Dashboard?${page - 2}">${page-2}</a></li></c:if>
-              <c:if test="${(page - 1)>0}"><li><a href="Dashboard?${page - 1}">${page-1}</a></li></c:if>
-              <c:if test="${page>0}"><li><a href="Dashboard?${page}">${page}</a></li></c:if>
-              <li><a href="Dashboard?${page + 1}">${page + 1}</a></li>
-              <li><a href="Dashboard?${page + 2}">${page + 2}</a></li>
               <li>
-                <a href="Dashboard?${fn:substringBefore((maxId/20)-1, '.')}" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
+                <a href="Dashboard?0" aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
                 </a>
-            </li>
-        </ul>
+              </li>
+            <c:forEach var="i" begin="0" end="10" step="1">
+    		  <c:if test="${page - 5 + i >0 && page -5 +i <(maxId/20)-1}">
+    			<li><a href="Dashboard?${page -5 + i}">${page -5 +i}</a></li>
+    		  </c:if>
+			</c:forEach>
+              <li>
+	            <a href="Dashboard?${fn:substringBefore((maxId/20)-1, '.')}" aria-label="Next">
+	              <span aria-hidden="true">&raquo;</span>
+	            </a>
+              </li>
+        	</ul>
 		</div>
 		
         <div class="btn-group btn-group-sm pull-right" role="group" >

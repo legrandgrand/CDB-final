@@ -52,11 +52,8 @@ public class Dashboard extends HttpServlet {
 
     List<Computer> computers = serviceComputer.listPage(page);
     request.setAttribute("computers", computers);
-    
-    Math.floor(page);
-    request.setAttribute("page", page/20);
-    String ascend = "Ascend"; 
-    request.setAttribute("Order", ascend);
+
+    request.setAttribute("Order", "ASC");
 
     this.getServletContext().getRequestDispatcher("/views/dashboard.jsp").forward(request,
         response);

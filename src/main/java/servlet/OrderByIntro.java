@@ -38,7 +38,13 @@ public class OrderByIntro extends HttpServlet {
     
     request.setAttribute("maxId", computers.size());
     
-    request.setAttribute("Order", "Descend");
+    if(type.equals("ASC")) {
+      type = "DESC";
+    } else {
+      type = "ASC";
+    }
+    request.setAttribute("Order", type);
+    
     this.getServletContext().getRequestDispatcher("/views/dashboard.jsp").forward(request,
         response);
 	}

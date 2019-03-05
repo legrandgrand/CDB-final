@@ -36,7 +36,15 @@ public class OrderByName extends HttpServlet {
     request.setAttribute("computers", computers);
     
     request.setAttribute("maxId", computers.size());
-    request.setAttribute("Order", "Ascend");
+    
+    if(type.equals("ASC")) {
+      type = "DESC";
+    } else {
+      type = "ASC";
+    }   
+    request.setAttribute("Order", type);
+    
+    
     this.getServletContext().getRequestDispatcher("/views/dashboard.jsp").forward(request,
         response);
 	}
