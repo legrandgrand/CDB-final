@@ -118,7 +118,7 @@ public class CompanyDaoImp implements CompanyDao {
 
   @Override
   public void delete(Company company) {
-    String IdString = Integer.toString(company.getId());
+    String idString = Integer.toString(company.getId());
     Connection connection = null;
     try {
       connection = database.connectDb();
@@ -126,14 +126,13 @@ public class CompanyDaoImp implements CompanyDao {
 
       PreparedStatement statement = connection.prepareStatement(DELETE_COMPANY);
       PreparedStatement statement2 = connection.prepareStatement(DELETE_COMPUTER);
-      
 
-      statement2.setString(1, IdString);
+      statement2.setString(1, idString);
       statement2.executeUpdate();
 
-      statement.setString(1, IdString);
+      statement.setString(1, idString);
       statement.executeUpdate();
-      
+
       connection.commit();
       logger.debug("Deleted company of id:" + company.getId());
 
@@ -152,12 +151,13 @@ public class CompanyDaoImp implements CompanyDao {
       }
     } finally {
       try {
-        if (connection != null)
+        if (connection != null) {
           connection.close();
+        }
       } catch (SQLException se) {
         logger.error(se.getMessage(), se);
       }
     }
   }
-  
+
 }

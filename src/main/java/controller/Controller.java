@@ -66,6 +66,11 @@ public class Controller {
     serviceComputer.delete(computer);
   }
   
+  /**
+   * Delete company.
+   *
+   * @param id the id
+   */
   public void deleteCompany(int id) {
     Company company = new Company();
     company.setId(id);

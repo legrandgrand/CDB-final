@@ -8,11 +8,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import model.Company;
 import model.Computer;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class View {
 
@@ -46,7 +46,6 @@ public class View {
     Scanner sc = new Scanner(System.in);
     try {
       int userChoice = sc.nextInt();
-      logger.debug("User choice is: "+userChoice); 
       switch (userChoice) { // TODO: enums
         case 1:
           listCompanies();
@@ -153,6 +152,7 @@ public class View {
    *
    * @param sc the sc
    * @return the date
+   * @throws Exception the exception
    */
   public Date addComputerDateIntro(Scanner sc) throws Exception {
     System.out.println("Please enter the date of introduction. "
@@ -178,6 +178,7 @@ public class View {
    * @param sc    the sc
    * @param intro the intro
    * @return the date
+   * @throws Exception the exception
    */
   public Date addComputerDateDisc(Scanner sc, Date intro) throws Exception {
     System.out
@@ -212,6 +213,9 @@ public class View {
 
   }
   
+  /**
+   * Delete company.
+   */
   public void deleteCompany() {
     System.out.println("We will now delete a company (and associated Computers) from the database."
         + "Please enter the company's id you want to delete.");

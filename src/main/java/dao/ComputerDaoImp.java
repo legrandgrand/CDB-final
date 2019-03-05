@@ -27,8 +27,8 @@ public class ComputerDaoImp implements ComputerDao {
       + "FROM computer ";
   private static final String SELECT_ONE = "SELECT id, name, introduced, discontinued, company_id "
       + "FROM computer ";
-  private static final String SELECT_ORDER_BY = "SELECT id, name, introduced, discontinued, company_id "
-      + "FROM computer ORDER BY ISNULL(";
+  private static final String SELECT_ORDER_BY = "SELECT id, name, introduced, "
+      + "discontinued, company_id FROM computer ORDER BY ISNULL(";
   private static final String PAGING = "LIMIT 20 OFFSET ";
   private static final String GET_MAX_ID = "SELECT MAX(id) FROM computer";
   private static final String DELETE = "DELETE FROM computer WHERE name= ?";
@@ -81,7 +81,8 @@ public class ComputerDaoImp implements ComputerDao {
 
     try (Connection connection = database.connectDb();
         Statement statement = connection.createStatement()) {
-      ResultSet resultat = statement.executeQuery(SELECT_ORDER_BY + column + ") , " + column + " " +  type);
+      ResultSet resultat = statement
+          .executeQuery(SELECT_ORDER_BY + column + ") , " + column + " " + type);
       while (resultat.next()) {
         list.add(setComputerData(resultat, companyList));
       }
@@ -133,17 +134,15 @@ public class ComputerDaoImp implements ComputerDao {
     logger.debug("Returning computer: " + computer);
     return list;
   }
-  
-  
-  
+
   @Override
   public int getMaxId() {
-    int id=0;
+    int id = 0;
     try (Connection connection = database.connectDb();
         Statement statement = connection.createStatement()) {
       ResultSet resultat = statement.executeQuery(GET_MAX_ID);
       while (resultat.next()) {
-        id=resultat.getInt("MAX(id)");
+        id = resultat.getInt("MAX(id)");
       }
     } catch (SQLException e) {
       logger.error(e.getMessage(), e);
@@ -255,7 +254,7 @@ public class ComputerDaoImp implements ComputerDao {
   /**
    * Sets the computer data.
    *
-   * @param resultat the resultat
+   * @param resultat    the resultat
    * @param companyList the company list
    * @return the computer
    * @throws SQLException the SQL exception
