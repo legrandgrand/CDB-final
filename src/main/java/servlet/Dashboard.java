@@ -20,7 +20,7 @@ import service.ServiceComputer;
 public class Dashboard extends HttpServlet {
   private static final long serialVersionUID = 1L;
   private static final Logger logger = LoggerFactory.getLogger(Dashboard.class);
-  
+
   private ServiceComputer serviceComputer = ServiceComputer.getInstance();
 
   /**
@@ -36,22 +36,37 @@ public class Dashboard extends HttpServlet {
       throws ServletException, IOException {
     String pageString = null;
     int page = 0;
+
+    String limitString = null;
+    int limit = 20;
     try {
-      pageString = request.getQueryString();
+      pageString = request.getParameter("page");
       if (!pageString.equals("")) {
         page = Integer.parseInt(pageString) * 20;
       }
     } catch (NullPointerException e) {
-      logger.error("PageString not valid");
+      logger.error("not valid");
     } catch (NumberFormatException e) {
       logger.error("PageString not valid");
     }
 
-    Math.floor(page);
-    request.setAttribute("page", page/20);
-    request.setAttribute("maxId", serviceComputer.getMaxId());
+    try {
+      limitString = request.getParameter("limit");
+      if (!limitString.equals("")) {
+        limit = Integer.parseInt(limitString);
+      }
+    } catch (NullPointerException se) {
+      logger.error("not valid");
+    } catch (NumberFormatException se) {
+      logger.error("PageString not valid");
+    }
 
-    List<Computer> computers = serviceComputer.listPage(page);
+    Math.floor(page);
+    request.setAttribute("page", page / 20);
+    request.setAttribute("maxId", serviceComputer.getMaxId());
+    
+    request.setAttribute("limit", limit);
+    List<Computer> computers = serviceComputer.listPage(limit, page);
     request.setAttribute("computers", computers);
 
     request.setAttribute("Order", "ASC");
@@ -72,7 +87,6 @@ public class Dashboard extends HttpServlet {
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
 
-    
   }
 
 }

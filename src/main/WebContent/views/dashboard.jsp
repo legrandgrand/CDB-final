@@ -106,7 +106,7 @@
               </li>
 	            <c:forEach var="i" begin="0" end="10" step="1">
 	    		  <c:if test="${page - 5 + i >0 && page -5 +i <(maxId/20)-1}">
-	    			<li><a href="Dashboard?${page -5 + i}">${page -5 +i}</a></li>
+	    			<li><a href="Dashboard?page=${page -5 + i}&limit=${limit}">${page -5 +i}</a></li>
 	    		  </c:if>
 				</c:forEach>
               <li>
@@ -115,12 +115,12 @@
 	            </a>
               </li>
         	</ul>
-		</div>
-		
-        <div class="btn-group btn-group-sm pull-right" role="group" >
-            <button type="button" class="btn btn-default">10</button>
-            <button type="button" class="btn btn-default">50</button>
-            <button type="button" class="btn btn-default">100</button>
+
+	        <div class="btn-group btn-group-sm pull-right" role="group" >
+	            <a href="Dashboard?page=${page}&limit=10"><button type="button" class="btn btn-default">10</button></a>
+	            <a href="Dashboard?page=${page}&limit=50"><button type="button" class="btn btn-default">50</button></a>
+	            <a href="Dashboard?page=${page}&limit=100"><button type="button" class="btn btn-default">100</button></a>
+	        </div>
         </div>
 
     </footer>

@@ -48,7 +48,7 @@ public interface ComputerDao {
    * @param page the page
    * @return the list
    */
-  public List<Computer> listPage(int page);
+  public List<Computer> listPage(int limit, int page);
 
   /**
    * Gets the computer from name.

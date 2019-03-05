@@ -110,8 +110,9 @@ public class ServiceComputer {
    * @param page the page
    * @return the list
    */
-  public List<Computer> listPage(int page) {
-    return computerDao.listPage(page);
+  public List<Computer> listPage(int limit, int page) {
+    logger.debug("limit: " + limit + "page: "+ page);
+    return computerDao.listPage(limit, page);
   }
   
   public int getMaxId() {
