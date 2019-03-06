@@ -84,7 +84,7 @@ public class EditComputer extends HttpServlet {
     computer.setCompany(company);
     logger.debug("Updating computer" + computer);
     ServiceComputer.getInstance().update(computer);
-    this.getServletContext().getRequestDispatcher("/Dashboard").forward(request, response);
+    response.sendRedirect(request.getContextPath() + "/Dashboard");
   }
 
   /**

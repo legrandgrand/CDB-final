@@ -25,7 +25,10 @@ public class ComputerDaoImp implements ComputerDao {
       + "SET introduced = ?, discontinued = ?, company_id = ? WHERE name= ?";
   private static final String SELECT = "SELECT id, name, introduced, discontinued, company_id "
       + "FROM computer ";
-  private static final String SELECT_ONE = "SELECT id, name, introduced, discontinued, company_id "
+  private static final String PAGE = "LIMIT ? OFFSET ? ";
+  private static final String SELECT_ID = "SELECT id, name, introduced, discontinued, company_id "
+      + "FROM computer WHERE id=?";
+  private static final String SELECT_NAME = "SELECT id, name, introduced, discontinued, company_id "
       + "FROM computer ";
   private static final String SELECT_ORDER_BY = "SELECT id, name, introduced, "
       + "discontinued, company_id FROM computer ORDER BY ISNULL(";
@@ -57,8 +60,8 @@ public class ComputerDaoImp implements ComputerDao {
     companyList = companyDao.list();
 
     try (Connection connection = database.connectDb();
-        Statement statement = connection.createStatement()) {
-      ResultSet resultat = statement.executeQuery(SELECT);
+        PreparedStatement statement = connection.prepareStatement(SELECT)) {
+      ResultSet resultat = statement.executeQuery();
       while (resultat.next()) {
         list.add(setComputerData(resultat, companyList));
       }
@@ -73,6 +76,7 @@ public class ComputerDaoImp implements ComputerDao {
 
   @Override
   // TODO: stream
+  // TODO: Prepared Statement
   public List<Computer> orderBy(String column, String type, int limit, int offset) {
     List<Computer> list = new ArrayList<Computer>();
     List<Company> companyList = new ArrayList<Company>();
@@ -101,8 +105,10 @@ public class ComputerDaoImp implements ComputerDao {
     companyList = companyDao.list();
 
     try (Connection connection = database.connectDb();
-        Statement statement = connection.createStatement()) {
-      ResultSet resultat = statement.executeQuery(SELECT + "LIMIT " + limit + " OFFSET " + page);
+        PreparedStatement statement = connection.prepareStatement(SELECT + PAGE)) {
+      statement.setInt(1, limit);
+      statement.setInt(2, page);    
+      ResultSet resultat = statement.executeQuery();
       while (resultat.next()) {
         list.add(setComputerData(resultat, companyList));
       }
@@ -122,8 +128,9 @@ public class ComputerDaoImp implements ComputerDao {
     companyList = companyDao.list();
 
     try (Connection connection = database.connectDb();
-        Statement statement = connection.createStatement()) {
-      ResultSet resultat = statement.executeQuery(SELECT_ONE + "WHERE id=" + computer.getId());
+        PreparedStatement statement = connection.prepareStatement(SELECT_ID)) {
+      statement.setInt(1, computer.getId());
+      ResultSet resultat = statement.executeQuery();
       while (resultat.next()) {
         list.add(setComputerData(resultat, companyList));
       }
@@ -138,8 +145,8 @@ public class ComputerDaoImp implements ComputerDao {
   public int getMaxId() {
     int id = 0;
     try (Connection connection = database.connectDb();
-        Statement statement = connection.createStatement()) {
-      ResultSet resultat = statement.executeQuery(GET_MAX_ID);
+        PreparedStatement statement = connection.prepareStatement(GET_MAX_ID)) {
+      ResultSet resultat = statement.executeQuery();
       while (resultat.next()) {
         id = resultat.getInt("MAX(id)");
       }
@@ -160,7 +167,7 @@ public class ComputerDaoImp implements ComputerDao {
     try (Connection connection = database.connectDb();
         Statement statement = connection.createStatement()) {
       ResultSet resultat = statement
-          .executeQuery(SELECT_ONE + "WHERE name LIKE '%" + computer.getName() + "%'");
+          .executeQuery(SELECT_NAME + "WHERE name LIKE '%" + computer.getName() + "%'");
       while (resultat.next()) {
         list.add(setComputerData(resultat, companyList));
       }

@@ -1,6 +1,8 @@
 package service;
 
 import dao.ComputerDaoImp;
+import exception.ComputerValidationException;
+
 import java.util.List;
 
 import model.Computer;
@@ -8,7 +10,7 @@ import model.Computer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import validator.Validator;
+import validator.ComputerValidator;
 
 public class ServiceComputer {
 
@@ -52,10 +54,10 @@ public class ServiceComputer {
    */
   public void add(Computer computer) {
     try {
-      Validator.validateName(computer.getName());
-      Validator.validateId(computer.getId());
+      ComputerValidator.validateName(computer.getName());
+      ComputerValidator.validateId(computer.getId());
       computerDao.add(computer);
-    } catch (Exception e) {
+    } catch (ComputerValidationException e) {
       logger.error(e.getMessage(), e);
     }
   }
@@ -67,10 +69,10 @@ public class ServiceComputer {
    */
   public void update(Computer computer) {
     try {
-      Validator.validateName(computer.getName());
-      Validator.validateId(computer.getId());
+      ComputerValidator.validateName(computer.getName());
+      ComputerValidator.validateId(computer.getId());
       computerDao.update(computer);
-    } catch (Exception e) {
+    } catch (ComputerValidationException e) {
       logger.error(e.getMessage(), e);
     }
   }
@@ -93,10 +95,10 @@ public class ServiceComputer {
    */
   public List<Computer> getComputerFromName(Computer computer) {
     try {
-      Validator.validateName(computer.getName());
+      ComputerValidator.validateName(computer.getName());
       logger.error("Valid computer name");
-    } catch (Exception e) {
-      logger.error("Invalid computer name");
+    } catch (ComputerValidationException e) {
+      logger.error(e.getMessage(), e);
       return null;
     }
     return computerDao.getComputerFromName(computer);

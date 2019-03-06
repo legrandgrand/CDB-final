@@ -9,7 +9,7 @@ import model.Company;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import validator.Validator;
+import validator.ComputerValidator;
 
 public class ServiceCompany {
 
@@ -55,7 +55,7 @@ public class ServiceCompany {
    */
   public List<Company> getCompanyFromId(Company company) {
     try {
-      Validator.validateId(company.getId());
+      ComputerValidator.validateId(company.getId());
     } catch (Exception e) {
       logger.error(e.getMessage(), e);
     }

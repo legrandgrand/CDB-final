@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 import service.ServiceCompany;
 import service.ServiceComputer;
 
-import validator.Validator;
+import validator.ComputerValidator;
 
 public class Controller {
   private ServiceComputer serviceComputer;
@@ -88,7 +88,7 @@ public class Controller {
   public String setComputerName(Scanner sc) throws Exception {
     String name = sc.nextLine();
     try {
-      Validator.validateName(name);
+      ComputerValidator.validateName(name);
       logger.debug("Setting computer name: " + name);
       return name;
     } catch (Exception e) {
@@ -108,7 +108,7 @@ public class Controller {
     String timestamp = null;
     timestamp = sc.nextLine();
     try {
-      Validator.validateIntro(timestamp);
+      ComputerValidator.validateDateFormatIntro(timestamp);
       if (!timestamp.equals("")) {
         intro = setDate(timestamp);
       }
@@ -133,7 +133,7 @@ public class Controller {
     do {
       timestamp = sc.nextLine();
       try { 
-        Validator.validateDisc(timestamp, intro);
+        ComputerValidator.validateDateFormatDisc(timestamp);
         if (!timestamp.equals("")) {
           discontinuation = setDate(timestamp);
           if (null != intro) {

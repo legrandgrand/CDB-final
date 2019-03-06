@@ -78,7 +78,7 @@ public class AddComputer extends HttpServlet {
     computer.setCompany(company);
     logger.debug("Adding computer" + computer);
     ServiceComputer.getInstance().add(computer);
-    this.getServletContext().getRequestDispatcher("/Dashboard").forward(request, response);
+    response.sendRedirect(request.getContextPath() + "/Dashboard");
   }
 
   /**

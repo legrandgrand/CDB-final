@@ -72,8 +72,8 @@ public class Dashboard extends HttpServlet {
   public int setLimit(HttpServletRequest request) {
     String limitString = null;
     int limit = 20;
+    limitString = request.getParameter("limit");
     try {
-      limitString = request.getParameter("limit");
       if (!limitString.equals("")) {
         limit = Integer.parseInt(limitString);
       }
@@ -94,8 +94,8 @@ public class Dashboard extends HttpServlet {
   public int setPage(HttpServletRequest request) {
     String pageString = null;
     int page = 0;
+    pageString = request.getParameter("page");
     try {
-      pageString = request.getParameter("page");
       if (!pageString.equals("")) {
         page = Integer.parseInt(pageString) * 20;
       }
