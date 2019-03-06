@@ -44,9 +44,11 @@ public class EditComputer extends HttpServlet {
     logger.debug("Size of companies: " + companies.size());
     request.setAttribute("companies", companies);
 
+    Computer computer = new Computer();
     String stringId = request.getQueryString();
-    int id = Integer.parseInt(stringId);
-    Computer computer = ServiceComputer.getInstance().getComputer(id).get(0);
+    computer.setId(Integer.parseInt(stringId));
+    
+    computer = ServiceComputer.getInstance().getComputer(computer).get(0);
     request.setAttribute("computer", computer);
 
     this.getServletContext().getRequestDispatcher("/views/editComputer.jsp").forward(request,
@@ -64,22 +66,22 @@ public class EditComputer extends HttpServlet {
    */
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
-    Date dateDisc = null;
-    Date dateIntro = null;
+    Computer computer = new Computer();
+    computer.setName(request.getParameter("name"));
 
-    String name = request.getParameter("name");
+    String introString = request.getParameter("intro");
+    Date intro = setComputerIntro(introString);
+    computer.setDateIntro(intro);
 
-    String intro = request.getParameter("intro");
-    dateIntro = setComputerIntro(intro);
+    String disc = request.getParameter("disc"); // TODO: handle situation where disc>intro
+    computer.setDateDiscontinuation(setComputerDisc(intro, disc));
+    
+    Company company = new Company();
+    company.setName(request.getParameter("companyname"));
 
-    String disc = request.getParameter("disc");
-    dateDisc = setComputerIntro(disc);// TODO: handle situation where disc>intro
+    company = ServiceCompany.getInstance().getCompany(company).get(0);
 
-    String companyIdString = request.getParameter("companyname");
-    int companyId = Integer.parseInt(companyIdString);
-    Company company = ServiceCompany.getInstance().getCompanyFromId(companyId).get(0);
-
-    Computer computer = new Computer(name, company, dateIntro, dateDisc, 0);
+    computer.setCompany(company);
     logger.debug("Updating computer" + computer);
     ServiceComputer.getInstance().update(computer);
     this.getServletContext().getRequestDispatcher("/Dashboard").forward(request, response);

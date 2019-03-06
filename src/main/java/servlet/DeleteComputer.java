@@ -49,13 +49,14 @@ public class DeleteComputer extends HttpServlet {
    */
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
+    Computer computer = new Computer();
     String idString = request.getParameter("selection");
     String[] idStringTable = idString.split(",");
     for (String c : idStringTable) {
-      int id = Integer.parseInt(c);
-      Computer computer = ServiceComputer.getInstance().getComputer(id).get(0);
+      computer.setId(Integer.parseInt(c));
+      computer = ServiceComputer.getInstance().getComputer(computer).get(0);
       logger.debug("Deleting computer: " + computer.getName());
-      ServiceComputer.getInstance().delete(computer.getName());
+      ServiceComputer.getInstance().delete(computer);
     }
 
     this.getServletContext().getRequestDispatcher("/Dashboard").forward(request, response);

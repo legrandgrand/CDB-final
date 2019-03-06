@@ -11,6 +11,9 @@
 <link href="./css/bootstrap.min.css" rel="stylesheet" media="screen">
 <link href="./css/font-awesome.css" rel="stylesheet" media="screen">
 <link href="./css/main.css" rel="stylesheet" media="screen">
+<script type="text/javascript" src="./js/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.0/dist/jquery.validate.min.js"></script>
+<script type="text/javascript" src="./js/jqueryvalidate.js"></script>
 </head>
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
@@ -28,7 +31,7 @@
                     <h1>Edit Computer</h1>
 
                     <form action="EditComputer" method="POST">
-                        <input type="hidden" value="<c:out value="${computer.id}"/> name = "id" id="id"/>
+                        <input type="hidden" value="<c:out value="${computer.id}"/>" id="id" name="id" />
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName">Computer name</label>
@@ -48,11 +51,11 @@
                                 <select class="form-control" id="companyId" name="companyname">
                                 <c:forEach items="${companies}" var="company">
                                 	<c:choose>
-									  <c:when test="${computer.company.companyId == company.companyId}">
-									    <option selected="selected" value="${company.nameCompany}">${company.nameCompany}</option>
+									  <c:when test="${computer.company.id == company.id}">
+									    <option selected="selected" value="${company.name}">${company.name}</option>
 									  </c:when>
 									  <c:otherwise>
-                                    	<option value="${company.nameCompany}">${company.nameCompany}</option>
+                                    	<option value="${company.name}">${company.name}</option>
                                    	  </c:otherwise>
 									</c:choose>
                                 </c:forEach> 

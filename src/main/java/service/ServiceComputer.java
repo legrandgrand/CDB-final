@@ -1,6 +1,6 @@
 package service;
 
-import dao.DaoFactory;
+import dao.ComputerDaoImp;
 import java.util.List;
 
 import model.Computer;
@@ -15,6 +15,8 @@ public class ServiceComputer {
   private static final Logger logger = LoggerFactory.getLogger(ServiceComputer.class);
   private static final ServiceComputer instance = new ServiceComputer();
 
+  private ComputerDaoImp computerDao = ComputerDaoImp.getInstance();
+
   /**
    * Instantiates a new service computer.
    */
@@ -28,10 +30,10 @@ public class ServiceComputer {
   /**
    * Delete computer.
    *
-   * @param name the name
+   * @param computer the computer
    */
-  public void delete(String name) {
-    DaoFactory.getComputerDao().delete(name);
+  public void delete(Computer computer) {
+    computerDao.delete(computer);
   }
 
   /**
@@ -40,7 +42,7 @@ public class ServiceComputer {
    * @return the list
    */
   public List<Computer> list() {
-    return DaoFactory.getComputerDao().list();
+    return computerDao.list();
   }
 
   /**
@@ -49,12 +51,13 @@ public class ServiceComputer {
    * @param computer the computer
    */
   public void add(Computer computer) {
-    if (Validator.validateName(computer.getName()) && Validator.validateId(computer.getId())) {
-      DaoFactory.getComputerDao().add(computer);
-    } else {
-      logger.error("Invalid computer name");
+    try {
+      Validator.validateName(computer.getName());
+      Validator.validateId(computer.getId());
+      computerDao.add(computer);
+    } catch (Exception e) {
+      logger.error(e.getMessage(), e);
     }
-
   }
 
   /**
@@ -63,47 +66,74 @@ public class ServiceComputer {
    * @param computer the computer
    */
   public void update(Computer computer) {
-    if (Validator.validateName(computer.getName()) && Validator.validateId(computer.getId())) {
-      DaoFactory.getComputerDao().update(computer);
-    } else {
-      logger.error("Invalid computer name");
+    try {
+      Validator.validateName(computer.getName());
+      Validator.validateId(computer.getId());
+      computerDao.update(computer);
+    } catch (Exception e) {
+      logger.error(e.getMessage(), e);
     }
   }
 
   /**
    * Gets the computer.
    *
-   * @param id the id
+   * @param computer the computer
    * @return the computer
    */
-  public List<Computer> getComputer(int id) {
-    return DaoFactory.getComputerDao().getComputer(id);
+  public List<Computer> getComputer(Computer computer) {
+    return computerDao.getComputer(computer);
   }
 
   /**
    * Gets the computer from name.
    *
-   * @param name the name
+   * @param computer the computer
    * @return the computer from name
    */
-  public List<Computer> getComputerFromName(String name) {
-    if (Validator.validateName(name)) {
+  public List<Computer> getComputerFromName(Computer computer) {
+    try {
+      Validator.validateName(computer.getName());
       logger.error("Valid computer name");
-      return DaoFactory.getComputerDao().getComputerFromName(name);
-    } else {
+    } catch (Exception e) {
       logger.error("Invalid computer name");
       return null;
     }
+    return computerDao.getComputerFromName(computer);
   }
 
   /**
    * List page.
    *
-   * @param page the page
+   * @param limit the limit
+   * @param page  the page
    * @return the list
    */
-  public List<Computer> listPage(int page) {
-    return DaoFactory.getComputerDao().listPage(page);
+  public List<Computer> listPage(int limit, int page) {
+    logger.debug("limit: " + limit + "page: " + page);
+    return computerDao.listPage(limit, page);
+  }
+
+  /**
+   * Return the max Id.
+   * 
+   * @return the max Id.
+   */
+  public int getMaxId() {
+    return computerDao.getMaxId();
+  }
+
+  /**
+   * Order by.
+   *
+   * @param column the column
+   * @param type   the type
+   * @param limit  the limit
+   * @param page   the page
+   * @return the list
+   */
+  public List<Computer> orderBy(String column, String type, int limit, int page) {
+    return computerDao.orderBy(column, type, limit, page);
   }
 
 }

@@ -12,7 +12,6 @@ import model.Company;
 import model.Computer;
 
 public class View {
-
   private Controller controller;
 
   /**
@@ -30,10 +29,14 @@ public class View {
    * Main menu.
    */
   public void mainMenu() {
-    System.out.println("What would you like to do?" + "\n1. List Manufacturer companies."
-        + "\n2. List Computer database." + "\n3. Add a Computer to the database."
-        + "\n4. Delete a Computer from the database." + "\n5. Update a Computer in the database."
-        + "\n6. Exit program.");
+    System.out.println("What would you like to do?"
+        + "\n1. List Manufacturer companies."
+        + "\n2. List Computer database."
+        + "\n3. Add a Computer to the database."
+        + "\n4. Delete a Computer from the database."
+        + "\n5. Delete a Company (and associated Computers) from the database."
+        + "\n6. Update a Computer in the database."
+        + "\n7. Exit program.");
     Scanner sc = new Scanner(System.in);
     try {
       int userChoice = sc.nextInt();
@@ -51,9 +54,12 @@ public class View {
           deleteComputer();
           break;
         case 5:
-          updateComputer();
+          deleteCompany();
           break;
         case 6:
+          updateComputer();
+          break;
+        case 7:
           System.out.println("Exiting program");
           sc.close();
           System.exit(0);
@@ -140,6 +146,7 @@ public class View {
    *
    * @param sc the sc
    * @return the date
+   * @throws Exception the exception
    */
   public Date addComputerDateIntro(Scanner sc) throws Exception {
     System.out.println("Please enter the date of introduction. "
@@ -165,6 +172,7 @@ public class View {
    * @param sc    the sc
    * @param intro the intro
    * @return the date
+   * @throws Exception the exception
    */
   public Date addComputerDateDisc(Scanner sc, Date intro) throws Exception {
     System.out
@@ -196,6 +204,23 @@ public class View {
       System.out.println(computerName + "a été supprimé");
       mainMenu();
     }
+
+  }
+  
+  /**
+   * Delete company.
+   */
+  public void deleteCompany() {
+    System.out.println("We will now delete a company (and associated Computers) from the database."
+        + "Please enter the company's id you want to delete.");
+    try (Scanner sc = new Scanner(System.in)) {
+      int companyId = sc.nextInt();
+      controller.deleteCompany(companyId);
+      System.out.println(companyId + "a été supprimé");
+      sc.nextLine();
+      mainMenu();
+    }
+
   }
 
   /**

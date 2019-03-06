@@ -23,11 +23,11 @@
     <section id="main">
         <div class="container">
             <h1 id="homeTitle">
-              ${fn:length(computers)} Computers found
+              <c:out value="${maxId}"/> Computers found
             </h1>
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
-                    <form id="searchForm" action="GetComputer" method="GET" class="form-inline"> <!-- GET one computer -->
+                    <form id="searchForm" action="GetComputer" method="GET" class="form-inline">
 
                         <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" />
                         <input type="submit" id="searchsubmit" value="Filter by name"
@@ -61,18 +61,18 @@
                             </span>
                         </th>
                         <th>
-                            Computer name
+	                      <a href="OrderByName?Order=${Order}&page=${page}&limit=${limit}">Computer name</a>
                         </th>
                         <th>
-                            Introduced date
+	                        <a href="OrderByIntro?Order=${Order}&page=${page}&limit=${limit}">Introduced date </a>
                         </th>
                         <!-- Table header for Discontinued Date -->
                         <th>
-                            Discontinued date
+	                      <a href="OrderByDisc?Order=${Order}&page=${page}&limit=${limit}">Discontinued date </a>
                         </th>
                         <!-- Table header for Company -->
                         <th>
-                            Company
+	                      <a href="OrderByCompany?Order=${Order}&page=${page}&limit=${limit}">Company</a>
                         </th>
 
                     </tr>
@@ -87,7 +87,7 @@
 				      <td> <a href="EditComputer?<c:out value="${computer.id}"/>" onclick=""><c:out value="${computer.name}" /></a></td>
 				      <td><c:out value="${computer.dateIntro}" /></td>
 				      <td><c:out value="${computer.dateDiscontinuation}" /></td>
-				      <td><c:out value="${computer.company}" /></td>
+				      <td><c:out value="${computer.company.name}" /></td>
 				    </tr>
 				  </c:forEach>
                     <tr>       
@@ -99,51 +99,28 @@
     <footer class="navbar-fixed-bottom">
         <div class="container text-center">
             <ul class="pagination">
-                <li>
-                    <a href="Dashboard?0" aria-label="Previous">
-                      <span aria-hidden="true">&laquo;</span>
-                  </a>
-              </li>
-              <li><a href="Dashboard?0">1</a></li>
-              <li><a href="Dashboard?20">2</a></li>
-              <li><a href="Dashboard?40">3</a></li>
-              <li><a href="Dashboard?60">4</a></li>
-              <li><a href="Dashboard?80">5</a></li>
-              <li><a href="Dashboard?100">6</a></li>
-              <li><a href="Dashboard?120">7</a></li>
-              <li><a href="Dashboard?140">8</a></li>
-              <li><a href="Dashboard?160">9</a></li>
-              <li><a href="Dashboard?180">10</a></li>
-              <li><a href="Dashboard?200">11</a></li>
-              <li><a href="Dashboard?220">12</a></li>
-              <li><a href="Dashboard?240">13</a></li>
-              <li><a href="Dashboard?260">14</a></li>
-              <li><a href="Dashboard?280">15</a></li>
-              <li><a href="Dashboard?300">16</a></li>
-              <li><a href="Dashboard?320">17</a></li>
-              <li><a href="Dashboard?340">18</a></li>
-              <li><a href="Dashboard?360">19</a></li>
-              <li><a href="Dashboard?380">20</a></li>
-              <li><a href="Dashboard?400">21</a></li>
-              <li><a href="Dashboard?420">22</a></li>
-              <li><a href="Dashboard?440">23</a></li>
-              <li><a href="Dashboard?460">24</a></li>
-              <li><a href="Dashboard?480">25</a></li>
-              <li><a href="Dashboard?500">26</a></li>
-              <li><a href="Dashboard?520">27</a></li>
-              <li><a href="Dashboard?540">28</a></li>
               <li>
-                <a href="Dashboard?540" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
+                <a href="Dashboard?0" aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
                 </a>
-            </li>
-        </ul>
-		</div>
-		
-        <div class="btn-group btn-group-sm pull-right" role="group" >
-            <button type="button" class="btn btn-default">10</button>
-            <button type="button" class="btn btn-default">50</button>
-            <button type="button" class="btn btn-default">100</button>
+              </li>
+	            <c:forEach var="i" begin="0" end="10" step="1">
+	    		  <c:if test="${page - 5 + i >0 && page -5 +i <(maxId/20)-1}">
+	    			<li><a href="Dashboard?page=${page -5 + i}&limit=${limit}">${page -5 +i}</a></li>
+	    		  </c:if>
+				</c:forEach>
+              <li>
+	            <a href="Dashboard?${fn:substringBefore((maxId/20)-1, '.')}" aria-label="Next">
+	              <span aria-hidden="true">&raquo;</span>
+	            </a>
+              </li>
+        	</ul>
+
+	        <div class="btn-group btn-group-sm pull-right" role="group" >
+	            <a href="Dashboard?page=${page}&limit=10"><button type="button" class="btn btn-default">10</button></a>
+	            <a href="Dashboard?page=${page}&limit=50"><button type="button" class="btn btn-default">50</button></a>
+	            <a href="Dashboard?page=${page}&limit=100"><button type="button" class="btn btn-default">100</button></a>
+	        </div>
         </div>
 
     </footer>

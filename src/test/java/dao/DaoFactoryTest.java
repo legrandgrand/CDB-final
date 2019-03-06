@@ -16,7 +16,7 @@ import org.mockito.MockitoAnnotations;
 public class DaoFactoryTest {
 
   @InjectMocks
-  private DaoFactory daoFactory;
+  private Database daoFactory;
   @Mock
   private Connection mockConnection;
   @Mock

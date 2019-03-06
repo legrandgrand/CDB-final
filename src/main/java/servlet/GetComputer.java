@@ -24,21 +24,30 @@ public class GetComputer extends HttpServlet {
   private static final long serialVersionUID = 1L;
   private static final Logger logger = LoggerFactory.getLogger(GetComputer.class);
 
+  private ServiceComputer serviceComputer = ServiceComputer.getInstance();
+
   /**
    * Do get.
    *
-   * @param request the request
+   * @param request  the request
    * @param response the response
    * @throws ServletException the servlet exception
-   * @throws IOException Signals that an I/O exception has occurred.
+   * @throws IOException      Signals that an I/O exception has occurred.
    * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
    */
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
-    String computerName = request.getParameter("search");
-    List<Computer> computers = ServiceComputer.getInstance().getComputerFromName(computerName);
+    Computer computer = new Computer();
+    computer.setName(request.getParameter("search"));
+    // TODO: get computers from companyName
+    List<Computer> computers = serviceComputer.getComputerFromName(computer);
+
     logger.debug("Size of computers: " + computers.size());
     request.setAttribute("computers", computers);
+
+    request.setAttribute("maxId", computers.size());
+
+    request.setAttribute("Order", "Ascend");
     this.getServletContext().getRequestDispatcher("/views/dashboard.jsp").forward(request,
         response);
   }
@@ -46,10 +55,10 @@ public class GetComputer extends HttpServlet {
   /**
    * Do post.
    *
-   * @param request the request
+   * @param request  the request
    * @param response the response
    * @throws ServletException the servlet exception
-   * @throws IOException Signals that an I/O exception has occurred.
+   * @throws IOException      Signals that an I/O exception has occurred.
    * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
    */
   protected void doPost(HttpServletRequest request, HttpServletResponse response)

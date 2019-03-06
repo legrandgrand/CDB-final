@@ -16,9 +16,9 @@ public interface ComputerDao {
   /**
    * Delete computer.
    *
-   * @param computerName the computer name
+   * @param computer the computer
    */
-  public void delete(String computerName);
+  public void delete(Computer computer);
 
   /**
    * Update computer.
@@ -34,10 +34,32 @@ public interface ComputerDao {
    */
   public void add(Computer computer);
   
-  public List<Computer> getComputer(int id);
+  /**
+   * Gets the computer.
+   *
+   * @param computer the computer
+   * @return the computer
+   */
+  public List<Computer> getComputer(Computer computer);
 
-  public List<Computer> listPage(int page);
+  /**
+   * List page.
+   *
+   * @param page the page
+   * @return the list
+   */
+  public List<Computer> listPage(int limit, int page);
 
-  List<Computer> getComputerFromName(String name);
+  /**
+   * Gets the computer from name.
+   *
+   * @param computer the computer
+   * @return the computer from name
+   */
+  List<Computer> getComputerFromName(Computer computer);
+
+  int getMaxId();
+
+  List<Computer> orderBy(String column, String type, int limit, int offset);
 
 }
