@@ -61,18 +61,18 @@
                             </span>
                         </th>
                         <th>
-	                      <a href="OrderByName?${Order}">Computer name</a>
+	                      <a href="OrderByName?Order=${Order}&page=${page}&limit=${limit}">Computer name</a>
                         </th>
                         <th>
-	                        <a href="OrderByIntro?${Order}">Introduced date </a>
+	                        <a href="OrderByIntro?Order=${Order}&page=${page}&limit=${limit}">Introduced date </a>
                         </th>
                         <!-- Table header for Discontinued Date -->
                         <th>
-	                      <a href="OrderByDisc?${Order}">Discontinued date </a>
+	                      <a href="OrderByDisc?Order=${Order}&page=${page}&limit=${limit}">Discontinued date </a>
                         </th>
                         <!-- Table header for Company -->
                         <th>
-	                      <a href="OrderByCompany?${Order}">Company</a>
+	                      <a href="OrderByCompany?Order=${Order}&page=${page}&limit=${limit}">Company</a>
                         </th>
 
                     </tr>

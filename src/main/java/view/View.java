@@ -11,13 +11,7 @@ import java.util.Scanner;
 import model.Company;
 import model.Computer;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class View {
-
-  
-  private static final Logger logger = LoggerFactory.getLogger(View.class);
   private Controller controller;
 
   /**

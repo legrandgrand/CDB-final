@@ -73,15 +73,15 @@ public class ComputerDaoImp implements ComputerDao {
 
   @Override
   // TODO: stream
-  public List<Computer> orderBy(String column, String type) {
+  public List<Computer> orderBy(String column, String type, int limit, int offset) {
     List<Computer> list = new ArrayList<Computer>();
     List<Company> companyList = new ArrayList<Company>();
     companyList = companyDao.list();
 
     try (Connection connection = database.connectDb();
         Statement statement = connection.createStatement()) {
-      ResultSet resultat = statement
-          .executeQuery(SELECT_ORDER_BY + column + ") , " + column + " " + type);
+      ResultSet resultat = statement.executeQuery(SELECT_ORDER_BY + column + ") , " + column + " "
+          + type + " LIMIT " + limit + " OFFSET " + offset);
       while (resultat.next()) {
         list.add(setComputerData(resultat, companyList));
       }
@@ -109,7 +109,7 @@ public class ComputerDaoImp implements ComputerDao {
     } catch (SQLException e) {
       logger.error(e.getMessage(), e);
     }
-    logger.debug("Size of list: " + list.size() + "offset: "+ page);
+    logger.debug("Size of list: " + list.size() + "offset: " + page);
     return list;
 
   }

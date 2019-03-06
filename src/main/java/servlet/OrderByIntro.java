@@ -37,14 +37,17 @@ public class OrderByIntro extends HttpServlet {
    */
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
-    String type = request.getQueryString();
-    logger.debug("request is order by: " + type);
-    List<Computer> computers = serviceComputer.orderByIntro("ASC");
-
-    logger.debug("Size of computers: " + computers.size());
+    int page = setPage(request);
+    int limit = setLimit(request);
+    
+    String type = request.getParameter("Order");
+    
+    List<Computer> computers = serviceComputer.orderBy("introduced", type, limit, page);
+    
+    request.setAttribute("page", page / 20);
+    request.setAttribute("maxId", serviceComputer.getMaxId()); 
+    request.setAttribute("limit", limit);  
     request.setAttribute("computers", computers);
-
-    request.setAttribute("maxId", computers.size());
 
     if (type.equals("ASC")) {
       type = "DESC";
@@ -52,7 +55,7 @@ public class OrderByIntro extends HttpServlet {
       type = "ASC";
     }
     request.setAttribute("Order", type);
-
+    logger.debug("request is order by: " + type);
     this.getServletContext().getRequestDispatcher("/views/dashboard.jsp").forward(request,
         response);
   }
@@ -69,6 +72,51 @@ public class OrderByIntro extends HttpServlet {
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
     doGet(request, response);
+  }
+  
+  /**
+   * Sets the limit.
+   *
+   * @param request the request
+   * @return the int
+   */
+  public int setLimit(HttpServletRequest request) {
+    String limitString = null;
+    int limit = 20;
+    try {
+      limitString = request.getParameter("limit");
+      if (!limitString.equals("")) {
+        limit = Integer.parseInt(limitString);
+      }
+    } catch (NullPointerException se) {
+      logger.error("not valid");
+    } catch (NumberFormatException se) {
+      logger.error("PageString not valid");
+    }
+    return limit;
+  }
+  
+  /**
+   * Sets the page.
+   *
+   * @param request the request
+   * @return the int
+   */
+  public int setPage(HttpServletRequest request) {
+    String pageString = null;
+    int page = 0;
+    try {
+      pageString = request.getParameter("page");
+      if (!pageString.equals("")) {
+        page = Integer.parseInt(pageString) * 20;
+      }
+    } catch (NullPointerException e) {
+      logger.error("not valid");
+    } catch (NumberFormatException e) {
+      logger.error("PageString not valid");
+    }
+    Math.floor(page);
+    return page;
   }
 
 }

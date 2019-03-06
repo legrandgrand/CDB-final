@@ -34,41 +34,15 @@ public class Dashboard extends HttpServlet {
    */
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
-    String pageString = null;
-    int page = 0;
 
-    String limitString = null;
-    int limit = 20;
-    try {
-      pageString = request.getParameter("page");
-      if (!pageString.equals("")) {
-        page = Integer.parseInt(pageString) * 20;
-      }
-    } catch (NullPointerException e) {
-      logger.error("not valid");
-    } catch (NumberFormatException e) {
-      logger.error("PageString not valid");
-    }
-
-    try {
-      limitString = request.getParameter("limit");
-      if (!limitString.equals("")) {
-        limit = Integer.parseInt(limitString);
-      }
-    } catch (NullPointerException se) {
-      logger.error("not valid");
-    } catch (NumberFormatException se) {
-      logger.error("PageString not valid");
-    }
-
-    Math.floor(page);
-    request.setAttribute("page", page / 20);
-    request.setAttribute("maxId", serviceComputer.getMaxId());
+    int page = setPage(request);
+    int limit = setLimit(request);
+    List<Computer> computers = serviceComputer.listPage(limit, page);  
     
+    request.setAttribute("page", page / 20);
+    request.setAttribute("maxId", serviceComputer.getMaxId()); 
     request.setAttribute("limit", limit);
-    List<Computer> computers = serviceComputer.listPage(limit, page);
     request.setAttribute("computers", computers);
-
     request.setAttribute("Order", "ASC");
 
     this.getServletContext().getRequestDispatcher("/views/dashboard.jsp").forward(request,
@@ -87,6 +61,51 @@ public class Dashboard extends HttpServlet {
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
 
+  }
+  
+  /**
+   * Sets the limit.
+   *
+   * @param request the request
+   * @return the int
+   */
+  public int setLimit(HttpServletRequest request) {
+    String limitString = null;
+    int limit = 20;
+    try {
+      limitString = request.getParameter("limit");
+      if (!limitString.equals("")) {
+        limit = Integer.parseInt(limitString);
+      }
+    } catch (NullPointerException se) {
+      logger.error("not valid");
+    } catch (NumberFormatException se) {
+      logger.error("PageString not valid");
+    }
+    return limit;
+  }
+  
+  /**
+   * Sets the page.
+   *
+   * @param request the request
+   * @return the int
+   */
+  public int setPage(HttpServletRequest request) {
+    String pageString = null;
+    int page = 0;
+    try {
+      pageString = request.getParameter("page");
+      if (!pageString.equals("")) {
+        page = Integer.parseInt(pageString) * 20;
+      }
+    } catch (NullPointerException e) {
+      logger.error("not valid");
+    } catch (NumberFormatException e) {
+      logger.error("PageString not valid");
+    }
+    Math.floor(page);
+    return page;
   }
 
 }

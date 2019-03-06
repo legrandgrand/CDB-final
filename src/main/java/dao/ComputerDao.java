@@ -60,6 +60,6 @@ public interface ComputerDao {
 
   int getMaxId();
 
-  List<Computer> orderBy(String column, String type);
+  List<Computer> orderBy(String column, String type, int limit, int offset);
 
 }

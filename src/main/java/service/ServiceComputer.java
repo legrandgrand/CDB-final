@@ -44,9 +44,7 @@ public class ServiceComputer {
   public List<Computer> list() {
     return computerDao.list();
   }
-  
 
-  
   /**
    * Adds the computer.
    *
@@ -107,34 +105,35 @@ public class ServiceComputer {
   /**
    * List page.
    *
-   * @param page the page
+   * @param limit the limit
+   * @param page  the page
    * @return the list
    */
   public List<Computer> listPage(int limit, int page) {
-    logger.debug("limit: " + limit + "page: "+ page);
+    logger.debug("limit: " + limit + "page: " + page);
     return computerDao.listPage(limit, page);
   }
-  
+
+  /**
+   * Return the max Id.
+   * 
+   * @return the max Id.
+   */
   public int getMaxId() {
     return computerDao.getMaxId();
   }
 
-  public List<Computer> orderByName(String type) {
-    return computerDao.orderBy("name", type);
+  /**
+   * Order by.
+   *
+   * @param column the column
+   * @param type   the type
+   * @param limit  the limit
+   * @param page   the page
+   * @return the list
+   */
+  public List<Computer> orderBy(String column, String type, int limit, int page) {
+    return computerDao.orderBy(column, type, limit, page);
   }
-
-  public List<Computer> orderByIntro(String type) {
-    return computerDao.orderBy("introduced", type);
-  }
-  
-  public List<Computer> orderByDisc(String type) {
-    return computerDao.orderBy("discontinued", type);
-  }
-
-  public List<Computer> orderByCompany(String type) {
-    return computerDao.orderBy("company_id", type);
-  }
-
-
 
 }

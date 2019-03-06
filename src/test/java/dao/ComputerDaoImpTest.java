@@ -53,7 +53,7 @@ public class ComputerDaoImpTest {
   public void testListPage() {
     Company company = new Company("Thinking Machines", 2);
     Computer computer = new Computer("CM-2a", company, null, null, 2);
-    List<Computer> computers = computerDaoImp.listPage(1);
+    List<Computer> computers = computerDaoImp.listPage(10, 1);
     assertTrue(computers.contains(computer));
   }
 
