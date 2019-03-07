@@ -14,6 +14,8 @@ import model.Computer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import dto.ComputerDto;
+import mapper.Mapper;
 import service.ServiceComputer;
 
 /**
@@ -42,12 +44,13 @@ public class OrderByName extends HttpServlet {
     
     String type = request.getParameter("Order");
     List<Computer> computers = serviceComputer.orderBy("name", type, limit, page);
+    List<ComputerDto> dto = Mapper.getInstance().listDtos(computers);
     
     
     request.setAttribute("maxId", serviceComputer.getMaxId());
     request.setAttribute("page", page / 20);
     request.setAttribute("limit", limit);  
-    request.setAttribute("computers", computers);
+    request.setAttribute("computers", dto);
 
     if (type.equals("ASC")) {
       type = "DESC";

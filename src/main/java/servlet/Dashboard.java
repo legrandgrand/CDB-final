@@ -14,6 +14,8 @@ import model.Computer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import dto.ComputerDto;
+import mapper.Mapper;
 import service.ServiceComputer;
 
 @WebServlet("/Dashboard")
@@ -37,12 +39,15 @@ public class Dashboard extends HttpServlet {
 
     int page = setPage(request);
     int limit = setLimit(request);
-    List<Computer> computers = serviceComputer.listPage(limit, page);  
+    
+    
+    List<Computer> computers = serviceComputer.listPage(limit, page);
+    List<ComputerDto> dto = Mapper.getInstance().listDtos(computers);
     
     request.setAttribute("page", page / 20);
     request.setAttribute("maxId", serviceComputer.getMaxId()); 
     request.setAttribute("limit", limit);
-    request.setAttribute("computers", computers);
+    request.setAttribute("computers", dto);
     request.setAttribute("Order", "ASC");
 
     this.getServletContext().getRequestDispatcher("/views/dashboard.jsp").forward(request,

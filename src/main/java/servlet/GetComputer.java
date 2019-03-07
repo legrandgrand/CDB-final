@@ -14,6 +14,8 @@ import model.Computer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import dto.ComputerDto;
+import mapper.Mapper;
 import service.ServiceComputer;
 
 /**
@@ -41,11 +43,11 @@ public class GetComputer extends HttpServlet {
     computer.setName(request.getParameter("search"));
     // TODO: get computers from companyName
     List<Computer> computers = serviceComputer.getComputerFromName(computer);
+    List<ComputerDto> dto = Mapper.getInstance().listDtos(computers);
 
-    logger.debug("Size of computers: " + computers.size());
-    request.setAttribute("computers", computers);
+    request.setAttribute("computers", dto);
 
-    request.setAttribute("maxId", computers.size());
+    request.setAttribute("maxId", dto.size());
 
     request.setAttribute("Order", "Ascend");
     this.getServletContext().getRequestDispatcher("/views/dashboard.jsp").forward(request,

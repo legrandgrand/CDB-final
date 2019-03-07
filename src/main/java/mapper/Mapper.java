@@ -4,6 +4,10 @@ import dto.ComputerDto;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 import model.Company;
 import model.Company.CompanyBuilder;
@@ -28,12 +32,12 @@ public class Mapper {
   }
 
   /**
-   * Map computer.
+   * Map dto to computer.
    *
    * @param dto the dto
    * @return the computer
    */
-  public Computer mapComputer(ComputerDto dto) {
+  public Computer dtoToComputer(ComputerDto dto) {
     SimpleDateFormat dt = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
     ComputerBuilder computerBuilder = new ComputerBuilder().setName(dto.getName());
     Company company = new Company();
@@ -56,6 +60,34 @@ public class Mapper {
   }
 
   /**
+   * Computer to dto.
+   *
+   * @param computer the computer
+   * @return the computer dto
+   */
+  public ComputerDto computerToDto(Computer computer) {
+    ComputerDto computerDto = new ComputerDto(computer.getId() + "", computer.getName(),
+        dateToString(computer.getDateIntro()), dateToString(computer.getDateDiscontinuation()),
+        computer.getCompany().getName(), computer.getCompany().getId());
+
+    return computerDto;
+  }
+
+  /**
+   * List dtos.
+   *
+   * @param computers the computers
+   * @return the list
+   */
+  public List<ComputerDto> listDtos(List<Computer> computers) {
+    List<ComputerDto> dtos = new ArrayList<ComputerDto>();
+    for (Computer computer : computers) {
+      dtos.add(computerToDto(computer));
+    }
+    return dtos;
+  }
+
+  /**
    * Map company.
    *
    * @param dto the dto
@@ -68,6 +100,22 @@ public class Mapper {
 
     return companyBuilder.build();
 
+  }
+
+  /**
+   * Date to string.
+   *
+   * @param date the date
+   * @return the string
+   */
+  private String dateToString(Date date) {
+    if (date != null) {
+      Calendar calendar = Calendar.getInstance();
+      calendar.setTime(date);
+      return String.format("%d/%d/%d", calendar.get(Calendar.DAY_OF_MONTH),
+          calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.YEAR));
+    }
+    return "";
   }
 
 }
