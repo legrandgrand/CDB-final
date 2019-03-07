@@ -1,5 +1,7 @@
 package servlet;
 
+import dto.ComputerDto;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -9,13 +11,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import mapper.Mapper;
+
 import model.Computer;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import dto.ComputerDto;
-import mapper.Mapper;
 import service.ServiceComputer;
 
 /**
@@ -24,7 +23,6 @@ import service.ServiceComputer;
 @WebServlet("/GetComputer")
 public class GetComputer extends HttpServlet {
   private static final long serialVersionUID = 1L;
-  private static final Logger logger = LoggerFactory.getLogger(GetComputer.class);
 
   private ServiceComputer serviceComputer = ServiceComputer.getInstance();
 
