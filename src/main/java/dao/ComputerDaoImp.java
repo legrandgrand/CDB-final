@@ -1,5 +1,7 @@
 package dao;
 
+import config.SpringConfig;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,6 +19,10 @@ import model.Computer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.stereotype.Repository;
+
+
+@Repository
 public class ComputerDaoImp implements ComputerDao {
 
   private static final String INSERT = "INSERT INTO computer "
@@ -40,7 +46,7 @@ public class ComputerDaoImp implements ComputerDao {
   private static final Logger logger = LoggerFactory.getLogger(ComputerDaoImp.class);
 
   private CompanyDaoImp companyDao = CompanyDaoImp.getInstance();
-  private Database database = Database.getInstance();
+  private SpringConfig database = new SpringConfig();
 
   /**
    * Instantiates a new computer dao imp.

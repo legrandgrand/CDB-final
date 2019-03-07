@@ -1,5 +1,7 @@
 package dao;
 
+import config.SpringConfig;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,7 +15,10 @@ import model.Company;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
+@Repository
 public class CompanyDaoImp implements CompanyDao {
 
   private static final String SELECT_ID = "SELECT id, name FROM company WHERE name LIKE ";
@@ -24,7 +29,7 @@ public class CompanyDaoImp implements CompanyDao {
 
   private static final Logger logger = LoggerFactory.getLogger(CompanyDaoImp.class);
 
-  private Database database = Database.getInstance();
+  private SpringConfig database = new SpringConfig();
 
   // TODO: stream
   private static final CompanyDaoImp instance = new CompanyDaoImp();
@@ -117,6 +122,7 @@ public class CompanyDaoImp implements CompanyDao {
   }
 
   @Override
+  @Transactional
   public void delete(Company company) {
     String idString = Integer.toString(company.getId());
     Connection connection = null;

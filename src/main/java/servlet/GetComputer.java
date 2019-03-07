@@ -5,6 +5,7 @@ import dto.ComputerDto;
 import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,6 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 import mapper.Mapper;
 
 import model.Computer;
+
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import service.ServiceComputer;
 
@@ -25,6 +28,12 @@ public class GetComputer extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
   private ServiceComputer serviceComputer = ServiceComputer.getInstance();
+  
+  @Override
+  public void init(ServletConfig config) throws ServletException {
+    super.init(config);
+    SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+  }
 
   /**
    * Do get.

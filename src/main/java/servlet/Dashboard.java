@@ -5,6 +5,7 @@ import dto.ComputerDto;
 import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,6 +18,7 @@ import model.Computer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import service.ServiceComputer;
 
@@ -26,6 +28,12 @@ public class Dashboard extends HttpServlet {
   private static final Logger logger = LoggerFactory.getLogger(Dashboard.class);
 
   private ServiceComputer serviceComputer = ServiceComputer.getInstance();
+  
+  @Override
+  public void init(ServletConfig config) throws ServletException {
+    super.init(config);
+    SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+  }
 
   /**
    * Do get.
@@ -81,11 +89,9 @@ public class Dashboard extends HttpServlet {
     int limit = 20;
     limitString = request.getParameter("limit");
     try {
-      if (!limitString.equals("")) {
+      if (limitString != null) {
         limit = Integer.parseInt(limitString);
       }
-    } catch (NullPointerException se) {
-      logger.error("not valid");
     } catch (NumberFormatException se) {
       logger.error("PageString not valid");
     }
@@ -103,7 +109,7 @@ public class Dashboard extends HttpServlet {
     int page = 0;
     pageString = request.getParameter("page");
     try {
-      if (!pageString.equals("")) {
+      if (pageString != null) {
         page = Integer.parseInt(pageString) * 20;
       }
     } catch (NullPointerException e) {

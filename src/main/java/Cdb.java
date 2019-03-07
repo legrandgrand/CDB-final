@@ -1,7 +1,11 @@
+import config.SpringConfig;
+
 import controller.Controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import service.ServiceCompany;
 import service.ServiceComputer;
@@ -18,6 +22,9 @@ public class Cdb {
    * @param args the arguments
    */
   public static void main(String[] args) {
+    ApplicationContext applicationContext = 
+        new AnnotationConfigApplicationContext(SpringConfig.class);
+    
     logger.debug("Starting program");
     ServiceComputer s1 = ServiceComputer.getInstance();
     ServiceCompany s2 = ServiceCompany.getInstance();
