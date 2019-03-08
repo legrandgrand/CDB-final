@@ -1,7 +1,5 @@
 package dao;
 
-import config.SpringConfig;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,10 +16,12 @@ import model.Computer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.zaxxer.hikari.HikariDataSource;
 
+// TODO: stream
 @Repository
 public class ComputerDaoImp implements ComputerDao {
 
@@ -41,31 +41,48 @@ public class ComputerDaoImp implements ComputerDao {
   private static final String GET_MAX_ID = "SELECT MAX(id) FROM computer";
   private static final String DELETE = "DELETE FROM computer WHERE name= ?";
 
-  private static final ComputerDaoImp instance = new ComputerDaoImp();
-
   private static final Logger logger = LoggerFactory.getLogger(ComputerDaoImp.class);
 
-  private CompanyDaoImp companyDao = CompanyDaoImp.getInstance();
-  private SpringConfig database = new SpringConfig();
 
+  
+  @Autowired
+  private CompanyDaoImp companyDao;
+  
+
+  
+//  @Autowired
+//  private DaoFactory database;
+
+  @Autowired
+  private HikariDataSource ds;
+  
+  private Connection connection = null;
+  
   /**
-   * Instantiates a new computer dao imp.
+   * Connect DB.
+   *
+   * @return the connection
+   * @throws SQLException the SQL exception
    */
-  private ComputerDaoImp() {
+  public Connection connectDb() throws SQLException {
+    if (connection == null || connection.isClosed()) {
+      connection = ds.getConnection();
+    }
+    return connection;
   }
 
-  public static final ComputerDaoImp getInstance() {
-    return instance;
-  }
+  
+  
+  private ComputerDaoImp() {}
+
 
   @Override
-  // TODO: stream
   public List<Computer> list() {
     List<Computer> list = new ArrayList<Computer>();
     List<Company> companyList = new ArrayList<Company>();
     companyList = companyDao.list();
 
-    try (Connection connection = database.connectDb();
+    try (Connection connection = connectDb();
         PreparedStatement statement = connection.prepareStatement(SELECT)) {
       ResultSet resultat = statement.executeQuery();
       while (resultat.next()) {
@@ -80,15 +97,14 @@ public class ComputerDaoImp implements ComputerDao {
 
   }
 
-  @Override
-  // TODO: stream
   // TODO: Prepared Statement
+  @Override
   public List<Computer> orderBy(String column, String type, int limit, int offset) {
     List<Computer> list = new ArrayList<Computer>();
     List<Company> companyList = new ArrayList<Company>();
     companyList = companyDao.list();
 
-    try (Connection connection = database.connectDb();
+    try (Connection connection = connectDb();
         Statement statement = connection.createStatement()) {
       ResultSet resultat = statement.executeQuery(SELECT_ORDER_BY + column + ") , " + column + " "
           + type + " LIMIT " + limit + " OFFSET " + offset);
@@ -104,13 +120,12 @@ public class ComputerDaoImp implements ComputerDao {
   }
 
   @Override
-  // TODO: stream
   public List<Computer> listPage(int limit, int page) {
     List<Computer> list = new ArrayList<Computer>();
     List<Company> companyList = new ArrayList<Company>();
     companyList = companyDao.list();
 
-    try (Connection connection = database.connectDb();
+    try (Connection connection = connectDb();
         PreparedStatement statement = connection.prepareStatement(SELECT + PAGE)) {
       statement.setInt(1, limit);
       statement.setInt(2, page);    
@@ -133,7 +148,7 @@ public class ComputerDaoImp implements ComputerDao {
     List<Company> companyList = new ArrayList<Company>();
     companyList = companyDao.list();
 
-    try (Connection connection = database.connectDb();
+    try (Connection connection = connectDb();
         PreparedStatement statement = connection.prepareStatement(SELECT_ID)) {
       statement.setInt(1, computer.getId());
       ResultSet resultat = statement.executeQuery();
@@ -150,7 +165,7 @@ public class ComputerDaoImp implements ComputerDao {
   @Override
   public int getMaxId() {
     int id = 0;
-    try (Connection connection = database.connectDb();
+    try (Connection connection = connectDb();
         PreparedStatement statement = connection.prepareStatement(GET_MAX_ID)) {
       ResultSet resultat = statement.executeQuery();
       while (resultat.next()) {
@@ -163,14 +178,13 @@ public class ComputerDaoImp implements ComputerDao {
     return id;
   }
 
-  // TODO: Upgrade the company lookup to only lookup for 1 company
   @Override
   public List<Computer> getComputerFromName(Computer computer) {
     List<Computer> list = new ArrayList<Computer>();
     List<Company> companyList = new ArrayList<Company>();
     companyList = companyDao.list();
 
-    try (Connection connection = database.connectDb();
+    try (Connection connection = connectDb();
         Statement statement = connection.createStatement()) {
       ResultSet resultat = statement
           .executeQuery(SELECT_NAME + "WHERE name LIKE '%" + computer.getName() + "%'");
@@ -184,15 +198,10 @@ public class ComputerDaoImp implements ComputerDao {
     return list;
   }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see dao.ComputerDao#deleteComputer(java.lang.String)
-   */
   @Override
   public void delete(Computer computer) {
 
-    try (Connection connection = database.connectDb();
+    try (Connection connection = connectDb();
         PreparedStatement statement = connection.prepareStatement(DELETE)) {
       statement.setString(1, computer.getName());
       statement.executeUpdate();
@@ -203,11 +212,6 @@ public class ComputerDaoImp implements ComputerDao {
 
   }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see dao.ComputerDao#updateComputer(model.Computer)
-   */
   @Override
   public void update(Computer computer) {
 
@@ -219,7 +223,7 @@ public class ComputerDaoImp implements ComputerDao {
     Timestamp introduced = toTimestamp(date1);
     Timestamp discontinued = toTimestamp(date2);
 
-    try (Connection connection = database.connectDb();
+    try (Connection connection = connectDb();
         PreparedStatement statement = connection.prepareStatement(UPDATE)) {
       statement.setTimestamp(1, introduced);
       statement.setTimestamp(2, discontinued);
@@ -232,11 +236,6 @@ public class ComputerDaoImp implements ComputerDao {
     }
   }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see dao.ComputerDao#addComputer(model.Computer)
-   */
   @Override
   public void add(Computer computer) {
 
@@ -248,7 +247,7 @@ public class ComputerDaoImp implements ComputerDao {
     Timestamp introduced = toTimestamp(date1);
     Timestamp discontinued = toTimestamp(date2);
 
-    try (Connection connection = database.connectDb();
+    try (Connection connection = connectDb();
         PreparedStatement statement = connection.prepareStatement(INSERT)) {
       statement.setString(1, name);
       statement.setTimestamp(2, introduced);

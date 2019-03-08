@@ -1,18 +1,24 @@
 package dao;
 
+import com.zaxxer.hikari.HikariDataSource;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+@Component
 public class DaoFactory {
 
-  private static final DaoFactory instance = new DaoFactory();
 
-  /**
-   * Get instance of a new dao factory.
-   */
-  public static final DaoFactory getInstance() {
-    return instance;
-  }
 
   private DaoFactory() {
   }
+
+  
+  
+
 
 
 }

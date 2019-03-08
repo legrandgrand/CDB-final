@@ -12,27 +12,30 @@ import model.Computer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import service.ServiceCompany;
 import service.ServiceComputer;
 
 import validator.ComputerValidator;
 
+@Component
 public class Controller {
-  private ServiceComputer serviceComputer;
-  private ServiceCompany serviceCompany;
-  private static final Logger logger = LoggerFactory.getLogger(Controller.class);
 
-  /**
-   * Instantiates a new controller.
-   * 
-   * @param serviceComputer the service of the Computer
-   * @param serviceCompany  the service of the Company
-   */
-  public Controller(ServiceComputer serviceComputer, ServiceCompany serviceCompany) {
-    this.serviceComputer = serviceComputer;
-    this.serviceCompany = serviceCompany;
-  }
+  
+  private static final Logger logger = LoggerFactory.getLogger(Controller.class);
+  
+  @Autowired
+  private ServiceComputer serviceComputer;
+  
+  @Autowired
+  private ServiceCompany serviceCompany;
+  
+  @Autowired
+  private ComputerValidator computerValidator;
+
+  private Controller() {}
 
   /**
    * List company.
@@ -88,7 +91,7 @@ public class Controller {
   public String setComputerName(Scanner sc) throws Exception {
     String name = sc.nextLine();
     try {
-      ComputerValidator.validateName(name);
+      computerValidator.validateName(name);
       logger.debug("Setting computer name: " + name);
       return name;
     } catch (Exception e) {
@@ -108,7 +111,7 @@ public class Controller {
     String timestamp = null;
     timestamp = sc.nextLine();
     try {
-      ComputerValidator.validateDateFormatIntro(timestamp);
+      computerValidator.validateDateFormatIntro(timestamp);
       if (!timestamp.equals("")) {
         intro = setDate(timestamp);
       }
@@ -133,7 +136,7 @@ public class Controller {
     do {
       timestamp = sc.nextLine();
       try { 
-        ComputerValidator.validateDateFormatDisc(timestamp);
+        computerValidator.validateDateFormatDisc(timestamp);
         if (!timestamp.equals("")) {
           discontinuation = setDate(timestamp);
           if (null != intro) {

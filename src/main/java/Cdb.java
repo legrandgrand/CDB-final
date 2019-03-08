@@ -1,14 +1,9 @@
 import config.SpringConfig;
 
-import controller.Controller;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
-import service.ServiceCompany;
-import service.ServiceComputer;
 
 import view.View;
 
@@ -26,10 +21,10 @@ public class Cdb {
         new AnnotationConfigApplicationContext(SpringConfig.class);
     
     logger.debug("Starting program");
-    ServiceComputer s1 = ServiceComputer.getInstance();
-    ServiceCompany s2 = ServiceCompany.getInstance();
-    Controller c = new Controller(s1, s2);
-    View view = new View(c);
+    //Controller c = new Controller();
+    
+    View view = View.class.cast(applicationContext.getBean("view", View.class));
+    view.start();
   }
 
 }

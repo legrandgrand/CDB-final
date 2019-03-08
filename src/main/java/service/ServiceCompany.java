@@ -8,25 +8,23 @@ import model.Company;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import validator.ComputerValidator;
 
+@Service
 public class ServiceCompany {
 
-  private static final ServiceCompany instance = new ServiceCompany();
   private static final Logger logger = LoggerFactory.getLogger(ServiceCompany.class);
   
-  private CompanyDaoImp companyDao = CompanyDaoImp.getInstance(); 
+  @Autowired
+  private ComputerValidator computerValidator;
+  
+  @Autowired
+  private CompanyDaoImp companyDao; 
 
-  /**
-   * Instantiates a new service company.
-   */
-  private ServiceCompany() {
-  }
-
-  public static ServiceCompany getInstance() {
-    return instance;
-  }
+  private ServiceCompany() {}
 
   /**
    * List company.
@@ -55,7 +53,7 @@ public class ServiceCompany {
    */
   public List<Company> getCompanyFromId(Company company) {
     try {
-      ComputerValidator.validateId(company.getId());
+      computerValidator.validateId(company.getId());
     } catch (Exception e) {
       logger.error(e.getMessage(), e);
     }

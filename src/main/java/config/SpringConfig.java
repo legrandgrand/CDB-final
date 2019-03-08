@@ -1,33 +1,36 @@
 package config;
 
-import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 
 @Configuration
-@ComponentScan
+@ComponentScan({"dao","controller", "mapper", "service", "servlet", "validator", "view"})
+@PropertySource(value = { "classpath:configuration.properties" })
 public class SpringConfig {
-  private static final HikariConfig hikariConfig = new HikariConfig("/config.properties");
-  HikariDataSource ds = new HikariDataSource(hikariConfig);
   
-  private static Connection connection;
+  @Autowired
+  private Environment env;
   
   /**
-   * Connect DB.
+   * Data source.
    *
-   * @return the connection
-   * @throws SQLException the SQL exception
+   * @return the hikari data source
    */
-  public Connection connectDb() throws SQLException {
-    if (connection == null || connection.isClosed()) {
-      connection = ds.getConnection();
-    }
-    return connection;
-  }
-  
+  //private static final HikariConfig hikariConfig = new HikariConfig("/config.properties");
+  @Bean
+  public HikariDataSource dataSource() {
+    
+    HikariDataSource ds = new HikariDataSource();
+    ds.setJdbcUrl(env.getRequiredProperty("URL"));
+    ds.setUsername(env.getRequiredProperty("datasource.USERNAME"));
+    ds.setPassword(env.getRequiredProperty("datasource.PASSWORD"));
+    ds.setDriverClassName(env.getRequiredProperty("datasource.DRIVER"));  
+    return ds;
+  }  
 }

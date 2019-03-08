@@ -9,25 +9,23 @@ import model.Computer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import validator.ComputerValidator;
 
+@Service
 public class ServiceComputer {
 
   private static final Logger logger = LoggerFactory.getLogger(ServiceComputer.class);
-  private static final ServiceComputer instance = new ServiceComputer();
+  
+  @Autowired
+  private ComputerValidator computerValidator;
 
-  private ComputerDaoImp computerDao = ComputerDaoImp.getInstance();
-
-  /**
-   * Instantiates a new service computer.
-   */
-  private ServiceComputer() {
-  }
-
-  public static ServiceComputer getInstance() {
-    return instance;
-  }
+  @Autowired
+  private ComputerDaoImp computerDao;
+  
+  private ServiceComputer() {}
 
   /**
    * Delete computer.
@@ -54,8 +52,8 @@ public class ServiceComputer {
    */
   public void add(Computer computer) {
     try {
-      ComputerValidator.validateName(computer.getName());
-      ComputerValidator.validateId(computer.getId());
+      computerValidator.validateName(computer.getName());
+      computerValidator.validateId(computer.getId());
       computerDao.add(computer);
     } catch (ComputerValidationException e) {
       logger.error(e.getMessage(), e);
@@ -69,8 +67,8 @@ public class ServiceComputer {
    */
   public void update(Computer computer) {
     try {
-      ComputerValidator.validateName(computer.getName());
-      ComputerValidator.validateId(computer.getId());
+      computerValidator.validateName(computer.getName());
+      computerValidator.validateId(computer.getId());
       computerDao.update(computer);
     } catch (ComputerValidationException e) {
       logger.error(e.getMessage(), e);
@@ -95,7 +93,7 @@ public class ServiceComputer {
    */
   public List<Computer> getComputerFromName(Computer computer) {
     try {
-      ComputerValidator.validateName(computer.getName());
+      computerValidator.validateName(computer.getName());
       logger.error("Valid computer name");
     } catch (ComputerValidationException e) {
       logger.error(e.getMessage(), e);

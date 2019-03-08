@@ -16,6 +16,7 @@ import mapper.Mapper;
 
 import model.Computer;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import service.ServiceComputer;
@@ -27,7 +28,11 @@ import service.ServiceComputer;
 public class GetComputer extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
-  private ServiceComputer serviceComputer = ServiceComputer.getInstance();
+  @Autowired
+  private ServiceComputer serviceComputer;
+  
+  @Autowired
+  private Mapper mapper;
   
   @Override
   public void init(ServletConfig config) throws ServletException {
@@ -50,7 +55,7 @@ public class GetComputer extends HttpServlet {
     computer.setName(request.getParameter("search"));
     // TODO: get computers from companyName
     List<Computer> computers = serviceComputer.getComputerFromName(computer);
-    List<ComputerDto> dto = Mapper.getInstance().listDtos(computers);
+    List<ComputerDto> dto = mapper.listDtos(computers);
 
     request.setAttribute("computers", dto);
 

@@ -18,6 +18,7 @@ import model.Computer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import service.ServiceComputer;
@@ -30,7 +31,11 @@ public class OrderByDisc extends HttpServlet {
   private static final long serialVersionUID = 1L;
   private static final Logger logger = LoggerFactory.getLogger(OrderByDisc.class);
 
-  private ServiceComputer serviceComputer = ServiceComputer.getInstance();
+  @Autowired
+  private ServiceComputer serviceComputer;
+  
+  @Autowired
+  private Mapper mapper;
   
   @Override
   public void init(ServletConfig config) throws ServletException {
@@ -55,7 +60,7 @@ public class OrderByDisc extends HttpServlet {
     String type = request.getParameter("Order");
     
     List<Computer> computers = serviceComputer.orderBy("discontinued", type, limit, page);
-    List<ComputerDto> dto = Mapper.getInstance().listDtos(computers);
+    List<ComputerDto> dto = mapper.listDtos(computers);
     
     request.setAttribute("page", page / 20);
     request.setAttribute("maxId", serviceComputer.getMaxId());

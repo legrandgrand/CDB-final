@@ -13,6 +13,7 @@ import model.Computer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import service.ServiceComputer;
@@ -25,6 +26,9 @@ public class DeleteComputer extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
   private static final Logger logger = LoggerFactory.getLogger(DeleteComputer.class);
+  
+  @Autowired
+  private ServiceComputer serviceComputer;
   
   @Override
   public void init(ServletConfig config) throws ServletException {
@@ -63,9 +67,9 @@ public class DeleteComputer extends HttpServlet {
     String[] idStringTable = idString.split(",");
     for (String c : idStringTable) {
       computer.setId(Integer.parseInt(c));
-      computer = ServiceComputer.getInstance().getComputer(computer).get(0);
+      computer = serviceComputer.getComputer(computer).get(0);
       logger.debug("Deleting computer: " + computer.getName());
-      ServiceComputer.getInstance().delete(computer);
+      serviceComputer.delete(computer);
     }
 
     this.getServletContext().getRequestDispatcher("/Dashboard").forward(request, response);

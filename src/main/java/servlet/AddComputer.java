@@ -18,6 +18,7 @@ import model.Computer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import service.ServiceCompany;
@@ -27,6 +28,12 @@ import service.ServiceComputer;
 public class AddComputer extends HttpServlet {
   private static final long serialVersionUID = 1L;
   private static final Logger logger = LoggerFactory.getLogger(AddComputer.class);
+  
+  @Autowired
+  private ServiceComputer serviceComputer;
+  
+  @Autowired
+  private ServiceCompany serviceCompany;
   
   @Override
   public void init(ServletConfig config) throws ServletException {
@@ -45,7 +52,7 @@ public class AddComputer extends HttpServlet {
    */
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
-    List<Company> companies = ServiceCompany.getInstance().listCompany();
+    List<Company> companies = serviceCompany.listCompany();
     logger.debug("Size of companies: " + companies.size());
     request.setAttribute("companies", companies);
     this.getServletContext().getRequestDispatcher("/views/addComputer.jsp").forward(request,
@@ -77,11 +84,11 @@ public class AddComputer extends HttpServlet {
     Company company = new Company();
     company.setName(request.getParameter("companyname"));
 
-    company = ServiceCompany.getInstance().getCompany(company).get(0);
+    company = serviceCompany.getCompany(company).get(0);
 
     computer.setCompany(company);
     logger.debug("Adding computer" + computer);
-    ServiceComputer.getInstance().add(computer);
+    serviceComputer.add(computer);
     response.sendRedirect(request.getContextPath() + "/Dashboard");
   }
 

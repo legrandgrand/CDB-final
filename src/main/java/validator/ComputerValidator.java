@@ -8,12 +8,17 @@ import java.util.Date;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ComputerValidator {
-
-  private static final Logger logger = LoggerFactory.getLogger(ComputerValidator.class);
+  
   private static final int MIN_ID = 0;
   private static final int MAX_ID = 43;
+  
+  private static final Logger logger = LoggerFactory.getLogger(ComputerValidator.class);
+
+  private ComputerValidator() {}
 
   /**
    * Validate name.
@@ -21,7 +26,7 @@ public class ComputerValidator {
    * @param name the name
    * @throws ComputerValidationException the computer validation exception
    */
-  public static void validateName(String name) throws ComputerValidationException {
+  public void validateName(String name) throws ComputerValidationException {
     if (!name.equals("")) {
       logger.info("valid");
     } else {
@@ -35,7 +40,7 @@ public class ComputerValidator {
    * @param intro the intro
    * @throws ComputerValidationException the computer validation exception
    */
-  public static void validateDateFormatIntro(String intro) throws ComputerValidationException {
+  public void validateDateFormatIntro(String intro) throws ComputerValidationException {
     SimpleDateFormat dt = new SimpleDateFormat("yyyy-mm-dd");
     try {
       if (!intro.equals("")) {
@@ -52,7 +57,7 @@ public class ComputerValidator {
    * @param disc  the disc
    * @throws ComputerValidationException the computer validation exception
    */
-  public static void validateDateFormatDisc(String disc) throws ComputerValidationException {
+  public void validateDateFormatDisc(String disc) throws ComputerValidationException {
     SimpleDateFormat dt = new SimpleDateFormat("yyyy-mm-dd");
     try {
       if (!disc.equals("")) {
@@ -70,7 +75,7 @@ public class ComputerValidator {
    * @param disc the disc
    * @throws ComputerValidationException the computer validation exception
    */
-  public static void validateDisc(Date intro, Date disc) 
+  public void validateDisc(Date intro, Date disc) 
       throws ComputerValidationException {
     if (disc.before(intro)) {
       logger.info("");
@@ -85,7 +90,7 @@ public class ComputerValidator {
    * @param id the id
    * @throws ComputerValidationException the computer validation exception
    */
-  public static void validateId(int id) throws ComputerValidationException {
+  public void validateId(int id) throws ComputerValidationException {
     if (id > MAX_ID || id < MIN_ID) {
       throw new ComputerValidationException("Invalid company Id");
     }

@@ -16,20 +16,14 @@ import model.Computer.ComputerBuilder;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
+@Component
 public class Mapper {
-  private static final Mapper instance = new Mapper();
+  
   private static final Logger logger = LoggerFactory.getLogger(Mapper.class);
 
-  public static final Mapper getInstance() {
-    return instance;
-  }
-
-  /**
-   * Instantiates a new company dao imp.
-   */
-  private Mapper() {
-  }
+  private Mapper() {}
 
   /**
    * Map dto to computer.

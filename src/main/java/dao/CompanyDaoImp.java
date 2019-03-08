@@ -1,7 +1,5 @@
 package dao;
 
-import config.SpringConfig;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,9 +13,13 @@ import model.Company;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.zaxxer.hikari.HikariDataSource;
+
+// TODO: stream
 @Repository
 public class CompanyDaoImp implements CompanyDao {
 
@@ -29,31 +31,33 @@ public class CompanyDaoImp implements CompanyDao {
 
   private static final Logger logger = LoggerFactory.getLogger(CompanyDaoImp.class);
 
-  private SpringConfig database = new SpringConfig();
-
-  // TODO: stream
-  private static final CompanyDaoImp instance = new CompanyDaoImp();
-
-  public static final CompanyDaoImp getInstance() {
-    return instance;
-  }
-
+//  @Autowired
+//  private DaoFactory database;
+  
+  @Autowired
+  private HikariDataSource ds;
+  
+  private Connection connection = null;
+  
   /**
-   * Instantiates a new company dao imp.
+   * Connect DB.
+   *
+   * @return the connection
+   * @throws SQLException the SQL exception
    */
-  private CompanyDaoImp() {
+  public Connection connectDb() throws SQLException {
+    if (connection == null || connection.isClosed()) {
+      connection = ds.getConnection();
+    }
+    return connection;
   }
-
-  /*
-   * (non-Javadoc)
-   * 
-   * @see dao.CompanyDao#listCompanies()
-   */
+  
+  private CompanyDaoImp() {}
 
   @Override
   public List<Company> list() {
     List<Company> list = new ArrayList<Company>();
-    try (Connection connection = database.connectDb();
+    try (Connection connection = connectDb();
         Statement statement = connection.createStatement()) {
 
       try (ResultSet resultat = statement.executeQuery(SELECT)) {
@@ -73,16 +77,11 @@ public class CompanyDaoImp implements CompanyDao {
     return list;
   }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see dao.CompanyDao#getCompany(java.lang.String)
-   */
   @Override
   public List<Company> getCompany(Company company) {
     List<Company> list = new ArrayList<Company>();
 
-    try (Connection connection = database.connectDb();
+    try (Connection connection = connectDb();
         Statement statement = connection.createStatement()) {
       ResultSet resultat = statement.executeQuery(SELECT_ID + "'%" + company.getName() + "%'");
       while (resultat.next()) {
@@ -97,16 +96,11 @@ public class CompanyDaoImp implements CompanyDao {
     return list;
   }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see dao.CompanyDao#getCompany(java.lang.String)
-   */
   @Override
   public List<Company> getCompanyFromId(Company company) {
     List<Company> list = new ArrayList<Company>();
 
-    try (Connection connection = database.connectDb();
+    try (Connection connection = connectDb();
         Statement statement = connection.createStatement();
         ResultSet resultat = statement.executeQuery(SELECT_NAME + company.getId())) {
       while (resultat.next()) {
@@ -127,7 +121,7 @@ public class CompanyDaoImp implements CompanyDao {
     String idString = Integer.toString(company.getId());
     Connection connection = null;
     try {
-      connection = database.connectDb();
+      connection = connectDb();
       connection.setAutoCommit(false);
 
       PreparedStatement statement = connection.prepareStatement(DELETE_COMPANY);

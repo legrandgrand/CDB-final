@@ -17,7 +17,7 @@
     <location>/views/403.html</location>
   </error-page>
   
-<!--           <listener>
+	<listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
 
@@ -28,5 +28,5 @@
     <context-param>
         <param-name>contextClass</param-name>
         <param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
-    </context-param> -->
+    </context-param>
 </web-app>

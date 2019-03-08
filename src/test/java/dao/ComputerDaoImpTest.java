@@ -13,17 +13,22 @@ import model.Computer;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class ComputerDaoImpTest {
   private static final String DATE_1 = "1997-10-02 00:00:00";
   private static final String DATE_2 = "1997-10-03 00:00:00";
+  private static final SimpleDateFormat DT = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+  
+  @Autowired
   private ComputerDaoImp computerDaoImp;
-  SimpleDateFormat dt = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+  
 
-  @Before
-  public void setUp() throws Exception {
-    computerDaoImp = ComputerDaoImp.getInstance();
-  }
+
+//  @Before
+//  public void setUp() throws Exception {
+//    computerDaoImp = ComputerDaoImp.getInstance();
+//  }
 
   @Test
   public void testList() {
@@ -68,7 +73,7 @@ public class ComputerDaoImpTest {
     assertTrue(computers.contains(computer));
 
     // Case 2: have company number, date of intro
-    Date date1 = dt.parse(DATE_1);
+    Date date1 = DT.parse(DATE_1);
 
     computer = new Computer("MacBook Pro 15.4 inch", company, date1, null, 1);
     computerDaoImp.update(computer);
@@ -76,7 +81,7 @@ public class ComputerDaoImpTest {
     assertTrue(computers.contains(computer));
 
     // Case 3: have company number, date of intro and disc superior to date of intro
-    Date date2 = dt.parse(DATE_2);
+    Date date2 = DT.parse(DATE_2);
     computer = new Computer("MacBook Pro 15.4 inch", company, date1, date2, 1);
     computerDaoImp.update(computer);
 
@@ -86,7 +91,7 @@ public class ComputerDaoImpTest {
 
   @Test
   public void testAdd() throws ParseException {
-    Date date1 = dt.parse(DATE_1);
+    Date date1 = DT.parse(DATE_1);
     // Case 1: have company number, no dates
     Company company = new Company("Apple Inc.", 1);
     Computer computer = new Computer("TestComputer", company, null, null, 580);
@@ -104,7 +109,7 @@ public class ComputerDaoImpTest {
     assertTrue(computers.contains(computer));
 
     // Case 3: have company number, date of intro and disc superior to date of intro
-    Date date2 = dt.parse(DATE_2);
+    Date date2 = DT.parse(DATE_2);
     computer = new Computer("TestComputer3", company, date1, date2, 580);
 
     computerDaoImp.add(computer);
