@@ -1,29 +1,3 @@
-
-Skip to content
-
-    Pull requests
-    Issues
-    Marketplace
-    Explore
-
-    @legrandgrand
-
-0
-0
-
-    0
-
-Rekwyn/computer-database
-Code
-Issues 0
-Pull requests 0
-Projects 0
-Wiki
-Insights
-computer-database/.gitignore
-175d02b 4 days ago
-@Rekwyn Rekwyn Create .gitignore
-57 lines (46 sloc) 462 Bytes
 #
 # Project specific excludes
 #
@@ -77,20 +51,3 @@ nb-configuration.xml
 release.properties
 pom.xml.releaseBackup
 pom.xml.tag
-
-    © 2019 GitHub, Inc.
-    Terms
-    Privacy
-    Security
-    Status
-    Help
-
-    Contact GitHub
-    Pricing
-    API
-    Training
-    Blog
-    About
-
-Press h to open a hovercard with more details.
-

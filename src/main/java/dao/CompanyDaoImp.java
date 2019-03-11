@@ -13,15 +13,12 @@ import model.Company;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.zaxxer.hikari.HikariDataSource;
-
 // TODO: stream
 @Repository
-public class CompanyDaoImp implements CompanyDao {
+public class CompanyDaoImp extends Dao implements CompanyDao {
 
   private static final String SELECT_ID = "SELECT id, name FROM company WHERE name LIKE ";
   private static final String SELECT_NAME = "SELECT id, name FROM company WHERE id= ";
@@ -30,27 +27,6 @@ public class CompanyDaoImp implements CompanyDao {
   private static final String DELETE_COMPUTER = "DELETE FROM computer WHERE company_id= ? ";
 
   private static final Logger logger = LoggerFactory.getLogger(CompanyDaoImp.class);
-
-//  @Autowired
-//  private DaoFactory database;
-  
-  @Autowired
-  private HikariDataSource ds;
-  
-  private Connection connection = null;
-  
-  /**
-   * Connect DB.
-   *
-   * @return the connection
-   * @throws SQLException the SQL exception
-   */
-  public Connection connectDb() throws SQLException {
-    if (connection == null || connection.isClosed()) {
-      connection = ds.getConnection();
-    }
-    return connection;
-  }
   
   private CompanyDaoImp() {}
 

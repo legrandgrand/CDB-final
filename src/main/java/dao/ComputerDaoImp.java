@@ -19,11 +19,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.zaxxer.hikari.HikariDataSource;
-
 // TODO: stream
 @Repository
-public class ComputerDaoImp implements ComputerDao {
+public class ComputerDaoImp extends Dao implements ComputerDao {
 
   private static final String INSERT = "INSERT INTO computer "
       + "(name,introduced,discontinued,company_id) VALUES (?,?,?,?)";
@@ -42,39 +40,11 @@ public class ComputerDaoImp implements ComputerDao {
   private static final String DELETE = "DELETE FROM computer WHERE name= ?";
 
   private static final Logger logger = LoggerFactory.getLogger(ComputerDaoImp.class);
-
-
   
   @Autowired
-  private CompanyDaoImp companyDao;
-  
-
-  
-//  @Autowired
-//  private DaoFactory database;
-
-  @Autowired
-  private HikariDataSource ds;
-  
-  private Connection connection = null;
-  
-  /**
-   * Connect DB.
-   *
-   * @return the connection
-   * @throws SQLException the SQL exception
-   */
-  public Connection connectDb() throws SQLException {
-    if (connection == null || connection.isClosed()) {
-      connection = ds.getConnection();
-    }
-    return connection;
-  }
-
-  
+  private CompanyDaoImp companyDao; 
   
   private ComputerDaoImp() {}
-
 
   @Override
   public List<Computer> list() {

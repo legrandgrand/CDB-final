@@ -14,6 +14,7 @@ import model.Computer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import service.ServiceComputer;
@@ -22,6 +23,7 @@ import service.ServiceComputer;
  * Servlet implementation class DeleteComputer.
  */
 @WebServlet("/DeleteComputer")
+@Configurable
 public class DeleteComputer extends HttpServlet {
   private static final long serialVersionUID = 1L;
 

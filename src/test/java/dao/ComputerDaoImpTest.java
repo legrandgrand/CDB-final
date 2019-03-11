@@ -19,11 +19,9 @@ public class ComputerDaoImpTest {
   private static final String DATE_1 = "1997-10-02 00:00:00";
   private static final String DATE_2 = "1997-10-03 00:00:00";
   private static final SimpleDateFormat DT = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
-  
+
   @Autowired
   private ComputerDaoImp computerDaoImp;
-  
-
 
 //  @Before
 //  public void setUp() throws Exception {
@@ -136,7 +134,7 @@ public class ComputerDaoImpTest {
     computerDaoImp.delete(computer);
 
     List<Computer> computers = computerDaoImp.list();
-    
+
     assertTrue(!computers.contains(computer));
   }
 

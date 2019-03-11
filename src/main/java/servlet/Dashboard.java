@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebListener;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -19,11 +20,13 @@ import model.Computer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import service.ServiceComputer;
 
 @WebServlet("/Dashboard")
+@Configurable
 public class Dashboard extends HttpServlet {
   private static final long serialVersionUID = 1L;
   private static final Logger logger = LoggerFactory.getLogger(Dashboard.class);
@@ -117,8 +120,6 @@ public class Dashboard extends HttpServlet {
       if (pageString != null) {
         page = Integer.parseInt(pageString) * 20;
       }
-    } catch (NullPointerException e) {
-      logger.error("not valid");
     } catch (NumberFormatException e) {
       logger.error("PageString not valid");
     }

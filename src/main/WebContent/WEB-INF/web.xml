@@ -23,7 +23,7 @@
 
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>org.example.demo.ticket.webapp.bootstrap.SpringConfiguration</param-value>
+        <param-value>config.SpringConfig</param-value>
     </context-param>
     <context-param>
         <param-name>contextClass</param-name>

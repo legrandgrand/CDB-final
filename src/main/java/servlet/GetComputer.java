@@ -17,6 +17,7 @@ import mapper.Mapper;
 import model.Computer;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import service.ServiceComputer;
@@ -25,6 +26,7 @@ import service.ServiceComputer;
  * Servlet implementation class GetComputer.
  */
 @WebServlet("/GetComputer")
+@Configurable
 public class GetComputer extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
