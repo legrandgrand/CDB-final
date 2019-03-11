@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Timestamp;
 
 import java.util.ArrayList;
@@ -67,7 +66,6 @@ public class ComputerDaoImp extends Dao implements ComputerDao {
 
   }
 
-  // TODO: Prepared Statement
   @Override
   public List<Computer> orderBy(String column, String type, int limit, int offset) {
     List<Computer> list = new ArrayList<Computer>();
@@ -75,9 +73,9 @@ public class ComputerDaoImp extends Dao implements ComputerDao {
     companyList = companyDao.list();
 
     try (Connection connection = connectDb();
-        Statement statement = connection.createStatement()) {
-      ResultSet resultat = statement.executeQuery(SELECT_ORDER_BY + column + ") , " + column + " "
-          + type + " LIMIT " + limit + " OFFSET " + offset);
+        PreparedStatement statement = connection.prepareStatement(SELECT_ORDER_BY 
+            + column + ") , " + column + " " + type + " LIMIT " + limit + " OFFSET " + offset)) {
+      ResultSet resultat = statement.executeQuery();
       while (resultat.next()) {
         list.add(setComputerData(resultat, companyList));
       }
@@ -155,9 +153,9 @@ public class ComputerDaoImp extends Dao implements ComputerDao {
     companyList = companyDao.list();
 
     try (Connection connection = connectDb();
-        Statement statement = connection.createStatement()) {
-      ResultSet resultat = statement
-          .executeQuery(SELECT_NAME + "WHERE name LIKE '%" + computer.getName() + "%'");
+        PreparedStatement statement = connection.prepareStatement(SELECT_NAME 
+            + "WHERE name LIKE '%" + computer.getName() + "%'")) {
+      ResultSet resultat = statement.executeQuery();
       while (resultat.next()) {
         list.add(setComputerData(resultat, companyList));
       }

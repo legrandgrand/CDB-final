@@ -1,14 +1,19 @@
 package validator;
 
+import dto.ComputerDto;
+
 import exception.ComputerValidationException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+
 import java.util.Date;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+
+
 
 @Component
 public class ComputerValidator {
@@ -19,6 +24,12 @@ public class ComputerValidator {
   private static final Logger logger = LoggerFactory.getLogger(ComputerValidator.class);
 
   private ComputerValidator() {}
+  
+  public void validateDto(ComputerDto dto) throws ComputerValidationException {
+    validateName(dto.getName());
+    validateDateFormatDisc(dto.getDateDiscontinuation());
+    validateDateFormatIntro(dto.getDateIntro());
+  }
 
   /**
    * Validate name.
@@ -75,7 +86,7 @@ public class ComputerValidator {
    * @param disc the disc
    * @throws ComputerValidationException the computer validation exception
    */
-  public void validateDisc(Date intro, Date disc) 
+  public void validateDiscBeforeIntro(Date intro, Date disc) 
       throws ComputerValidationException {
     if (disc.before(intro)) {
       logger.info("");

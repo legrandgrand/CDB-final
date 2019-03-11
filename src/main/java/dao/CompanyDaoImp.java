@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,25 +26,25 @@ public class CompanyDaoImp extends Dao implements CompanyDao {
   private static final String DELETE_COMPUTER = "DELETE FROM computer WHERE company_id= ? ";
 
   private static final Logger logger = LoggerFactory.getLogger(CompanyDaoImp.class);
-  
-  private CompanyDaoImp() {}
+
+  private CompanyDaoImp() {
+  }
 
   @Override
   public List<Company> list() {
     List<Company> list = new ArrayList<Company>();
     try (Connection connection = connectDb();
-        Statement statement = connection.createStatement()) {
+        PreparedStatement statement = connection.prepareStatement(SELECT)) {
 
-      try (ResultSet resultat = statement.executeQuery(SELECT)) {
+      ResultSet resultat = statement.executeQuery();
 
-        while (resultat.next()) {
-          String name = resultat.getString("name");
-          int id = resultat.getInt("id");
-          Company company = new Company(name, id);
-          list.add(company);
-        }
-
+      while (resultat.next()) {
+        String name = resultat.getString("name");
+        int id = resultat.getInt("id");
+        Company company = new Company(name, id);
+        list.add(company);
       }
+
     } catch (SQLException e) {
       logger.error(e.getMessage(), e);
     }
@@ -58,8 +57,10 @@ public class CompanyDaoImp extends Dao implements CompanyDao {
     List<Company> list = new ArrayList<Company>();
 
     try (Connection connection = connectDb();
-        Statement statement = connection.createStatement()) {
-      ResultSet resultat = statement.executeQuery(SELECT_ID + "'%" + company.getName() + "%'");
+        PreparedStatement statement = connection
+            .prepareStatement(SELECT_ID + "'%" + company.getName() + "%'")) {
+
+      ResultSet resultat = statement.executeQuery();
       while (resultat.next()) {
         company.setName(resultat.getString("name"));
         company.setId(resultat.getInt("id"));
@@ -77,8 +78,8 @@ public class CompanyDaoImp extends Dao implements CompanyDao {
     List<Company> list = new ArrayList<Company>();
 
     try (Connection connection = connectDb();
-        Statement statement = connection.createStatement();
-        ResultSet resultat = statement.executeQuery(SELECT_NAME + company.getId())) {
+        PreparedStatement statement = connection.prepareStatement(SELECT_NAME + company.getId())) {
+      ResultSet resultat = statement.executeQuery();
       while (resultat.next()) {
         company.setName(resultat.getString("name"));
         company.setId(resultat.getInt("id"));

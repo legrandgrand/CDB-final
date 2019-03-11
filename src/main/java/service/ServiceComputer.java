@@ -18,22 +18,14 @@ import validator.ComputerValidator;
 public class ServiceComputer {
 
   private static final Logger logger = LoggerFactory.getLogger(ServiceComputer.class);
-  
+
   @Autowired
   private ComputerValidator computerValidator;
 
   @Autowired
   private ComputerDaoImp computerDao;
-  
-  private ServiceComputer() {}
 
-  /**
-   * Delete computer.
-   *
-   * @param computer the computer
-   */
-  public void delete(Computer computer) {
-    computerDao.delete(computer);
+  private ServiceComputer() {
   }
 
   /**
@@ -43,36 +35,6 @@ public class ServiceComputer {
    */
   public List<Computer> list() {
     return computerDao.list();
-  }
-
-  /**
-   * Adds the computer.
-   *
-   * @param computer the computer
-   */
-  public void add(Computer computer) {
-    try {
-      computerValidator.validateName(computer.getName());
-      computerValidator.validateId(computer.getId());
-      computerDao.add(computer);
-    } catch (ComputerValidationException e) {
-      logger.error(e.getMessage(), e);
-    }
-  }
-
-  /**
-   * Update computer.
-   *
-   * @param computer the computer
-   */
-  public void update(Computer computer) {
-    try {
-      computerValidator.validateName(computer.getName());
-      computerValidator.validateId(computer.getId());
-      computerDao.update(computer);
-    } catch (ComputerValidationException e) {
-      logger.error(e.getMessage(), e);
-    }
   }
 
   /**
@@ -113,16 +75,7 @@ public class ServiceComputer {
     logger.debug("limit: " + limit + "page: " + page);
     return computerDao.listPage(limit, page);
   }
-
-  /**
-   * Return the max Id.
-   * 
-   * @return the max Id.
-   */
-  public int getMaxId() {
-    return computerDao.getMaxId();
-  }
-
+  
   /**
    * Order by.
    *
@@ -135,5 +88,59 @@ public class ServiceComputer {
   public List<Computer> orderBy(String column, String type, int limit, int page) {
     return computerDao.orderBy(column, type, limit, page);
   }
+
+  /**
+   * Delete computer.
+   *
+   * @param computer the computer
+   */
+  public void delete(Computer computer) {
+    try {
+      computerValidator.validateName(computer.getName());
+      computerDao.delete(computer);
+    } catch (ComputerValidationException e) {
+      logger.error(e.getMessage(), e);
+    }
+  }
+
+  /**
+   * Adds the computer.
+   *
+   * @param computer the computer
+   */
+  public void add(Computer computer) {
+    try {
+      computerValidator.validateName(computer.getName());
+      computerValidator.validateId(computer.getId());
+      computerDao.add(computer);
+    } catch (ComputerValidationException e) {
+      logger.error(e.getMessage(), e);
+    }
+  }
+
+  /**
+   * Update computer.
+   *
+   * @param computer the computer
+   */
+  public void update(Computer computer) {
+    try {
+      computerValidator.validateName(computer.getName());
+      computerValidator.validateId(computer.getId());
+      computerDao.update(computer);
+    } catch (ComputerValidationException e) {
+      logger.error(e.getMessage(), e);
+    }
+  }
+
+  /**
+   * Return the max Id.
+   * 
+   * @return the max Id.
+   */
+  public int getMaxId() {
+    return computerDao.getMaxId();
+  }
+
 
 }

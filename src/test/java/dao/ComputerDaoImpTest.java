@@ -2,6 +2,8 @@ package dao;
 
 import static org.junit.Assert.assertTrue;
 
+import config.SpringConfig;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -11,9 +13,11 @@ import java.util.List;
 import model.Company;
 import model.Computer;
 
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class ComputerDaoImpTest {
   private static final String DATE_1 = "1997-10-02 00:00:00";
@@ -22,12 +26,31 @@ public class ComputerDaoImpTest {
 
   @Autowired
   private ComputerDaoImp computerDaoImp;
+  
+//  @ClassRule
+//  public static final SpringClassRule SPRING_CLASS_RULE = new SpringClassRule();
+//
+//  @Rule
+//  public final SpringMethodRule springMethodRule = new SpringMethodRule();
 
-//  @Before
-//  public void setUp() throws Exception {
-//    computerDaoImp = ComputerDaoImp.getInstance();
-//  }
 
+  @Autowired
+  ApplicationContext context;
+
+  /**
+   * Sets the up before class.
+   *
+   * @throws Exception the exception
+   */
+  @BeforeClass
+  public static void setUpBeforeClass() throws Exception {
+    ApplicationContext applicationContext = 
+        new AnnotationConfigApplicationContext(SpringConfig.class);
+  }
+
+  /**
+   * Test list.
+   */
   @Test
   public void testList() {
     Company company = new Company("Apple Inc.", 1);
@@ -36,6 +59,9 @@ public class ComputerDaoImpTest {
     assertTrue(computers.contains(computer));
   }
 
+  /**
+   * Test get computer.
+   */
   @Test
   public void testGetComputer() {
     Company company = new Company("Thinking Machines", 2);
@@ -44,6 +70,9 @@ public class ComputerDaoImpTest {
     assertTrue(computers.contains(computer));
   }
 
+  /**
+   * Test get computer from name.
+   */
   @Test
   public void testGetComputerFromName() {
     Company company = new Company("Thinking Machines", 2);
@@ -52,6 +81,9 @@ public class ComputerDaoImpTest {
     assertTrue(computers.contains(computer));
   }
 
+  /**
+   * Test list page.
+   */
   @Test
   public void testListPage() {
     Company company = new Company("Thinking Machines", 2);
@@ -60,6 +92,11 @@ public class ComputerDaoImpTest {
     assertTrue(computers.contains(computer));
   }
 
+  /**
+   * Test update.
+   *
+   * @throws ParseException the parse exception
+   */
   @Test
   public void testUpdate() throws ParseException {
     Company company = new Company("Apple Inc.", 1);
@@ -87,6 +124,11 @@ public class ComputerDaoImpTest {
     assertTrue(computers.contains(computer));
   }
 
+  /**
+   * Test add.
+   *
+   * @throws ParseException the parse exception
+   */
   @Test
   public void testAdd() throws ParseException {
     Date date1 = DT.parse(DATE_1);
@@ -124,6 +166,9 @@ public class ComputerDaoImpTest {
     assertTrue(computers.contains(computer));
   }
 
+  /**
+   * Test delete.
+   */
   @Test
   public void testDelete() {
     // Case 1: successfull delete

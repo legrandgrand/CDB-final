@@ -22,7 +22,6 @@ public class SpringConfig {
    *
    * @return the hikari data source
    */
-  //private static final HikariConfig hikariConfig = new HikariConfig("/config.properties");
   @Bean
   public HikariDataSource dataSource() {
     

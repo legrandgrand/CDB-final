@@ -1,8 +1,8 @@
 package mapper;
 
 import dto.ComputerDto;
+import exception.ComputerValidationException;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -16,12 +16,18 @@ import model.Computer.ComputerBuilder;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import validator.ComputerValidator;
 
 @Component
 public class Mapper {
   
   private static final Logger logger = LoggerFactory.getLogger(Mapper.class);
+  
+  @Autowired
+  ComputerValidator validator;
 
   private Mapper() {}
 
@@ -31,24 +37,16 @@ public class Mapper {
    * @param dto the dto
    * @return the computer
    */
+  //TODO: finish that I'm tired of this
   public Computer dtoToComputer(ComputerDto dto) {
     SimpleDateFormat dt = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
-    ComputerBuilder computerBuilder = new ComputerBuilder().setName(dto.getName());
-    Company company = new Company();
-    company.setId(dto.getIdCompany());
-    company.setName(dto.getCompanyName());
-    computerBuilder.setCompany(company);
-
+    ComputerBuilder computerBuilder = new ComputerBuilder();
     try {
-      if (!dto.getIdComputer().equals("")) {
-        computerBuilder.setId(Integer.parseInt(dto.getIdComputer()));
-      } else {
-        computerBuilder.setId(0);
-      }
-      computerBuilder.setDateDiscontinuation(dt.parse(dto.getDateDiscontinuation()));
-      computerBuilder.setDateIntro(dt.parse(dto.getDateIntro()));
-    } catch (ParseException e) {
-      logger.error(e.getMessage(), e);
+      validator.validateDto(dto);
+      computerBuilder.build().setId(dto.getIdComputer());
+      
+    } catch (ComputerValidationException e) {
+      logger.error(e.getMessage());   
     }
     return computerBuilder.build();
   }
@@ -60,7 +58,7 @@ public class Mapper {
    * @return the computer dto
    */
   public ComputerDto computerToDto(Computer computer) {
-    ComputerDto computerDto = new ComputerDto(computer.getId() + "", computer.getName(),
+    ComputerDto computerDto = new ComputerDto(computer.getId(), computer.getName(),
         dateToString(computer.getDateIntro()), dateToString(computer.getDateDiscontinuation()),
         computer.getCompany().getName(), computer.getCompany().getId());
 

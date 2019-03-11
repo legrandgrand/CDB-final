@@ -21,7 +21,6 @@ public class Cdb {
         new AnnotationConfigApplicationContext(SpringConfig.class);
     
     logger.debug("Starting program");
-    //Controller c = new Controller();
     
     View view = View.class.cast(applicationContext.getBean("view", View.class));
     view.start();
