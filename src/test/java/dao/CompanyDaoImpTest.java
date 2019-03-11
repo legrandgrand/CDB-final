@@ -2,8 +2,9 @@ package dao;
 
 import static org.junit.Assert.assertEquals;
 
-import config.SpringConfig;
+import config.SpringConfigTest;
 
+import java.sql.Connection;
 import java.util.List;
 
 import model.Company;
@@ -15,12 +16,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-public class CompanyDaoImpTest {
-  @Autowired
-  private CompanyDaoImp companyDaoImp;
+import com.zaxxer.hikari.HikariDataSource;
 
-  @Autowired
-  ApplicationContext context;
+public class CompanyDaoImpTest {
+
+  private static CompanyDaoImp companyDaoImp;
+
+  private static HikariDataSource dataSource;
 
   /**
    * Sets the up before class.
@@ -29,9 +31,11 @@ public class CompanyDaoImpTest {
    */
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
-
     ApplicationContext applicationContext = 
-        new AnnotationConfigApplicationContext(SpringConfig.class);
+        new AnnotationConfigApplicationContext(SpringConfigTest.class);
+    dataSource = applicationContext.getBean("dataSource", HikariDataSource.class);
+    companyDaoImp = applicationContext.getBean("companyDaoImp", CompanyDaoImp.class);
+    Connection connection = dataSource.getConnection();
   }
 
   /**

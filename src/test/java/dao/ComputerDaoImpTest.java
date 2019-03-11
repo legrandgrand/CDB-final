@@ -2,8 +2,9 @@ package dao;
 
 import static org.junit.Assert.assertTrue;
 
-import config.SpringConfig;
+import config.SpringConfigTest;
 
+import java.sql.Connection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -19,24 +20,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import com.zaxxer.hikari.HikariDataSource;
+
 public class ComputerDaoImpTest {
   private static final String DATE_1 = "1997-10-02 00:00:00";
   private static final String DATE_2 = "1997-10-03 00:00:00";
   private static final SimpleDateFormat DT = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
 
-  @Autowired
-  private ComputerDaoImp computerDaoImp;
+  private static ComputerDaoImp computerDaoImp;
   
-//  @ClassRule
-//  public static final SpringClassRule SPRING_CLASS_RULE = new SpringClassRule();
-//
-//  @Rule
-//  public final SpringMethodRule springMethodRule = new SpringMethodRule();
-
-
-  @Autowired
-  ApplicationContext context;
-
+  private static HikariDataSource dataSource;
+  
+  
   /**
    * Sets the up before class.
    *
@@ -45,7 +40,10 @@ public class ComputerDaoImpTest {
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
     ApplicationContext applicationContext = 
-        new AnnotationConfigApplicationContext(SpringConfig.class);
+        new AnnotationConfigApplicationContext(SpringConfigTest.class);
+    dataSource = applicationContext.getBean("dataSource", HikariDataSource.class);
+    computerDaoImp = applicationContext.getBean("computerDaoImp", ComputerDaoImp.class);
+    Connection connection = dataSource.getConnection();
   }
 
   /**
