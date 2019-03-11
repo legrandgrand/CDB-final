@@ -1,7 +1,10 @@
 package validator;
 
 import dto.ComputerDto;
-
+import exception.ComputerDiscValidationException;
+import exception.ComputerIdValidationException;
+import exception.ComputerIntroValidationException;
+import exception.ComputerNameValidationException;
 import exception.ComputerValidationException;
 
 import java.text.ParseException;
@@ -23,8 +26,17 @@ public class ComputerValidator {
   
   private static final Logger logger = LoggerFactory.getLogger(ComputerValidator.class);
 
+  /**
+   * Instantiates a new computer validator.
+   */
   private ComputerValidator() {}
   
+  /**
+   * Validate dto.
+   *
+   * @param dto the dto
+   * @throws ComputerValidationException the computer validation exception
+   */
   public void validateDto(ComputerDto dto) throws ComputerValidationException {
     validateName(dto.getName());
     validateDateFormatDisc(dto.getDateDiscontinuation());
@@ -35,13 +47,13 @@ public class ComputerValidator {
    * Validate name.
    *
    * @param name the name
-   * @throws ComputerValidationException the computer validation exception
+   * @throws ComputerNameValidationException the computer name validation exception
    */
-  public void validateName(String name) throws ComputerValidationException {
+  public void validateName(String name) throws ComputerNameValidationException {
     if (!name.equals("")) {
       logger.info("valid");
     } else {
-      throw new ComputerValidationException("Invalid name");
+      throw new ComputerNameValidationException("Invalid name");
     }
   }
 
@@ -49,16 +61,16 @@ public class ComputerValidator {
    * Validate intro.
    *
    * @param intro the intro
-   * @throws ComputerValidationException the computer validation exception
+   * @throws ComputerIntroValidationException the computer intro validation exception
    */
-  public void validateDateFormatIntro(String intro) throws ComputerValidationException {
+  public void validateDateFormatIntro(String intro) throws ComputerIntroValidationException {
     SimpleDateFormat dt = new SimpleDateFormat("yyyy-mm-dd");
     try {
       if (!intro.equals("")) {
         dt.parse(intro);
       }
     } catch (ParseException e) {
-      throw new ComputerValidationException("Invalid type of Introduction");
+      throw new ComputerIntroValidationException("Invalid type of Introduction");
     }
   }
 
@@ -66,16 +78,16 @@ public class ComputerValidator {
    * Validate disc.
    *
    * @param disc  the disc
-   * @throws ComputerValidationException the computer validation exception
+   * @throws ComputerDiscValidationException the computer disc validation exception
    */
-  public void validateDateFormatDisc(String disc) throws ComputerValidationException {
+  public void validateDateFormatDisc(String disc) throws ComputerDiscValidationException {
     SimpleDateFormat dt = new SimpleDateFormat("yyyy-mm-dd");
     try {
       if (!disc.equals("")) {
         dt.parse(disc);
       }
     } catch (ParseException e) {
-      throw new ComputerValidationException("Invalid type of Date of Discontinuation");
+      throw new ComputerDiscValidationException("Invalid type of Date of Discontinuation");
     }
   }
   
@@ -99,11 +111,11 @@ public class ComputerValidator {
    * Validate id.
    *
    * @param id the id
-   * @throws ComputerValidationException the computer validation exception
+   * @throws ComputerIdValidationException the computer id validation exception
    */
-  public void validateId(int id) throws ComputerValidationException {
+  public void validateId(int id) throws ComputerIdValidationException {
     if (id > MAX_ID || id < MIN_ID) {
-      throw new ComputerValidationException("Invalid company Id");
+      throw new ComputerIdValidationException("Invalid company Id");
     }
   }
   
