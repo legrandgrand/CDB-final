@@ -22,7 +22,6 @@ public class View {
    */
   public void start() {
     System.out.print("Welcome to the computer database program.");
-    mainMenu();
   }
 
   /**
@@ -49,10 +48,10 @@ public class View {
    * @param list the list
    */
   public void listCompanies(List<Company> list) {
-    Company company = new Company();
+    Company company;
     Iterator<Company> itr = list.iterator();
     while (itr.hasNext()) {
-      company = (Company) itr.next();
+      company = itr.next();
       System.out.println(company);
     }
   }
@@ -70,10 +69,10 @@ public class View {
    * @param list the list
    */
   public void listComputers(List<Computer> list) {
-    Computer computer = new Computer();
+    Computer computer;
     Iterator<Computer> itr = list.iterator();
     while (itr.hasNext()) {
-      computer = (Computer) itr.next();
+      computer = itr.next();
       System.out.println(computer);
     }
   }

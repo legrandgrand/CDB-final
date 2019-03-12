@@ -38,30 +38,13 @@ public class DeleteComputer extends HttpServlet {
     SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
   }
 
-  /**
-   * Do get.
-   *
-   * @param request the request
-   * @param response the response
-   * @throws ServletException the servlet exception
-   * @throws IOException Signals that an I/O exception has occurred.
-   * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-   */
+  @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
-    // TODO Auto-generated method stub
     response.getWriter().append("Served at: ").append(request.getContextPath());
   }
 
-  /**
-   * Do post.
-   *
-   * @param request the request
-   * @param response the response
-   * @throws ServletException the servlet exception
-   * @throws IOException Signals that an I/O exception has occurred.
-   * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-   */
+  @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
     Computer computer = new Computer();

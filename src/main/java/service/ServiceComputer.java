@@ -3,6 +3,7 @@ package service;
 import dao.ComputerDaoImp;
 import exception.ComputerValidationException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import model.Computer;
@@ -54,14 +55,15 @@ public class ServiceComputer {
    * @return the computer from name
    */
   public List<Computer> getComputerFromName(Computer computer) {
+    List<Computer> list = new ArrayList<>();
     try {
       computerValidator.validateName(computer.getName());
       logger.error("Valid computer name");
     } catch (ComputerValidationException e) {
       logger.error(e.getMessage(), e);
-      return null;
-    }
-    return computerDao.getComputerFromName(computer);
+      return list;
+    }   
+    return list = computerDao.getComputerFromName(computer);
   }
 
   /**

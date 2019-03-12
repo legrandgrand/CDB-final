@@ -5,6 +5,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +20,7 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 @PropertySource(value = { "classpath:configuration.properties" })
 public class SpringConfig implements WebApplicationInitializer {
 
+  @Autowired
   private Environment env;
 
   /**

@@ -39,7 +39,6 @@ public class Mapper {
    */
   //TODO: finish that I'm tired of this
   public Computer dtoToComputer(ComputerDto dto) {
-    SimpleDateFormat dt = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
     ComputerBuilder computerBuilder = new ComputerBuilder();
     try {
       validator.validateDto(dto);
@@ -72,7 +71,7 @@ public class Mapper {
    * @return the list
    */
   public List<ComputerDto> listDtos(List<Computer> computers) {
-    List<ComputerDto> dtos = new ArrayList<ComputerDto>();
+    List<ComputerDto> dtos = new ArrayList<>();
     for (Computer computer : computers) {
       dtos.add(computerToDto(computer));
     }

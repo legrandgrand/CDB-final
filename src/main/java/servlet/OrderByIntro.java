@@ -45,15 +45,7 @@ public class OrderByIntro extends HttpServlet {
     SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
   }
 
-  /**
-   * Do get.
-   *
-   * @param request  the request
-   * @param response the response
-   * @throws ServletException the servlet exception
-   * @throws IOException      Signals that an I/O exception has occurred.
-   * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-   */
+  @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
     int page = setPage(request);
@@ -80,15 +72,7 @@ public class OrderByIntro extends HttpServlet {
         response);
   }
 
-  /**
-   * Do post.
-   *
-   * @param request  the request
-   * @param response the response
-   * @throws ServletException the servlet exception
-   * @throws IOException      Signals that an I/O exception has occurred.
-   * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-   */
+  @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
     doGet(request, response);
@@ -131,7 +115,6 @@ public class OrderByIntro extends HttpServlet {
     } catch (NumberFormatException e) {
       logger.error("PageString not valid");
     }
-    Math.floor(page);
     return page;
   }
 

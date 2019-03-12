@@ -51,7 +51,7 @@ public class Controller {
    * Start.
    */
   public void start() {
-    System.out.print("Welcome to the computer database program.");
+    view.start();
     mainMenu();
   }
 

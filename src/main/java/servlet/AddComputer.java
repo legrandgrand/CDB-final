@@ -43,15 +43,7 @@ public class AddComputer extends HttpServlet {
     SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
   }
 
-  /**
-   * Do get.
-   *
-   * @param request  the request
-   * @param response the response
-   * @throws ServletException the servlet exception
-   * @throws IOException      Signals that an I/O exception has occurred.
-   * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-   */
+  @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
     List<Company> companies = serviceCompany.listCompany();
@@ -61,15 +53,7 @@ public class AddComputer extends HttpServlet {
         response);
   }
 
-  /**
-   * Do post.
-   *
-   * @param request  the request
-   * @param response the response
-   * @throws ServletException the servlet exception
-   * @throws IOException      Signals that an I/O exception has occurred.
-   * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-   */
+  @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
 

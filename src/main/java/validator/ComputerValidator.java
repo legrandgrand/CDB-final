@@ -16,21 +16,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-
-
 @Component
 public class ComputerValidator {
-  
+
   private static final int MIN_ID = 0;
   private static final int MAX_ID = 43;
-  
+
   private static final Logger logger = LoggerFactory.getLogger(ComputerValidator.class);
 
   /**
    * Instantiates a new computer validator.
    */
-  private ComputerValidator() {}
-  
+  private ComputerValidator() {
+  }
+
   /**
    * Validate dto.
    *
@@ -77,7 +76,7 @@ public class ComputerValidator {
   /**
    * Validate disc.
    *
-   * @param disc  the disc
+   * @param disc the disc
    * @throws ComputerDiscValidationException the computer disc validation exception
    */
   public void validateDateFormatDisc(String disc) throws ComputerDiscValidationException {
@@ -90,22 +89,19 @@ public class ComputerValidator {
       throw new ComputerDiscValidationException("Invalid type of Date of Discontinuation");
     }
   }
-  
+
   /**
    * Validate date of disc.
    *
    * @param intro the intro
-   * @param disc the disc
+   * @param disc  the disc
    * @throws ComputerValidationException the computer validation exception
    */
-  public void validateDiscBeforeIntro(Date intro, Date disc) 
-      throws ComputerValidationException {
-    if (disc != null) {
-      if (disc.before(intro)) {
-        logger.info("");
-        throw new ComputerValidationException("The date you entered happened "
-            + "before the date of introduction. Please enter a valid date.");
-      }
+  public void validateDiscBeforeIntro(Date intro, Date disc) throws ComputerValidationException {
+    if (disc != null && disc.before(intro)) {
+      logger.info("");
+      throw new ComputerValidationException("The date you entered happened "
+          + "before the date of introduction. Please enter a valid date.");
     }
   }
 
@@ -120,7 +116,5 @@ public class ComputerValidator {
       throw new ComputerIdValidationException("Invalid company Id");
     }
   }
-  
-
 
 }
