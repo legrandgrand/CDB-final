@@ -1,18 +1,26 @@
 package servlet;
 
+import dto.ComputerDto;
+
 import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import mapper.Mapper;
+
 import model.Computer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import service.ServiceComputer;
 
@@ -20,11 +28,22 @@ import service.ServiceComputer;
  * Servlet implementation class OrderByName.
  */
 @WebServlet("/OrderByDisc")
+@Configurable
 public class OrderByDisc extends HttpServlet {
   private static final long serialVersionUID = 1L;
   private static final Logger logger = LoggerFactory.getLogger(OrderByDisc.class);
 
-  private ServiceComputer serviceComputer = ServiceComputer.getInstance();
+  @Autowired
+  private ServiceComputer serviceComputer;
+  
+  @Autowired
+  private Mapper mapper;
+  
+  @Override
+  public void init(ServletConfig config) throws ServletException {
+    super.init(config);
+    SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+  }
 
   /**
    * Do get.
@@ -43,11 +62,12 @@ public class OrderByDisc extends HttpServlet {
     String type = request.getParameter("Order");
     
     List<Computer> computers = serviceComputer.orderBy("discontinued", type, limit, page);
+    List<ComputerDto> dto = mapper.listDtos(computers);
     
     request.setAttribute("page", page / 20);
     request.setAttribute("maxId", serviceComputer.getMaxId());
     request.setAttribute("limit", limit);  
-    request.setAttribute("computers", computers);
+    request.setAttribute("computers", dto);
 
     if (type.equals("ASC")) {
       type = "DESC";
@@ -86,11 +106,9 @@ public class OrderByDisc extends HttpServlet {
     int limit = 20;
     try {
       limitString = request.getParameter("limit");
-      if (!limitString.equals("")) {
+      if (limitString != null) {
         limit = Integer.parseInt(limitString);
       }
-    } catch (NullPointerException se) {
-      logger.error("not valid");
     } catch (NumberFormatException se) {
       logger.error("PageString not valid");
     }
@@ -108,11 +126,9 @@ public class OrderByDisc extends HttpServlet {
     int page = 0;
     try {
       pageString = request.getParameter("page");
-      if (!pageString.equals("")) {
+      if (pageString != null) {
         page = Integer.parseInt(pageString) * 20;
       }
-    } catch (NullPointerException e) {
-      logger.error("not valid");
     } catch (NumberFormatException e) {
       logger.error("PageString not valid");
     }

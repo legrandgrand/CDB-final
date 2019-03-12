@@ -1,39 +1,31 @@
 package service;
 
 import dao.ComputerDaoImp;
+import exception.ComputerValidationException;
+
 import java.util.List;
 
 import model.Computer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import validator.Validator;
+import validator.ComputerValidator;
 
+@Service
 public class ServiceComputer {
 
   private static final Logger logger = LoggerFactory.getLogger(ServiceComputer.class);
-  private static final ServiceComputer instance = new ServiceComputer();
 
-  private ComputerDaoImp computerDao = ComputerDaoImp.getInstance();
+  @Autowired
+  private ComputerValidator computerValidator;
 
-  /**
-   * Instantiates a new service computer.
-   */
+  @Autowired
+  private ComputerDaoImp computerDao;
+
   private ServiceComputer() {
-  }
-
-  public static ServiceComputer getInstance() {
-    return instance;
-  }
-
-  /**
-   * Delete computer.
-   *
-   * @param computer the computer
-   */
-  public void delete(Computer computer) {
-    computerDao.delete(computer);
   }
 
   /**
@@ -43,36 +35,6 @@ public class ServiceComputer {
    */
   public List<Computer> list() {
     return computerDao.list();
-  }
-
-  /**
-   * Adds the computer.
-   *
-   * @param computer the computer
-   */
-  public void add(Computer computer) {
-    try {
-      Validator.validateName(computer.getName());
-      Validator.validateId(computer.getId());
-      computerDao.add(computer);
-    } catch (Exception e) {
-      logger.error(e.getMessage(), e);
-    }
-  }
-
-  /**
-   * Update computer.
-   *
-   * @param computer the computer
-   */
-  public void update(Computer computer) {
-    try {
-      Validator.validateName(computer.getName());
-      Validator.validateId(computer.getId());
-      computerDao.update(computer);
-    } catch (Exception e) {
-      logger.error(e.getMessage(), e);
-    }
   }
 
   /**
@@ -93,10 +55,10 @@ public class ServiceComputer {
    */
   public List<Computer> getComputerFromName(Computer computer) {
     try {
-      Validator.validateName(computer.getName());
+      computerValidator.validateName(computer.getName());
       logger.error("Valid computer name");
-    } catch (Exception e) {
-      logger.error("Invalid computer name");
+    } catch (ComputerValidationException e) {
+      logger.error(e.getMessage(), e);
       return null;
     }
     return computerDao.getComputerFromName(computer);
@@ -113,16 +75,7 @@ public class ServiceComputer {
     logger.debug("limit: " + limit + "page: " + page);
     return computerDao.listPage(limit, page);
   }
-
-  /**
-   * Return the max Id.
-   * 
-   * @return the max Id.
-   */
-  public int getMaxId() {
-    return computerDao.getMaxId();
-  }
-
+  
   /**
    * Order by.
    *
@@ -135,5 +88,59 @@ public class ServiceComputer {
   public List<Computer> orderBy(String column, String type, int limit, int page) {
     return computerDao.orderBy(column, type, limit, page);
   }
+
+  /**
+   * Delete computer.
+   *
+   * @param computer the computer
+   */
+  public void delete(Computer computer) {
+    try {
+      computerValidator.validateName(computer.getName());
+      computerDao.delete(computer);
+    } catch (ComputerValidationException e) {
+      logger.error(e.getMessage(), e);
+    }
+  }
+
+  /**
+   * Adds the computer.
+   *
+   * @param computer the computer
+   */
+  public void add(Computer computer) {
+    try {
+      computerValidator.validateName(computer.getName());
+      computerValidator.validateId(computer.getId());
+      computerDao.add(computer);
+    } catch (ComputerValidationException e) {
+      logger.error(e.getMessage(), e);
+    }
+  }
+
+  /**
+   * Update computer.
+   *
+   * @param computer the computer
+   */
+  public void update(Computer computer) {
+    try {
+      computerValidator.validateName(computer.getName());
+      computerValidator.validateId(computer.getId());
+      computerDao.update(computer);
+    } catch (ComputerValidationException e) {
+      logger.error(e.getMessage(), e);
+    }
+  }
+
+  /**
+   * Return the max Id.
+   * 
+   * @return the max Id.
+   */
+  public int getMaxId() {
+    return computerDao.getMaxId();
+  }
+
 
 }

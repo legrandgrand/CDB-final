@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +12,12 @@ import model.Company;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-public class CompanyDaoImp implements CompanyDao {
+// TODO: stream
+@Repository
+public class CompanyDaoImp extends Dao implements CompanyDao {
 
   private static final String SELECT_ID = "SELECT id, name FROM company WHERE name LIKE ";
   private static final String SELECT_NAME = "SELECT id, name FROM company WHERE id= ";
@@ -24,43 +27,24 @@ public class CompanyDaoImp implements CompanyDao {
 
   private static final Logger logger = LoggerFactory.getLogger(CompanyDaoImp.class);
 
-  private Database database = Database.getInstance();
-
-  // TODO: stream
-  private static final CompanyDaoImp instance = new CompanyDaoImp();
-
-  public static final CompanyDaoImp getInstance() {
-    return instance;
-  }
-
-  /**
-   * Instantiates a new company dao imp.
-   */
   private CompanyDaoImp() {
   }
-
-  /*
-   * (non-Javadoc)
-   * 
-   * @see dao.CompanyDao#listCompanies()
-   */
 
   @Override
   public List<Company> list() {
     List<Company> list = new ArrayList<Company>();
-    try (Connection connection = database.connectDb();
-        Statement statement = connection.createStatement()) {
+    try (Connection connection = connectDb();
+        PreparedStatement statement = connection.prepareStatement(SELECT)) {
 
-      try (ResultSet resultat = statement.executeQuery(SELECT)) {
+      ResultSet resultat = statement.executeQuery();
 
-        while (resultat.next()) {
-          String name = resultat.getString("name");
-          int id = resultat.getInt("id");
-          Company company = new Company(name, id);
-          list.add(company);
-        }
-
+      while (resultat.next()) {
+        String name = resultat.getString("name");
+        int id = resultat.getInt("id");
+        Company company = new Company(name, id);
+        list.add(company);
       }
+
     } catch (SQLException e) {
       logger.error(e.getMessage(), e);
     }
@@ -68,18 +52,15 @@ public class CompanyDaoImp implements CompanyDao {
     return list;
   }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see dao.CompanyDao#getCompany(java.lang.String)
-   */
   @Override
   public List<Company> getCompany(Company company) {
     List<Company> list = new ArrayList<Company>();
 
-    try (Connection connection = database.connectDb();
-        Statement statement = connection.createStatement()) {
-      ResultSet resultat = statement.executeQuery(SELECT_ID + "'%" + company.getName() + "%'");
+    try (Connection connection = connectDb();
+        PreparedStatement statement = connection
+            .prepareStatement(SELECT_ID + "'%" + company.getName() + "%'")) {
+
+      ResultSet resultat = statement.executeQuery();
       while (resultat.next()) {
         company.setName(resultat.getString("name"));
         company.setId(resultat.getInt("id"));
@@ -92,18 +73,13 @@ public class CompanyDaoImp implements CompanyDao {
     return list;
   }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see dao.CompanyDao#getCompany(java.lang.String)
-   */
   @Override
   public List<Company> getCompanyFromId(Company company) {
     List<Company> list = new ArrayList<Company>();
 
-    try (Connection connection = database.connectDb();
-        Statement statement = connection.createStatement();
-        ResultSet resultat = statement.executeQuery(SELECT_NAME + company.getId())) {
+    try (Connection connection = connectDb();
+        PreparedStatement statement = connection.prepareStatement(SELECT_NAME + company.getId())) {
+      ResultSet resultat = statement.executeQuery();
       while (resultat.next()) {
         company.setName(resultat.getString("name"));
         company.setId(resultat.getInt("id"));
@@ -117,11 +93,12 @@ public class CompanyDaoImp implements CompanyDao {
   }
 
   @Override
+  @Transactional
   public void delete(Company company) {
     String idString = Integer.toString(company.getId());
     Connection connection = null;
     try {
-      connection = database.connectDb();
+      connection = connectDb();
       connection.setAutoCommit(false);
 
       PreparedStatement statement = connection.prepareStatement(DELETE_COMPANY);

@@ -11,7 +11,13 @@ import java.util.Scanner;
 import model.Company;
 import model.Computer;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+@Component
 public class View {
+  
+  @Autowired
   private Controller controller;
 
   /**
@@ -19,8 +25,12 @@ public class View {
    *
    * @param controller the controller
    */
-  public View(Controller controller) {
-    this.controller = controller;
+  private View() {
+    //this.controller = controller;
+    //start();
+  }
+  
+  public void start() {
     System.out.print("Welcome to the computer database program.");
     mainMenu();
   }

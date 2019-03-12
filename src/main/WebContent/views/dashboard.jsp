@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html>
@@ -82,12 +82,12 @@
 				  <c:forEach items="${computers}" var="computer">
 				    <tr>
 				        <td class="editMode">
-                            <input type="checkbox" class="cb" value="${computer.id}">
+                            <input type="checkbox" class="cb" value="${computer.idComputer}">
                         </td>
-				      <td> <a href="EditComputer?<c:out value="${computer.id}"/>" onclick=""><c:out value="${computer.name}" /></a></td>
+				      <td> <a href="EditComputer?<c:out value="${computer.idComputer}"/>" onclick=""><c:out value="${computer.name}" /></a></td>
 				      <td><c:out value="${computer.dateIntro}" /></td>
 				      <td><c:out value="${computer.dateDiscontinuation}" /></td>
-				      <td><c:out value="${computer.company.name}" /></td>
+				      <td><c:out value="${computer.companyName}" /></td>
 				    </tr>
 				  </c:forEach>
                     <tr>       
@@ -100,7 +100,7 @@
         <div class="container text-center">
             <ul class="pagination">
               <li>
-                <a href="Dashboard?0" aria-label="Previous">
+                <a href="Dashboard?page=0&limit=${limit}" aria-label="Previous">
                   <span aria-hidden="true">&laquo;</span>
                 </a>
               </li>
@@ -110,7 +110,7 @@
 	    		  </c:if>
 				</c:forEach>
               <li>
-	            <a href="Dashboard?${fn:substringBefore((maxId/20)-1, '.')}" aria-label="Next">
+	            <a href="Dashboard?page=${fn:substringBefore((maxId/20)-1, '.')}&limit=${limit}" aria-label="Next">
 	              <span aria-hidden="true">&raquo;</span>
 	            </a>
               </li>
