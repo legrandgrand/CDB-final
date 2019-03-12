@@ -57,4 +57,11 @@ public class CompanyDaoImpTest {
     List<Company> companies = companyDaoImp.getCompany(company);
     assertEquals(true, companies.contains(company));
   }
+  
+  @Test
+  public void testGetCompanyFromId() {
+    Company company = new Company("OQO", 18);
+    List<Company> companies = companyDaoImp.getCompanyFromId(company);
+    assertEquals(true, companies.contains(company));
+  }
 }

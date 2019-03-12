@@ -2,6 +2,8 @@ package dao;
 
 import static org.junit.Assert.assertTrue;
 
+import com.zaxxer.hikari.HikariDataSource;
+
 import config.SpringConfigTest;
 
 import java.sql.Connection;
@@ -16,11 +18,8 @@ import model.Computer;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
-import com.zaxxer.hikari.HikariDataSource;
 
 public class ComputerDaoImpTest {
   private static final String DATE_1 = "1997-10-02 00:00:00";
@@ -28,10 +27,9 @@ public class ComputerDaoImpTest {
   private static final SimpleDateFormat DT = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
 
   private static ComputerDaoImp computerDaoImp;
-  
+
   private static HikariDataSource dataSource;
-  
-  
+
   /**
    * Sets the up before class.
    *
@@ -39,11 +37,17 @@ public class ComputerDaoImpTest {
    */
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
-    ApplicationContext applicationContext = 
-        new AnnotationConfigApplicationContext(SpringConfigTest.class);
+    ApplicationContext applicationContext = new AnnotationConfigApplicationContext(
+        SpringConfigTest.class);
     dataSource = applicationContext.getBean("dataSource", HikariDataSource.class);
     computerDaoImp = applicationContext.getBean("computerDaoImp", ComputerDaoImp.class);
     Connection connection = dataSource.getConnection();
+  }
+  
+  @Test
+  public void testGetMaxId() {
+    int maxId = 574;
+    assertTrue(computerDaoImp.getMaxId() == maxId);
   }
 
   /**
@@ -96,29 +100,32 @@ public class ComputerDaoImpTest {
    * @throws ParseException the parse exception
    */
   @Test
-  public void testUpdate() throws ParseException {
+  public void testUpdateNoDate() throws ParseException {
     Company company = new Company("Apple Inc.", 1);
-    // Case 1: have company number, no dates
     Computer computer = new Computer("MacBook Pro 15.4 inch", company, null, null, 1);
     computerDaoImp.update(computer);
-
     List<Computer> computers = computerDaoImp.list();
     assertTrue(computers.contains(computer));
+  }
 
-    // Case 2: have company number, date of intro
+  @Test
+  public void testUpdateNoDisc() throws ParseException {
+    Company company = new Company("Apple Inc.", 1);
     Date date1 = DT.parse(DATE_1);
-
-    computer = new Computer("MacBook Pro 15.4 inch", company, date1, null, 1);
+    Computer computer = new Computer("MacBook Pro 15.4 inch", company, date1, null, 1);
     computerDaoImp.update(computer);
-    computers = computerDaoImp.list();
+    List<Computer> computers = computerDaoImp.list();
     assertTrue(computers.contains(computer));
+  }
 
-    // Case 3: have company number, date of intro and disc superior to date of intro
+  @Test
+  public void testUpdateAll() throws ParseException {
+    Company company = new Company("Apple Inc.", 1);
+    Date date1 = DT.parse(DATE_1);
     Date date2 = DT.parse(DATE_2);
-    computer = new Computer("MacBook Pro 15.4 inch", company, date1, date2, 1);
+    Computer computer = new Computer("MacBook Pro 15.4 inch", company, date1, date2, 1);
     computerDaoImp.update(computer);
-
-    computers = computerDaoImp.list();
+    List<Computer> computers = computerDaoImp.list();
     assertTrue(computers.contains(computer));
   }
 
@@ -129,8 +136,6 @@ public class ComputerDaoImpTest {
    */
   @Test
   public void testAdd() throws ParseException {
-    Date date1 = DT.parse(DATE_1);
-    // Case 1: have company number, no dates
     Company company = new Company("Apple Inc.", 1);
     Computer computer = new Computer("TestComputer", company, null, null, 580);
 
@@ -138,29 +143,41 @@ public class ComputerDaoImpTest {
 
     List<Computer> computers = computerDaoImp.list();
     assertTrue(computers.contains(computer));
+  }
 
-    // Case 2: have company number, date of intro
-    computer = new Computer("TestComputer2", company, date1, null, 580);
+  @Test
+  public void testAddNoDate() throws ParseException {
+    Date date1 = DT.parse(DATE_1);
+    Company company = new Company("Apple Inc.", 1);
+    Computer computer = new Computer("TestComputer2", company, date1, null, 580);
     computerDaoImp.add(computer);
 
-    computers = computerDaoImp.list();
+    List<Computer> computers = computerDaoImp.list();
     assertTrue(computers.contains(computer));
+  }
 
-    // Case 3: have company number, date of intro and disc superior to date of intro
+  @Test
+  public void testAddAll() throws ParseException {
+    Date date1 = DT.parse(DATE_1);
     Date date2 = DT.parse(DATE_2);
-    computer = new Computer("TestComputer3", company, date1, date2, 580);
+    Company company = new Company("Apple Inc.", 1);
+    Computer computer = new Computer("TestComputer3", company, date1, date2, 580);
 
     computerDaoImp.add(computer);
 
-    computers = computerDaoImp.list();
+    List<Computer> computers = computerDaoImp.list();
     assertTrue(computers.contains(computer));
+  }
 
-    // Case 4: have company number, date of disc
-    computer = new Computer("TestComputer3", company, null, date2, 580);
+  @Test
+  public void testAddNoIntro() throws ParseException {
+    Date date2 = DT.parse(DATE_2);
+    Company company = new Company("Apple Inc.", 1);
+    Computer computer = new Computer("TestComputer3", company, null, date2, 580);
 
     computerDaoImp.add(computer);
 
-    computers = computerDaoImp.list();
+    List<Computer> computers = computerDaoImp.list();
     assertTrue(computers.contains(computer));
   }
 
@@ -169,8 +186,6 @@ public class ComputerDaoImpTest {
    */
   @Test
   public void testDelete() {
-    // Case 1: successfull delete
-
     Company company = new Company("Apple Inc.", 1);
     Computer computer = new Computer("testComputer", company, null, null, 580);
 
@@ -180,5 +195,7 @@ public class ComputerDaoImpTest {
 
     assertTrue(!computers.contains(computer));
   }
+  
+
 
 }

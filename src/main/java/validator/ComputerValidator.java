@@ -100,10 +100,12 @@ public class ComputerValidator {
    */
   public void validateDiscBeforeIntro(Date intro, Date disc) 
       throws ComputerValidationException {
-    if (disc.before(intro)) {
-      logger.info("");
-      throw new ComputerValidationException("The date you entered happened "
-          + "before the date of introduction. Please enter a valid date.");
+    if (disc != null) {
+      if (disc.before(intro)) {
+        logger.info("");
+        throw new ComputerValidationException("The date you entered happened "
+            + "before the date of introduction. Please enter a valid date.");
+      }
     }
   }
 
