@@ -5,7 +5,6 @@ import com.zaxxer.hikari.HikariDataSource;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -14,14 +13,12 @@ import org.springframework.core.env.Environment;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
-import org.springframework.web.servlet.DispatcherServlet;
 
 @Configuration
 @ComponentScan({ "dao", "controller", "mapper", "service", "servlet", "validator", "view" })
 @PropertySource(value = { "classpath:configuration.properties" })
 public class SpringConfig implements WebApplicationInitializer {
 
-  @Autowired
   private Environment env;
 
   /**

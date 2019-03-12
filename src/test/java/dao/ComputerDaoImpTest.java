@@ -2,11 +2,8 @@ package dao;
 
 import static org.junit.Assert.assertTrue;
 
-import com.zaxxer.hikari.HikariDataSource;
-
 import config.SpringConfigTest;
 
-import java.sql.Connection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -16,9 +13,11 @@ import java.util.List;
 import model.Company;
 import model.Computer;
 
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class ComputerDaoImpTest {
@@ -27,8 +26,8 @@ public class ComputerDaoImpTest {
   private static final SimpleDateFormat DT = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
 
   private static ComputerDaoImp computerDaoImp;
-
-  private static HikariDataSource dataSource;
+  
+  private static ApplicationContext applicationContext;
 
   /**
    * Sets the up before class.
@@ -37,11 +36,14 @@ public class ComputerDaoImpTest {
    */
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
-    ApplicationContext applicationContext = new AnnotationConfigApplicationContext(
+    applicationContext = new AnnotationConfigApplicationContext(
         SpringConfigTest.class);
-    dataSource = applicationContext.getBean("dataSource", HikariDataSource.class);
     computerDaoImp = applicationContext.getBean("computerDaoImp", ComputerDaoImp.class);
-    Connection connection = dataSource.getConnection();
+  }
+  
+  @AfterClass
+  public static void setUpAfterClass() throws Exception {
+    ((ConfigurableApplicationContext)applicationContext).close();
   }
   
   @Test

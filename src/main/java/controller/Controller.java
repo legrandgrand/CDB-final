@@ -1,9 +1,12 @@
 package controller;
 
+import exception.ComputerValidationException;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import java.util.Date;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -19,105 +22,179 @@ import service.ServiceCompany;
 import service.ServiceComputer;
 
 import validator.ComputerValidator;
+import view.View;
 
 @Component
 public class Controller {
 
-  
   private static final Logger logger = LoggerFactory.getLogger(Controller.class);
-  
+
+  @Autowired
+  private View view;
+
   @Autowired
   private ServiceComputer serviceComputer;
-  
+
   @Autowired
   private ServiceCompany serviceCompany;
-  
+
   @Autowired
   private ComputerValidator computerValidator;
 
-  private Controller() {}
+  /**
+   * Instantiates a new controller.
+   */
+  private Controller() {
+  }
+
+  /**
+   * Start.
+   */
+  public void start() {
+    System.out.print("Welcome to the computer database program.");
+    mainMenu();
+  }
+
+  /**
+   * Main menu.
+   */
+  public void mainMenu() {
+    view.mainMenu();
+    Scanner sc = new Scanner(System.in);
+    try {
+      int userChoice = sc.nextInt();
+      switch (userChoice) { // TODO: enums
+        case 1:
+          listCompany();
+          break;
+        case 2:
+          listComputers();
+          break;
+        case 3:
+          addComputer();
+          break;
+        case 4:
+          deleteComputer();
+          break;
+        case 5:
+          deleteCompany();
+          break;
+        case 6:
+          updateComputer();
+          break;
+        case 7:
+          System.out.println("Exiting program");
+          sc.close();
+          System.exit(0);
+          break;
+        default:
+          System.out.println("Not a valid statement.");
+          mainMenu();
+          break;
+      }
+    } catch (InputMismatchException e) {
+      System.out.println("Not a valid input.");
+
+      mainMenu();
+    }
+  }
 
   /**
    * List company.
-   *
-   * @return the list
    */
-  public List<Company> listCompany() {
+  public void listCompany() {
+    view.startListCompanies();
     logger.debug("Listing companies");
-    return serviceCompany.listCompany();
+    List<Company> list = serviceCompany.listCompany();
+    view.listCompanies(list);
+    mainMenu();
   }
 
   /**
    * List computer.
    *
-   * @return the list
    */
-  public List<Computer> listComputer() {
+  public void listComputers() {
+    view.startListComputers();
     logger.debug("Listing computers");
-    return serviceComputer.list();
+    List<Computer> list = serviceComputer.list();
+    view.listComputers(list);
+    mainMenu();
   }
 
   /**
    * Delete computer.
-   *
-   * @param name the name
    */
-  public void deleteComputer(String name) {
+  public void deleteComputer() {
+    view.deleteComputer();
+    String name = null;
+    Scanner sc = new Scanner(System.in);
+    name = sc.nextLine();
     Computer computer = new Computer();
     computer.setName(name);
-    logger.debug("Deleting computer named" + name);
     serviceComputer.delete(computer);
+    view.deletedComputer(name);
+    logger.debug("Deleting computer named" + name);
+    mainMenu();
   }
-  
+
   /**
    * Delete company.
-   *
-   * @param id the id
    */
-  public void deleteCompany(int id) {
-    Company company = new Company();
-    company.setId(id);
-    logger.debug("Deleting company of id: " + id);
-    serviceCompany.delete(company);
+  public void deleteCompany() {
+    view.startDeleteCompany();
+    try (Scanner sc = new Scanner(System.in)) {
+      int companyId = sc.nextInt();
+      Company company = new Company();
+      company.setId(companyId);
+      logger.debug("Deleting company of id: " + companyId);
+      serviceCompany.delete(company);
+      view.deleteCompany(company);
+      sc.nextLine();
+      mainMenu();
+    }
   }
 
   /**
    * Sets the computer name.
    *
-   * @param sc the scanner
    * @return the ComputerName
-   * @throws Exception exception
+   * @throws ComputerValidationException the computer validation exception
    */
-  public String setComputerName(Scanner sc) throws Exception {
+  public String setComputerName() throws ComputerValidationException {
+    view.setComputerName();
+    Scanner sc = new Scanner(System.in);
     String name = sc.nextLine();
     try {
       computerValidator.validateName(name);
       logger.debug("Setting computer name: " + name);
       return name;
-    } catch (Exception e) {
-      throw new Exception(e);
+    } catch (ComputerValidationException e) {
+      throw e;
     }
   }
 
   /**
    * Sets the computer intro.
    *
-   * @param sc the scanner
    * @return the timestamp
-   * @throws Exception the exception
+   * @throws ComputerValidationException the computer validation exception
    */
-  public Date setComputerIntro(Scanner sc) throws Exception {
+  public Date setComputerIntro() throws ComputerValidationException {
+    view.addComputerDateIntro();
+    Scanner sc = new Scanner(System.in);
     Date intro = null;
     String timestamp = null;
     timestamp = sc.nextLine();
     try {
       computerValidator.validateDateFormatIntro(timestamp);
-      if (!timestamp.equals("")) {
-        intro = setDate(timestamp);
-      }
-    } catch (Exception e) {
-      throw new Exception(e);
+    } catch (ComputerValidationException e) {
+      throw e;
     }
+    if (!timestamp.equals("")) {
+      intro = setDate(timestamp);
+    }
+
     logger.debug("Setting computer date of introduction: " + intro);
     return intro;
   }
@@ -125,35 +202,24 @@ public class Controller {
   /**
    * Sets the computer disc.
    *
-   * @param sc    the scanner
-   * @param intro the date of introduction
    * @return the date of discontinuation
-   * @throws Exception the exception
+   * @throws ComputerValidationException the computer validation exception
    */
-  public Date setComputerDisc(Scanner sc, Date intro) throws Exception {
+  public Date setComputerDisc() throws ComputerValidationException {
+    view.addComputerDateDisc();
     Date discontinuation = null;
     String timestamp = null;
-    do {
-      timestamp = sc.nextLine();
-      try { 
-        computerValidator.validateDateFormatDisc(timestamp);
-        if (!timestamp.equals("")) {
-          discontinuation = setDate(timestamp);
-          if (null != intro) {
-            break;
-          }
-          if (discontinuation.before(intro)) {
-            logger.info("The date you entered happened before the date of introduction. "
-                + "Please enter a valid date.");
-          }
-        } else {
-          break;
-        }
-      } catch (Exception e) {
-        throw new Exception(e);
-      }
+    Scanner sc = new Scanner(System.in);
+    timestamp = sc.nextLine();
+    try {
+      computerValidator.validateDateFormatDisc(timestamp);
+    } catch (ComputerValidationException e) {
+      throw e;
+    }
+    if (!timestamp.equals("")) {
+      discontinuation = setDate(timestamp);
+    }
 
-    } while (null != intro || discontinuation.before(intro));
     logger.debug("Setting computer date of discontinuation: " + discontinuation);
     return discontinuation;
 
@@ -162,48 +228,77 @@ public class Controller {
   /**
    * Sets the computer company id.
    *
-   * @param sc the scanner
    * @return the Company Id
    */
-  public Company setComputerCompany(Scanner sc) {
+  public Company setComputerCompany() {
+    view.setComputerCompanyId();
     Company company = new Company();
+    Scanner sc = new Scanner(System.in);
     company.setName(sc.nextLine());
     logger.debug("Setting company Id: " + company.getName());
-    company = (Company) serviceCompany.getCompany(company).get(0);
-    //sc.nextLine();
+    company = serviceCompany.getCompany(company).get(0);
     return company;
   }
 
   /**
    * Adds the computer.
    *
-   * @param name            the name
-   * @param intro           the date of introduction
-   * @param discontinuation the date of discontinuation
-   * @param companyId       the company id
-   * @return the computer
    */
-  public Computer addComputer(String name, Date intro, Date discontinuation, Company companyId) {
-    Computer computer = new Computer(name, companyId, intro, discontinuation, 0);
-    logger.debug("Adding computer: " + computer);
-    serviceComputer.add(computer);
-    return computer;
+  public void addComputer() {
+    view.startAddComputer();
+    String name = null;
+    Date intro = null;
+    Date discontinuation = null;
+    Company company = new Company();
+    try {
+      name = setComputerName();
+      intro = setComputerIntro();
+      discontinuation = setComputerDisc();
+      company = setComputerCompany();
+      Computer computer = new Computer(name, company, intro, discontinuation, 0);
+      logger.debug("Adding computer: " + computer);
+      serviceComputer.add(computer);
+      view.addComputer(computer);
+    } catch (IllegalArgumentException e) {
+      System.out
+          .println("The argument you entered doesn't have the correct format. Please try again.");
+
+      addComputer();
+    } catch (InputMismatchException e) {
+      System.out.println("Not a valid input. Please try again.");
+      addComputer();
+    } catch (ComputerValidationException e) {
+      logger.error(e.getMessage(), e);
+      mainMenu();
+    }
+
+    mainMenu();
+
   }
 
   /**
    * Update computer.
    *
-   * @param name            the computer name
-   * @param intro           the date of introduction
-   * @param discontinuation the date of discontinuation
-   * @param companyId       the company id
-   * @return the computer
    */
-  public Computer updateComputer(String name, Date intro, Date discontinuation, Company companyId) {
-    Computer computer = new Computer(name, companyId, intro, discontinuation, 0);
-    logger.debug("Updating computer: " + computer);
-    serviceComputer.update(computer);
-    return computer;
+  public void updateComputer() {
+    String name = null;
+    Date intro = null;
+    Date discontinuation = null;
+    Company company = new Company();
+    try {
+      name = setComputerName();
+      intro = setComputerIntro();
+      discontinuation = setComputerDisc();
+      company = setComputerCompany();
+      Computer computer = new Computer(name, company, intro, discontinuation, 0);
+      logger.debug("Updating computer: " + computer);
+      serviceComputer.update(computer);
+      view.updateComputer(computer);
+    } catch (ComputerValidationException e) {
+      logger.error(e.getMessage(), e);
+      mainMenu();
+    }
+    mainMenu();
   }
 
   /**
