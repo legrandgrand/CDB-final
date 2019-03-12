@@ -1,3 +1,4 @@
+package main;
 import config.SpringConfig;
 import controller.Controller;
 

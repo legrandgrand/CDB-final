@@ -92,7 +92,8 @@ public class ComputerDaoImp extends Dao implements ComputerDao {
     companyList = companyDao.list();
 
     try (Connection connection = connectDb();
-        PreparedStatement statement = connection.prepareStatement(SELECT + PAGE)) {
+        PreparedStatement statement = connection.prepareStatement(SELECT + PAGE);
+        ) {
       statement.setInt(1, limit);
       statement.setInt(2, page);    
       ResultSet resultat = statement.executeQuery();

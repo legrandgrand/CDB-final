@@ -246,41 +246,33 @@ public class Controller {
    */
   public void addComputer() {
     view.startAddComputer();
-    String name = null;
-    Date intro = null;
-    Date discontinuation = null;
-    Company company = new Company();
-    try {
-      name = setComputerName();
-      intro = setComputerIntro();
-      discontinuation = setComputerDisc();
-      company = setComputerCompany();
-      Computer computer = new Computer(name, company, intro, discontinuation, 0);
-      logger.debug("Adding computer: " + computer);
-      serviceComputer.add(computer);
-      view.addComputer(computer);
-    } catch (IllegalArgumentException e) {
-      System.out
-          .println("The argument you entered doesn't have the correct format. Please try again.");
-
-      addComputer();
-    } catch (InputMismatchException e) {
-      System.out.println("Not a valid input. Please try again.");
-      addComputer();
-    } catch (ComputerValidationException e) {
-      logger.error(e.getMessage(), e);
-      mainMenu();
-    }
-
+    Computer computer = setComputer();
+    logger.debug("Adding computer: " + computer);
+    serviceComputer.add(computer);
+    view.addComputer(computer);
     mainMenu();
-
   }
+
 
   /**
    * Update computer.
    *
    */
   public void updateComputer() {
+    view.startUpdateComputer();
+    Computer computer = setComputer();
+    logger.debug("Updating computer: " + computer);
+    serviceComputer.update(computer);
+    view.updateComputer(computer);
+    mainMenu();
+  }
+
+  /**
+   * Sets the computer.
+   *
+   * @return the computer
+   */
+  public Computer setComputer() {
     String name = null;
     Date intro = null;
     Date discontinuation = null;
@@ -290,15 +282,18 @@ public class Controller {
       intro = setComputerIntro();
       discontinuation = setComputerDisc();
       company = setComputerCompany();
-      Computer computer = new Computer(name, company, intro, discontinuation, 0);
-      logger.debug("Updating computer: " + computer);
-      serviceComputer.update(computer);
-      view.updateComputer(computer);
     } catch (ComputerValidationException e) {
       logger.error(e.getMessage(), e);
       mainMenu();
+    } catch (IllegalArgumentException e) {
+      System.out
+          .println("The argument you entered doesn't have the correct format. Please try again.");
+      mainMenu();
+    } catch (InputMismatchException e) {
+      System.out.println("Not a valid input. Please try again.");
+      mainMenu();
     }
-    mainMenu();
+    return new Computer(name, company, intro, discontinuation, 0);
   }
 
   /**

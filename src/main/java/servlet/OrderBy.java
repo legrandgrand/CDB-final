@@ -27,11 +27,11 @@ import service.ServiceComputer;
 /**
  * Servlet implementation class OrderByName.
  */
-@WebServlet("/OrderByIntro")
+@WebServlet("/OrderBy")
 @Configurable
-public class OrderByIntro extends HttpServlet {
+public class OrderBy extends HttpServlet {
   private static final long serialVersionUID = 1L;
-  private static final Logger logger = LoggerFactory.getLogger(OrderByIntro.class);
+  private static final Logger logger = LoggerFactory.getLogger(OrderBy.class);
 
   @Autowired
   private ServiceComputer serviceComputer;
@@ -50,24 +50,25 @@ public class OrderByIntro extends HttpServlet {
       throws ServletException, IOException {
     int page = setPage(request);
     int limit = setLimit(request);
+    String order = request.getParameter("Order");
+    String type = request.getParameter("type");
     
-    String type = request.getParameter("Order");
-    
-    List<Computer> computers = serviceComputer.orderBy("introduced", type, limit, page);
+    List<Computer> computers = serviceComputer.orderBy(type, order, limit, page);
     List<ComputerDto> dto = mapper.listDtos(computers);
     
     request.setAttribute("page", page / 20);
-    request.setAttribute("maxId", serviceComputer.getMaxId()); 
+    request.setAttribute("maxId", serviceComputer.getMaxId());
     request.setAttribute("limit", limit);  
     request.setAttribute("computers", dto);
 
-    if (type.equals("ASC")) {
-      type = "DESC";
+    if (order.equals("ASC")) {
+      order = "DESC";
     } else {
-      type = "ASC";
+      order = "ASC";
     }
-    request.setAttribute("Order", type);
-    logger.debug("request is order by: " + type);
+    logger.debug("request is order by: " + order);
+    request.setAttribute("Order", order);
+
     this.getServletContext().getRequestDispatcher("/views/dashboard.jsp").forward(request,
         response);
   }
@@ -92,7 +93,7 @@ public class OrderByIntro extends HttpServlet {
       if (limitString != null) {
         limit = Integer.parseInt(limitString);
       }
-    }  catch (NumberFormatException se) {
+    } catch (NumberFormatException se) {
       logger.error("PageString not valid");
     }
     return limit;
