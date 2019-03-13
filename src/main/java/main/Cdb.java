@@ -1,4 +1,5 @@
 package main;
+
 import config.SpringConfig;
 import controller.Controller;
 
@@ -22,8 +23,7 @@ public class Cdb {
     
     logger.debug("Starting program");
     
-    Controller controller = Controller.class.cast(
-        applicationContext.getBean("controller", Controller.class));
+    Controller controller = applicationContext.getBean("controller", Controller.class);
     controller.start();
   }
 

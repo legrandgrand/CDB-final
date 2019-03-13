@@ -26,5 +26,11 @@ public class Dao {
     }
     return connection;
   }
+  
+  public HikariDataSource getDataSource() {
+    return ds;
+  }
+  
+  
 
 }

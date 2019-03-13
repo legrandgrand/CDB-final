@@ -50,12 +50,20 @@ public class GetComputer extends HttpServlet {
     // TODO: get computers from companyName
     List<Computer> computers = serviceComputer.getComputerFromName(computer);
     List<ComputerDto> dto = mapper.listDtos(computers);
+    
+    String order = request.getParameter("Order");
 
     request.setAttribute("computers", dto);
 
     request.setAttribute("maxId", dto.size());
 
-    request.setAttribute("Order", "Ascend");
+    if (order.equals("ASC")) {
+      order = "DESC";
+    } else {
+      order = "ASC";
+    }
+    
+    request.setAttribute("Order", order);
     this.getServletContext().getRequestDispatcher("/views/dashboard.jsp").forward(request,
         response);
   }

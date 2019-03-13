@@ -16,13 +16,10 @@ import model.Computer;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-@RunWith(SpringJUnit4ClassRunner.class)
 public class ComputerDaoImpTest {
   private static final String DATE_1 = "1997-10-02 00:00:00";
   private static final String DATE_2 = "1997-10-03 00:00:00";
@@ -51,8 +48,10 @@ public class ComputerDaoImpTest {
   
   @Test
   public void testGetMaxId() {
-    int maxId = 574;
-    assertTrue(computerDaoImp.getMaxId() == maxId);
+    List<Computer> computers = computerDaoImp.list();
+    int id = computerDaoImp.getMaxId();
+    System.out.println(computers.size() + " et " + id);
+    assertTrue(id == computers.size()-1);
   }
 
   /**
@@ -60,8 +59,8 @@ public class ComputerDaoImpTest {
    */
   @Test
   public void testList() {
-    Company company = new Company("Apple Inc.", 1);
-    Computer computer = new Computer("Lenovo Thinkpad Edge 11", company, null, null, 571);
+    Company company = new Company("Thinking Machines", 2);
+    Computer computer = new Computer("CM-2a", company, null, null, 2);
     List<Computer> computers = computerDaoImp.list();
     assertTrue(computers.contains(computer));
   }
@@ -142,7 +141,7 @@ public class ComputerDaoImpTest {
   @Test
   public void testAdd() throws ParseException {
     Company company = new Company("Apple Inc.", 1);
-    Computer computer = new Computer("TestComputer", company, null, null, 580);
+    Computer computer = new Computer("TestComputer", company, null, null, 575);
 
     computerDaoImp.add(computer);
 
@@ -154,7 +153,7 @@ public class ComputerDaoImpTest {
   public void testAddNoDate() throws ParseException {
     Date date1 = DT.parse(DATE_1);
     Company company = new Company("Apple Inc.", 1);
-    Computer computer = new Computer("TestComputer2", company, date1, null, 580);
+    Computer computer = new Computer("TestComputer2", company, date1, null, 576);
     computerDaoImp.add(computer);
 
     List<Computer> computers = computerDaoImp.list();
@@ -166,7 +165,7 @@ public class ComputerDaoImpTest {
     Date date1 = DT.parse(DATE_1);
     Date date2 = DT.parse(DATE_2);
     Company company = new Company("Apple Inc.", 1);
-    Computer computer = new Computer("TestComputer3", company, date1, date2, 580);
+    Computer computer = new Computer("TestComputer3", company, date1, date2, 577);
 
     computerDaoImp.add(computer);
 
@@ -178,7 +177,7 @@ public class ComputerDaoImpTest {
   public void testAddNoIntro() throws ParseException {
     Date date2 = DT.parse(DATE_2);
     Company company = new Company("Apple Inc.", 1);
-    Computer computer = new Computer("TestComputer3", company, null, date2, 580);
+    Computer computer = new Computer("TestComputer4", company, null, date2, 578);
 
     computerDaoImp.add(computer);
 
@@ -192,7 +191,7 @@ public class ComputerDaoImpTest {
   @Test
   public void testDelete() {
     Company company = new Company("Apple Inc.", 1);
-    Computer computer = new Computer("testComputer", company, null, null, 580);
+    Computer computer = new Computer("testComputer5", company, null, null, 579);
 
     computerDaoImp.delete(computer);
 
