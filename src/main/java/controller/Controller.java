@@ -43,7 +43,8 @@ public class Controller {
    * @param view the view
    */
   @Autowired
-  public Controller(ComputerValidator computerValidator, ServiceCompany serviceCompany, ServiceComputer serviceComputer, View view) {
+  public Controller(ComputerValidator computerValidator, 
+      ServiceCompany serviceCompany, ServiceComputer serviceComputer, View view) {
     this.view = view;
     this.serviceCompany = serviceCompany;
     this.serviceComputer = serviceComputer;

@@ -14,8 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import service.ServiceCompany;
@@ -24,20 +24,21 @@ import service.ServiceComputer;
 @Controller
 public class AddComputer {
   private static final Logger logger = LoggerFactory.getLogger(AddComputer.class);
-  
+
   private ServiceComputer serviceComputer;
   private ServiceCompany serviceCompany;
   private Dashboard dashboard;
-  
+
   /**
    * Instantiates a new adds the computer.
    *
-   * @param serviceCompany the service company
+   * @param serviceCompany  the service company
    * @param serviceComputer the service computer
-   * @param dashboard the dashboard
+   * @param dashboard       the dashboard
    */
   @Autowired
-  public AddComputer(ServiceCompany serviceCompany, ServiceComputer serviceComputer, Dashboard dashboard) {
+  public AddComputer(ServiceCompany serviceCompany, ServiceComputer serviceComputer,
+      Dashboard dashboard) {
     this.serviceComputer = serviceComputer;
     this.serviceCompany = serviceCompany;
     this.dashboard = dashboard;
@@ -47,32 +48,30 @@ public class AddComputer {
    * Sets the add.
    *
    * @param request the request
-   * @param response the response
    * @return the model and view
    * @throws Exception the exception
    */
-  @RequestMapping(value = "/AddComputer", method = RequestMethod.GET)
-  public ModelAndView setAdd(HttpServletRequest request) throws Exception {
-    
+  @GetMapping(value = "/AddComputer")
+  public ModelAndView setAdd(HttpServletRequest request) {
+
     List<Company> companies = serviceCompany.listCompany();
     logger.debug("Size of companies: " + companies.size());
-    
+
     ModelAndView mv = new ModelAndView();
     mv.addObject("companies", companies);
     mv.setViewName("addComputer");
     return mv;
   }
-  
+
   /**
    * Do post.
    *
    * @param request the request
-   * @param response the response
    * @return the model and view
    * @throws Exception the exception
    */
-  @RequestMapping(value = "/AddComputer", method = RequestMethod.POST)
-  public ModelAndView doPost(HttpServletRequest request) throws Exception {
+  @PostMapping(value = "/AddComputer")
+  public ModelAndView doPost(HttpServletRequest request) {
 
     Computer computer = new Computer();
     computer.setName(request.getParameter("name"));
@@ -83,15 +82,15 @@ public class AddComputer {
 
     String disc = request.getParameter("disc"); // TODO: handle situation where disc>intro
     computer.setDateDiscontinuation(setComputerDisc(intro, disc));
-    
+
     Company company = new Company();
     company.setName(request.getParameter("companyname"));
     company = serviceCompany.getCompany(company).get(0);
     computer.setCompany(company);
-    
+
     logger.debug("Adding computer" + computer);
     serviceComputer.add(computer);
-  
+
     return dashboard.setDashboard(request);
   }
 
@@ -131,7 +130,7 @@ public class AddComputer {
    * Sets the computer disc.
    *
    * @param intro the intro
-   * @param disc the disc
+   * @param disc  the disc
    * @return the date
    */
   public Date setComputerDisc(Date intro, String disc) { // TODO: to change

@@ -8,12 +8,12 @@
 <title>Computer Database</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap -->
-<link href="./css/bootstrap.min.css" rel="stylesheet" media="screen">
-<link href="./css/font-awesome.css" rel="stylesheet" media="screen">
-<link href="./css/main.css" rel="stylesheet" media="screen">
-<script type="text/javascript" src="./js/jquery.min.js"></script>
+<link href="resources/css/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="resources/css/font-awesome.css" rel="stylesheet" media="screen">
+<link href="resources/css/main.css" rel="stylesheet" media="screen">
+<script type="text/javascript" src="resources/js/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.0/dist/jquery.validate.min.js"></script>
-<script type="text/javascript" src="./js/jqueryvalidate.js"></script>
+<script type="text/javascript" src="resources/js/jqueryvalidate.js"></script>
 </head>
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">

@@ -12,7 +12,7 @@ import org.springframework.core.env.Environment;
 @Configuration
 @ComponentScan({ "dao", "controller", "mapper", "service", "validator", "view" })
 @PropertySource(value = { "classpath:configuration.properties" })
-public class SpringConfigCli {
+public class SpringConfig {
 
   @Autowired
   private Environment env;
