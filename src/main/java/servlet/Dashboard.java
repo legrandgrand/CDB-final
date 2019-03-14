@@ -2,13 +2,8 @@ package servlet;
 
 import dto.ComputerDto;
 
-import java.io.IOException;
 import java.util.List;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -18,16 +13,16 @@ import model.Computer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import service.ServiceComputer;
 
-@WebServlet("/Dashboard")
-@Configurable
-public class Dashboard extends HttpServlet {
-  private static final long serialVersionUID = 1L;
+@Controller
+public class Dashboard {
   private static final Logger logger = LoggerFactory.getLogger(Dashboard.class);
 
   @Autowired
@@ -35,38 +30,26 @@ public class Dashboard extends HttpServlet {
   
   @Autowired
   private Mapper mapper;
-  
-  @Override
-  public void init(ServletConfig config) throws ServletException {
-    super.init(config);
-    SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
-  }
 
-  @Override
-  protected void doGet(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
+  @RequestMapping(value = "/Dashboard")
+  protected ModelAndView doGet(HttpServletRequest request,
+      HttpServletResponse response) throws Exception {
 
     int page = setPage(request);
-    int limit = setLimit(request);
-    
+    int limit = setLimit(request);  
     
     List<Computer> computers = serviceComputer.listPage(limit, page);
     List<ComputerDto> dto = mapper.listDtos(computers);
     
-    request.setAttribute("page", page / 20);
-    request.setAttribute("maxId", serviceComputer.getMaxId()); 
-    request.setAttribute("limit", limit);
-    request.setAttribute("computers", dto);
-    request.setAttribute("Order", "ASC");
-
-    this.getServletContext().getRequestDispatcher("/views/dashboard.jsp").forward(request,
-        response);
-  }
-
-  @Override
-  protected void doPost(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
-
+    ModelAndView mv = new ModelAndView();   
+    mv.addObject("page", page / 20);
+    mv.addObject("maxId", serviceComputer.getMaxId()); 
+    mv.addObject("limit", limit);
+    mv.addObject("computers", dto);
+    mv.addObject("Order", "ASC");
+    mv.setViewName("dashboard");
+    
+    return mv;
   }
   
   /**
@@ -79,6 +62,7 @@ public class Dashboard extends HttpServlet {
     String limitString = null;
     int limit = 20;
     limitString = request.getParameter("limit");
+    
     try {
       if (limitString != null) {
         limit = Integer.parseInt(limitString);
@@ -86,6 +70,7 @@ public class Dashboard extends HttpServlet {
     } catch (NumberFormatException se) {
       logger.error("PageString not valid");
     }
+    
     return limit;
   }
   
@@ -99,6 +84,7 @@ public class Dashboard extends HttpServlet {
     String pageString = null;
     int page = 0;
     pageString = request.getParameter("page");
+    
     try {
       if (pageString != null) {
         page = Integer.parseInt(pageString) * 20;
@@ -106,7 +92,10 @@ public class Dashboard extends HttpServlet {
     } catch (NumberFormatException e) {
       logger.error("PageString not valid");
     }
+    
     return page;
   }
+
+
 
 }

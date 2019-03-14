@@ -26,7 +26,7 @@ public class ComputerDaoImpTest {
   private static final SimpleDateFormat DT = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
 
   private static ComputerDaoImp computerDaoImp;
-  
+
   private static ApplicationContext applicationContext;
 
   /**
@@ -36,22 +36,21 @@ public class ComputerDaoImpTest {
    */
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
-    applicationContext = new AnnotationConfigApplicationContext(
-        SpringConfigTest.class);
+    applicationContext = new AnnotationConfigApplicationContext(SpringConfigTest.class);
     computerDaoImp = applicationContext.getBean("computerDaoImp", ComputerDaoImp.class);
   }
-  
+
   @AfterClass
   public static void setUpAfterClass() throws Exception {
-    ((ConfigurableApplicationContext)applicationContext).close();
+    ((ConfigurableApplicationContext) applicationContext).close();
   }
-  
+
   @Test
   public void testGetMaxId() {
     List<Computer> computers = computerDaoImp.list();
     int id = computerDaoImp.getMaxId();
     System.out.println(computers.size() + " et " + id);
-    assertTrue(id == computers.size()-1);
+    assertTrue(id == computers.size() - 1);
   }
 
   /**
@@ -199,7 +198,5 @@ public class ComputerDaoImpTest {
 
     assertTrue(!computers.contains(computer));
   }
-  
-
 
 }

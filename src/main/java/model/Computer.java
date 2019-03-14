@@ -5,7 +5,7 @@ import java.util.Date;
 public class Computer {
 
   private String name;// Compulsory
-  private Company company;// TODO: pas entier, mais company
+  private Company company;
   private Date dateIntro;
   private Date dateDiscontinuation;// Has to be higher than date B
   private int id;
@@ -144,7 +144,7 @@ public class Computer {
 
   public static class ComputerBuilder {
     private String name;// Compulsory
-    private Company company;// TODO: pas entier, mais company
+    private Company company;
     private Date dateIntro;
     private Date dateDiscontinuation;// Has to be higher than date B
     private int id;

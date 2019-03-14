@@ -19,17 +19,25 @@ import validator.ComputerValidator;
 public class ServiceCompany {
 
   private static final Logger logger = LoggerFactory.getLogger(ServiceCompany.class);
-  
-  @Autowired
-  private ComputerValidator computerValidator;
-  
-  @Autowired
-  private CompanyDaoImp companyDao; 
-  
-  @Autowired
-  private ComputerDaoImp computerDao; 
 
-  private ServiceCompany() {}
+  private ComputerValidator computerValidator;
+  private CompanyDaoImp companyDaoImp;
+  private ComputerDaoImp computerDaoImp;
+
+  /**
+   * Instantiates a new service company.
+   *
+   * @param computerDaoImp the computer dao imp
+   * @param companyDaoImp the company dao imp
+   * @param computerValidator the computer validator
+   */
+  @Autowired
+  public ServiceCompany(ComputerDaoImp computerDaoImp, CompanyDaoImp companyDaoImp,
+      ComputerValidator computerValidator) {
+    this.companyDaoImp = companyDaoImp;
+    this.computerDaoImp = computerDaoImp;
+    this.computerValidator = computerValidator;
+  }
 
   /**
    * List company.
@@ -37,7 +45,7 @@ public class ServiceCompany {
    * @return the list
    */
   public List<Company> listCompany() {
-    return companyDao.list();
+    return companyDaoImp.list();
   }
 
   /**
@@ -47,7 +55,7 @@ public class ServiceCompany {
    * @return the company
    */
   public List<Company> getCompany(Company company) {
-    return companyDao.getCompany(company);
+    return companyDaoImp.getCompany(company);
   }
 
   /**
@@ -62,12 +70,17 @@ public class ServiceCompany {
     } catch (Exception e) {
       logger.error(e.getMessage(), e);
     }
-    return companyDao.getCompanyFromId(company);
+    return companyDaoImp.getCompanyFromId(company);
   }
-  
+
+  /**
+   * Delete.
+   *
+   * @param company the company
+   */
   @Transactional
   public void delete(Company company) {
-    computerDao.deleteComputerOfCompanyId(company);
-    companyDao.delete(company);  
+    computerDaoImp.deleteComputerOfCompanyId(company);
+    companyDaoImp.delete(company);
   }
 }

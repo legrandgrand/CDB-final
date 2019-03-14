@@ -49,7 +49,7 @@ public class AddComputer extends HttpServlet {
     List<Company> companies = serviceCompany.listCompany();
     logger.debug("Size of companies: " + companies.size());
     request.setAttribute("companies", companies);
-    this.getServletContext().getRequestDispatcher("/views/addComputer.jsp").forward(request,
+    this.getServletContext().getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(request,
         response);
   }
 

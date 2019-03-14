@@ -20,17 +20,23 @@ public class ServiceComputer {
 
   private static final Logger logger = LoggerFactory.getLogger(ServiceComputer.class);
 
-  @Autowired
   private ComputerValidator computerValidator;
-
-  @Autowired
   private ComputerDaoImp computerDao;
 
-  private ServiceComputer() {
+  /**
+   * Instantiates a new service computer.
+   *
+   * @param computerDao the computer dao
+   * @param computerValidator the computer validator
+   */
+  @Autowired
+  public ServiceComputer(ComputerDaoImp computerDao, ComputerValidator computerValidator) {
+    this.computerValidator = computerValidator;
+    this.computerDao = computerDao;
   }
 
   /**
-   * List computer.
+   * List.
    *
    * @return the list
    */
@@ -63,14 +69,14 @@ public class ServiceComputer {
       logger.error(e.getMessage(), e);
       return list;
     }   
-    return list = computerDao.getComputerFromName(computer);
+    return computerDao.getComputerFromName(computer);
   }
 
   /**
    * List page.
    *
    * @param limit the limit
-   * @param page  the page
+   * @param page the page
    * @return the list
    */
   public List<Computer> listPage(int limit, int page) {
@@ -82,9 +88,9 @@ public class ServiceComputer {
    * Order by.
    *
    * @param column the column
-   * @param type   the type
-   * @param limit  the limit
-   * @param page   the page
+   * @param type the type
+   * @param limit the limit
+   * @param page the page
    * @return the list
    */
   public List<Computer> orderBy(String column, String type, int limit, int page) {
@@ -92,7 +98,7 @@ public class ServiceComputer {
   }
 
   /**
-   * Delete computer.
+   * Delete.
    *
    * @param computer the computer
    */
@@ -106,7 +112,7 @@ public class ServiceComputer {
   }
 
   /**
-   * Adds the computer.
+   * Adds the.
    *
    * @param computer the computer
    */
@@ -121,7 +127,7 @@ public class ServiceComputer {
   }
 
   /**
-   * Update computer.
+   * Update.
    *
    * @param computer the computer
    */

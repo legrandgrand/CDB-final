@@ -69,7 +69,7 @@ public class OrderBy extends HttpServlet {
     logger.debug("request is order by: " + order);
     request.setAttribute("Order", order);
 
-    this.getServletContext().getRequestDispatcher("/views/dashboard.jsp").forward(request,
+    this.getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request,
         response);
   }
 

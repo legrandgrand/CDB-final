@@ -60,7 +60,7 @@ public class EditComputer extends HttpServlet {
     computer = serviceComputer.getComputer(computer).get(0);
     request.setAttribute("computer", computer);
 
-    this.getServletContext().getRequestDispatcher("/views/editComputer.jsp").forward(request,
+    this.getServletContext().getRequestDispatcher("/WEB-INF/views/editComputer.jsp").forward(request,
         response);
   }
 

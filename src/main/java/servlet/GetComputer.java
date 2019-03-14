@@ -64,7 +64,7 @@ public class GetComputer extends HttpServlet {
     }
     
     request.setAttribute("Order", order);
-    this.getServletContext().getRequestDispatcher("/views/dashboard.jsp").forward(request,
+    this.getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request,
         response);
   }
 

@@ -29,22 +29,17 @@ public class Controller {
 
   private static final Logger logger = LoggerFactory.getLogger(Controller.class);
 
-  @Autowired
   private View view;
-
-  @Autowired
   private ServiceComputer serviceComputer;
-
-  @Autowired
   private ServiceCompany serviceCompany;
-
-  @Autowired
   private ComputerValidator computerValidator;
 
-  /**
-   * Instantiates a new controller.
-   */
-  private Controller() {
+  @Autowired
+  public Controller(ComputerValidator computerValidator, ServiceCompany serviceCompany, ServiceComputer serviceComputer, View view) {
+    this.view = view;
+    this.serviceCompany = serviceCompany;
+    this.serviceComputer = serviceComputer;
+    this.computerValidator = computerValidator;
   }
 
   /**

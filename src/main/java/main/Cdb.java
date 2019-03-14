@@ -1,6 +1,6 @@
 package main;
 
-import config.SpringConfig;
+import config.SpringConfigCli;
 import controller.Controller;
 
 import org.slf4j.Logger;
@@ -19,7 +19,7 @@ public class Cdb {
    */
   public static void main(String[] args) {
     ApplicationContext applicationContext = 
-        new AnnotationConfigApplicationContext(SpringConfig.class);
+        new AnnotationConfigApplicationContext(SpringConfigCli.class);
     
     logger.debug("Starting program");
     
