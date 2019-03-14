@@ -16,6 +16,7 @@ import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
@@ -24,7 +25,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 @ComponentScan({ "dao", "controller", "mapper", "service", "servlet", "validator", "view" })
 @PropertySource(value = { "classpath:configuration.properties" })
 public class SpringConfigWeb implements WebApplicationInitializer, WebMvcConfigurer {
-  
+
   @Autowired
   private Environment env;
 
@@ -43,7 +44,7 @@ public class SpringConfigWeb implements WebApplicationInitializer, WebMvcConfigu
     ds.setDriverClassName(env.getRequiredProperty("datasource.DRIVER"));
     return ds;
   }
-  
+
   @Override
   public void onStartup(ServletContext servletContext) throws ServletException {
     AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
@@ -51,7 +52,6 @@ public class SpringConfigWeb implements WebApplicationInitializer, WebMvcConfigu
     servletContext.addListener(new ContextLoaderListener(rootContext));
 
   }
-  
 
   /**
    * Internal resource view resolver.

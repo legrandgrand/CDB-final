@@ -1,17 +1,11 @@
 package servlet;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import model.Company;
 import model.Computer;
@@ -19,43 +13,66 @@ import model.Computer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 import service.ServiceCompany;
 import service.ServiceComputer;
 
-@WebServlet("/AddComputer")
-@Configurable
-public class AddComputer extends HttpServlet {
-  private static final long serialVersionUID = 1L;
+@Controller
+public class AddComputer {
   private static final Logger logger = LoggerFactory.getLogger(AddComputer.class);
   
-  @Autowired
   private ServiceComputer serviceComputer;
-  
-  @Autowired
   private ServiceCompany serviceCompany;
+  private Dashboard dashboard;
   
-  @Override
-  public void init(ServletConfig config) throws ServletException {
-    super.init(config);
-    SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+  /**
+   * Instantiates a new adds the computer.
+   *
+   * @param serviceCompany the service company
+   * @param serviceComputer the service computer
+   * @param dashboard the dashboard
+   */
+  @Autowired
+  public AddComputer(ServiceCompany serviceCompany, ServiceComputer serviceComputer, Dashboard dashboard) {
+    this.serviceComputer = serviceComputer;
+    this.serviceCompany = serviceCompany;
+    this.dashboard = dashboard;
   }
 
-  @Override
-  protected void doGet(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
+  /**
+   * Sets the add.
+   *
+   * @param request the request
+   * @param response the response
+   * @return the model and view
+   * @throws Exception the exception
+   */
+  @RequestMapping(value = "/AddComputer", method = RequestMethod.GET)
+  public ModelAndView setAdd(HttpServletRequest request) throws Exception {
+    
     List<Company> companies = serviceCompany.listCompany();
     logger.debug("Size of companies: " + companies.size());
-    request.setAttribute("companies", companies);
-    this.getServletContext().getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(request,
-        response);
+    
+    ModelAndView mv = new ModelAndView();
+    mv.addObject("companies", companies);
+    mv.setViewName("addComputer");
+    return mv;
   }
-
-  @Override
-  protected void doPost(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
+  
+  /**
+   * Do post.
+   *
+   * @param request the request
+   * @param response the response
+   * @return the model and view
+   * @throws Exception the exception
+   */
+  @RequestMapping(value = "/AddComputer", method = RequestMethod.POST)
+  public ModelAndView doPost(HttpServletRequest request) throws Exception {
 
     Computer computer = new Computer();
     computer.setName(request.getParameter("name"));
@@ -69,20 +86,20 @@ public class AddComputer extends HttpServlet {
     
     Company company = new Company();
     company.setName(request.getParameter("companyname"));
-
     company = serviceCompany.getCompany(company).get(0);
-
     computer.setCompany(company);
+    
     logger.debug("Adding computer" + computer);
     serviceComputer.add(computer);
-    response.sendRedirect(request.getContextPath() + "/Dashboard");
+  
+    return dashboard.setDashboard(request);
   }
 
   /**
-   * Sets the timestamp.
+   * Sets the date.
    *
-   * @param timestamp the timestamp to change
-   * @return the timestamp
+   * @param timestamp the timestamp
+   * @return the date
    */
   public Date setDate(String timestamp) {
     timestamp = timestamp + " 00:00:00";// timestamp format: YYYY-MM-DD (user input) + 00:00:00
@@ -99,7 +116,7 @@ public class AddComputer extends HttpServlet {
    * Sets the computer intro.
    *
    * @param introString the intro string
-   * @return the timestamp
+   * @return the date
    */
   public Date setComputerIntro(String introString) {
     Date intro = null;
@@ -114,7 +131,7 @@ public class AddComputer extends HttpServlet {
    * Sets the computer disc.
    *
    * @param intro the intro
-   * @param disc  the disc
+   * @param disc the disc
    * @return the date
    */
   public Date setComputerDisc(Date intro, String disc) { // TODO: to change

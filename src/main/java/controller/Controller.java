@@ -34,6 +34,14 @@ public class Controller {
   private ServiceCompany serviceCompany;
   private ComputerValidator computerValidator;
 
+  /**
+   * Instantiates a new controller.
+   *
+   * @param computerValidator the computer validator
+   * @param serviceCompany the service company
+   * @param serviceComputer the service computer
+   * @param view the view
+   */
   @Autowired
   public Controller(ComputerValidator computerValidator, ServiceCompany serviceCompany, ServiceComputer serviceComputer, View view) {
     this.view = view;
@@ -106,8 +114,7 @@ public class Controller {
   }
 
   /**
-   * List computer.
-   *
+   * List computers.
    */
   public void listComputers() {
     view.startListComputers();
@@ -153,7 +160,7 @@ public class Controller {
   /**
    * Sets the computer name.
    *
-   * @return the ComputerName
+   * @return the string
    * @throws ComputerValidationException the computer validation exception
    */
   public String setComputerName() throws ComputerValidationException {
@@ -172,7 +179,7 @@ public class Controller {
   /**
    * Sets the computer intro.
    *
-   * @return the timestamp
+   * @return the date
    * @throws ComputerValidationException the computer validation exception
    */
   public Date setComputerIntro() throws ComputerValidationException {
@@ -197,7 +204,7 @@ public class Controller {
   /**
    * Sets the computer disc.
    *
-   * @return the date of discontinuation
+   * @return the date
    * @throws ComputerValidationException the computer validation exception
    */
   public Date setComputerDisc() throws ComputerValidationException {
@@ -221,9 +228,9 @@ public class Controller {
   }
 
   /**
-   * Sets the computer company id.
+   * Sets the computer company.
    *
-   * @return the Company Id
+   * @return the company
    */
   public Company setComputerCompany() {
     view.setComputerCompanyId();
@@ -237,7 +244,6 @@ public class Controller {
 
   /**
    * Adds the computer.
-   *
    */
   public void addComputer() {
     view.startAddComputer();
@@ -251,7 +257,6 @@ public class Controller {
 
   /**
    * Update computer.
-   *
    */
   public void updateComputer() {
     view.startUpdateComputer();
@@ -292,10 +297,10 @@ public class Controller {
   }
 
   /**
-   * Sets the timestamp.
+   * Sets the date.
    *
-   * @param timestamp the timestamp to change
-   * @return the timestamp
+   * @param timestamp the timestamp
+   * @return the date
    */
   public Date setDate(String timestamp) {
     timestamp = timestamp + " 00:00:00";// timestamp format: YYYY-MM-DD (user input) + 00:00:00

@@ -2,10 +2,11 @@ package servlet;
 
 import dto.ComputerDto;
 
+import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import mapper.Mapper;
 
@@ -25,15 +26,31 @@ import service.ServiceComputer;
 public class Dashboard {
   private static final Logger logger = LoggerFactory.getLogger(Dashboard.class);
 
-  @Autowired
   private ServiceComputer serviceComputer;
-  
-  @Autowired
   private Mapper mapper;
+  
+  /**
+   * Instantiates a new dashboard.
+   *
+   * @param mapper the mapper
+   * @param serviceComputer the service computer
+   */
+  @Autowired
+  public Dashboard(Mapper mapper, ServiceComputer serviceComputer) {
+    this.serviceComputer = serviceComputer;
+    this.mapper = mapper;  
+  }
 
+  /**
+   * Sets the dashboard.
+   *
+   * @param request the request
+   * @param response the response
+   * @return the model and view
+   * @throws Exception the exception
+   */
   @RequestMapping(value = "/Dashboard")
-  protected ModelAndView doGet(HttpServletRequest request,
-      HttpServletResponse response) throws Exception {
+  public ModelAndView setDashboard(HttpServletRequest request) throws Exception {
 
     int page = setPage(request);
     int limit = setLimit(request);  
@@ -50,6 +67,93 @@ public class Dashboard {
     mv.setViewName("dashboard");
     
     return mv;
+  }
+  
+  /**
+   * Do get.
+   *
+   * @param request the request
+   * @return the model and view
+   * @throws ServletException the servlet exception
+   * @throws IOException Signals that an I/O exception has occurred.
+   */
+  @RequestMapping(value = "/OrderBy")
+  public ModelAndView setComputer(HttpServletRequest request)
+      throws Exception {
+    
+    int page = setPage(request);
+    int limit = setLimit(request);
+    
+    String order = request.getParameter("Order");
+    String type = request.getParameter("type");
+    
+    List<Computer> computers = serviceComputer.orderBy(type, order, limit, page);
+    List<ComputerDto> dto = mapper.listDtos(computers);
+
+    if (order.equals("ASC")) {
+      order = "DESC";
+    } else {
+      order = "ASC";
+    }
+    logger.debug("request is order by: " + order);
+    ModelAndView mv = new ModelAndView(); 
+    mv.addObject("computers", dto);
+    mv.addObject("page", page / 20);
+    mv.addObject("limit", limit);
+    mv.addObject("maxId", serviceComputer.getMaxId());
+    mv.addObject("Order", order);
+    mv.setViewName("dashboard");
+    return mv;
+  }
+  
+  /**
+   * Gets the computer.
+   *
+   * @param request the request
+   * @param response the response
+   * @return the computer
+   * @throws ServletException the servlet exception
+   * @throws IOException Signals that an I/O exception has occurred.
+   */
+  @RequestMapping(value = "/GetComputer")
+  public ModelAndView getComputer(HttpServletRequest request)
+      throws Exception {
+
+    Computer computer = new Computer();
+    computer.setName(request.getParameter("search"));
+    // TODO: get computers from companyName
+    List<Computer> computers = serviceComputer.getComputerFromName(computer);
+    List<ComputerDto> dto = mapper.listDtos(computers);
+    
+    ModelAndView mv = new ModelAndView();
+    mv.addObject("computers", dto);
+    mv.addObject("maxId", dto.size());
+    mv.setViewName("dashboard");
+    return mv;
+  }
+  
+  /**
+   * Do post.
+   *
+   * @param request the request
+   * @param response the response
+   * @throws ServletException the servlet exception
+   * @throws IOException Signals that an I/O exception has occurred.
+   */
+  @RequestMapping(value = "/DeleteComputer")
+  public ModelAndView deleteComputer(HttpServletRequest request)
+      throws Exception {
+    Computer computer = new Computer();
+    String idString = request.getParameter("selection");
+    String[] idStringTable = idString.split(",");
+    for (String c : idStringTable) {
+      computer.setId(Integer.parseInt(c));
+      computer = serviceComputer.getComputer(computer).get(0);
+      logger.debug("Deleting computer: " + computer.getName());
+      serviceComputer.delete(computer);
+    }
+    
+    return new ModelAndView("dashboard");
   }
   
   /**
