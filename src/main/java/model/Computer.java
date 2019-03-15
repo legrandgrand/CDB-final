@@ -166,56 +166,26 @@ public class Computer {
       return computer;
     }
 
-    /**
-     * Sets the name.
-     *
-     * @param name the name
-     * @return the computer builder
-     */
     public ComputerBuilder setName(String name) {
       this.name = name;
       return this;
     }
 
-    /**
-     * Sets the company.
-     *
-     * @param company the company
-     * @return the computer builder
-     */
     public ComputerBuilder setCompany(Company company) {
       this.company = company;
       return this;
     }
 
-    /**
-     * Sets the date intro.
-     *
-     * @param dateIntro the date intro
-     * @return the computer builder
-     */
     public ComputerBuilder setDateIntro(Date dateIntro) {
       this.dateIntro = dateIntro;
       return this;
     }
 
-    /**
-     * Sets the date discontinuation.
-     *
-     * @param dateDiscontinuation the date discontinuation
-     * @return the computer builder
-     */
     public ComputerBuilder setDateDiscontinuation(Date dateDiscontinuation) {
       this.dateDiscontinuation = dateDiscontinuation;
       return this;
     }
 
-    /**
-     * Sets the id.
-     *
-     * @param id the id
-     * @return the computer builder
-     */
     public ComputerBuilder setId(int id) {
       this.id = id;
       return this;

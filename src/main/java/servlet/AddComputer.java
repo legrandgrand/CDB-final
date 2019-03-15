@@ -5,8 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import model.Company;
 import model.Computer;
 
@@ -16,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import service.ServiceCompany;
@@ -32,9 +31,9 @@ public class AddComputer {
   /**
    * Instantiates a new adds the computer.
    *
-   * @param serviceCompany  the service company
+   * @param serviceCompany the service company
    * @param serviceComputer the service computer
-   * @param dashboard       the dashboard
+   * @param dashboard the dashboard
    */
   @Autowired
   public AddComputer(ServiceCompany serviceCompany, ServiceComputer serviceComputer,
@@ -45,14 +44,12 @@ public class AddComputer {
   }
 
   /**
-   * Sets the add.
+   * Sets the add Computer page.
    *
-   * @param request the request
    * @return the model and view
-   * @throws Exception the exception
    */
   @GetMapping(value = "/AddComputer")
-  public ModelAndView setAdd(HttpServletRequest request) {
+  public ModelAndView setAdd() {
 
     List<Company> companies = serviceCompany.listCompany();
     logger.debug("Size of companies: " + companies.size());
@@ -66,32 +63,35 @@ public class AddComputer {
   /**
    * Do post.
    *
-   * @param request the request
+   * @param computerName the computer name
+   * @param introString the intro string
+   * @param discString the disc string
+   * @param companyName the company name
    * @return the model and view
-   * @throws Exception the exception
    */
   @PostMapping(value = "/AddComputer")
-  public ModelAndView doPost(HttpServletRequest request) {
+  public ModelAndView doPost(@RequestParam(name = "name") String computerName,
+      @RequestParam(required = false, name = "intro") String introString,
+      @RequestParam(required = false, name = "disc") String discString,
+      @RequestParam(required = false, name = "companyname") String companyName) {
 
     Computer computer = new Computer();
-    computer.setName(request.getParameter("name"));
+    computer.setName(computerName);
 
-    String introString = request.getParameter("intro");
     Date intro = setComputerIntro(introString);
     computer.setDateIntro(intro);
 
-    String disc = request.getParameter("disc"); // TODO: handle situation where disc>intro
-    computer.setDateDiscontinuation(setComputerDisc(intro, disc));
+    computer.setDateDiscontinuation(setComputerDisc(intro, discString));
 
     Company company = new Company();
-    company.setName(request.getParameter("companyname"));
+    company.setName(companyName);
     company = serviceCompany.getCompany(company).get(0);
     computer.setCompany(company);
 
     logger.debug("Adding computer" + computer);
     serviceComputer.add(computer);
 
-    return dashboard.setDashboard(request);
+    return dashboard.setDashboard("0", "20");
   }
 
   /**
@@ -130,7 +130,7 @@ public class AddComputer {
    * Sets the computer disc.
    *
    * @param intro the intro
-   * @param disc  the disc
+   * @param disc the disc
    * @return the date
    */
   public Date setComputerDisc(Date intro, String disc) { // TODO: to change

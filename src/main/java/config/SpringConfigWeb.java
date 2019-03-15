@@ -18,7 +18,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan({ "dao", "controller", "mapper", "service", "servlet", "validator", "view" })
+@ComponentScan({ "dao", "mapper", "service", "servlet", "validator"})
 @PropertySource(value = { "classpath:configuration.properties" })
 public class SpringConfigWeb extends SpringConfig
     implements WebApplicationInitializer, WebMvcConfigurer {
@@ -47,5 +47,7 @@ public class SpringConfigWeb extends SpringConfig
   public void addResourceHandlers(final ResourceHandlerRegistry registry) {
     registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
   }
+  
+  //HandlerExceptionResolver
 
 }

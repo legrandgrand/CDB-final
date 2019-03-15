@@ -1,7 +1,6 @@
 package mapper;
 
 import dto.ComputerDto;
-import exception.ComputerValidationException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -13,7 +12,6 @@ import java.util.List;
 import model.Company;
 import model.Company.CompanyBuilder;
 import model.Computer;
-import model.Computer.ComputerBuilder;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,9 +82,8 @@ public class DtoMapper {
    * @return the company
    */
   public Company mapCompany(ComputerDto dto) {
-    CompanyBuilder companyBuilder = new CompanyBuilder().setNameCompany(dto.getCompanyName());
-
-    companyBuilder.setCompanyId((dto.getIdCompany()));
+    CompanyBuilder companyBuilder = new CompanyBuilder().setNameCompany(dto.getCompanyName())
+        .setCompanyId(dto.getIdCompany());
 
     return companyBuilder.build();
 

@@ -95,23 +95,11 @@ public class Company {
       return company;
     }
 
-    /**
-     * Sets the name company.
-     *
-     * @param name the name
-     * @return the company builder
-     */
     public CompanyBuilder setNameCompany(String name) {
       this.name = name;
       return this;
     }
 
-    /**
-     * Sets the company id.
-     *
-     * @param id the id
-     * @return the company builder
-     */
     public CompanyBuilder setCompanyId(int id) {
       this.id = id;
       return this;

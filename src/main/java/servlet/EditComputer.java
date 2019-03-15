@@ -5,8 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import model.Company;
 import model.Computer;
 
@@ -16,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import service.ServiceCompany;
@@ -35,9 +34,9 @@ public class EditComputer {
   /**
    * Instantiates a new edits the computer.
    *
-   * @param serviceCompany  the service company
+   * @param serviceCompany the service company
    * @param serviceComputer the service computer
-   * @param dashboard       the dashboard
+   * @param dashboard the dashboard
    */
   @Autowired
   public EditComputer(ServiceCompany serviceCompany, ServiceComputer serviceComputer,
@@ -50,17 +49,15 @@ public class EditComputer {
   /**
    * Do get.
    *
-   * @param request  the request
+   * @param stringId the string id
    * @return the model and view
-   * @throws Exception the exception
    */
   @GetMapping(value = "/EditComputer")
-  public ModelAndView doGet(HttpServletRequest request) {
+  public ModelAndView doGet(@RequestParam(name = "id") String stringId) {
     List<Company> companies = serviceCompany.listCompany();
     logger.debug("Size of companies: " + companies.size());
 
     Computer computer = new Computer();
-    String stringId = request.getQueryString();
     computer.setId(Integer.parseInt(stringId));
     computer = serviceComputer.getComputer(computer).get(0);
 
@@ -75,24 +72,27 @@ public class EditComputer {
   /**
    * Do post.
    *
-   * @param request  the request
+   * @param computerName the computer name
+   * @param introString the intro string
+   * @param discString the disc string
+   * @param companyName the company name
    * @return the model and view
-   * @throws Exception the exception
    */
   @PostMapping(value = "/EditComputer")
-  public ModelAndView doPost(HttpServletRequest request) {
+  public ModelAndView doPost(@RequestParam(name = "name") String computerName,
+      @RequestParam(required = false, name = "intro") String introString,
+      @RequestParam(required = false, name = "disc") String discString,
+      @RequestParam(required = false, name = "companyname") String companyName) {
     Computer computer = new Computer();
-    computer.setName(request.getParameter("name"));
+    computer.setName(computerName);
 
-    String introString = request.getParameter("intro");
-    Date intro = setComputerIntro(introString);
+    Date intro = setComputerDate(introString);
     computer.setDateIntro(intro);
 
-    String disc = request.getParameter("disc"); // TODO: handle situation where disc>intro
-    computer.setDateDiscontinuation(setComputerDisc(intro, disc));
+    computer.setDateDiscontinuation(setComputerDate(discString));
 
     Company company = new Company();
-    company.setName(request.getParameter("companyname"));
+    company.setName(companyName);
 
     company = serviceCompany.getCompany(company).get(0);
 
@@ -100,7 +100,7 @@ public class EditComputer {
     logger.debug("Updating computer" + computer);
     serviceComputer.update(computer);
 
-    return dashboard.setDashboard(request);
+    return dashboard.setDashboard("0", "20");
 
   }
 
@@ -122,45 +122,17 @@ public class EditComputer {
   }
 
   /**
-   * Sets the computer intro.
+   * Sets the computer date.
    *
-   * @param disc the disc
+   * @param stringDate the string date
    * @return the date
    */
-  public Date setComputerIntro(String disc) {
+  public Date setComputerDate(String stringDate) {
     Date intro = null;
-    if (!disc.equals("")) {
-      intro = setDate(disc);
+    if (stringDate != null) {
+      intro = setDate(stringDate);
     }
     logger.debug("Setting computer date of introduction: " + intro);
     return intro;
-  }
-
-  /**
-   * Sets the computer disc.
-   *
-   * @param intro the intro
-   * @param disc  the disc
-   * @return the date
-   */
-  public Date setComputerDisc(Date intro, String disc) { // TODO: to change
-    Date discontinuation = null;
-    do {
-      if (!disc.equals("")) {
-        discontinuation = setDate(disc);
-        if (null != intro) { // TODO: null.equals()null
-          break;
-        }
-        if (discontinuation.before(intro)) {
-          logger.info("The date you entered happened before the date of introduction. "
-              + "Please enter a valid date.");
-        }
-      } else {
-        break;
-      }
-    } while (null != intro || discontinuation.before(intro));
-    logger.debug("Setting computer date of discontinuation: " + discontinuation);
-    return discontinuation;
-
   }
 }

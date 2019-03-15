@@ -1,10 +1,9 @@
 package servlet;
 
 import dto.ComputerDto;
+import exception.Error404;
 
 import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
 
 import mapper.DtoMapper;
 
@@ -15,7 +14,9 @@ import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import service.ServiceComputer;
@@ -30,7 +31,7 @@ public class Dashboard {
   /**
    * Instantiates a new dashboard.
    *
-   * @param mapper the mapper
+   * @param mapper          the mapper
    * @param serviceComputer the service computer
    */
   @Autowired
@@ -42,14 +43,17 @@ public class Dashboard {
   /**
    * Sets the dashboard.
    *
-   * @param request the request
+   * @param pageString  the page string
+   * @param limitString the limit string
    * @return the model and view
    */
   @GetMapping(value = "/Dashboard")
-  public ModelAndView setDashboard(HttpServletRequest request) {
+  public ModelAndView setDashboard(
+      @RequestParam(defaultValue = "0", name = "page") String pageString,
+      @RequestParam(defaultValue = "20", name = "limit") String limitString) {
 
-    int page = setPage(request);
-    int limit = setLimit(request);
+    int page = setPage(pageString);
+    int limit = setLimit(limitString);
     String order = "ASC";
     List<Computer> computers = serviceComputer.listPage(limit, page);
 
@@ -59,17 +63,21 @@ public class Dashboard {
   /**
    * Sets the computer.
    *
-   * @param request the request
+   * @param pageString  the page string
+   * @param limitString the limit string
+   * @param order       the order
+   * @param type        the type
    * @return the model and view
    */
   @GetMapping(value = "/OrderBy")
-  public ModelAndView setComputer(HttpServletRequest request) {
+  public ModelAndView setComputer(
+      @RequestParam(defaultValue = "0", name = "page") String pageString,
+      @RequestParam(defaultValue = "20", name = "limit") String limitString,
+      @RequestParam(defaultValue = "ASC", name = "Order") String order,
+      @RequestParam(defaultValue = "id", name = "type") String type) {
 
-    int page = setPage(request);
-    int limit = setLimit(request);
-
-    String order = request.getParameter("Order");
-    String type = request.getParameter("type");
+    int page = setPage(pageString);
+    int limit = setLimit(limitString);
 
     List<Computer> computers = serviceComputer.orderBy(type, order, limit, page);
     return setMv(computers, order, page, limit);
@@ -78,54 +86,67 @@ public class Dashboard {
   /**
    * Gets the computer.
    *
-   * @param request the request
+   * @param computerName the computer name
    * @return the computer
    */
   @GetMapping(value = "/GetComputer")
-  public ModelAndView getComputer(HttpServletRequest request) {
+  public ModelAndView getComputer(@RequestParam(name = "search") String computerName) {
 
     Computer computer = new Computer();
-    computer.setName(request.getParameter("search"));
+    computer.setName(computerName);
     // TODO: get computers from companyName
     List<Computer> computers = serviceComputer.getComputerFromName(computer);
     List<ComputerDto> dto = mapper.listDtos(computers);
 
-    ModelAndView mv = new ModelAndView();
+    ModelAndView mv = new ModelAndView("dashboard");
     mv.addObject("computers", dto);
     mv.addObject("maxId", dto.size());
-    mv.setViewName("dashboard");
     return mv;
   }
 
   /**
    * Delete computer.
    *
-   * @param request the request
+   * @param idString the id string
    * @return the model and view
    */
   @GetMapping(value = "/DeleteComputer")
-  public ModelAndView deleteComputer(HttpServletRequest request) {
+  public ModelAndView deleteComputer(
+      @RequestParam(required = false, name = "selection") String idString) {
     Computer computer = new Computer();
-    String idString = request.getParameter("selection");
-    String[] idStringTable = idString.split(",");
-    
-    for (String c : idStringTable) {
-      computer.setId(Integer.parseInt(c));
-      computer = serviceComputer.getComputer(computer).get(0);
-      logger.debug("Deleting computer: " + computer.getName());
-      serviceComputer.delete(computer);
+
+    if (idString != null) {
+      String[] idStringTable = idString.split(",");
+
+      for (String c : idStringTable) {
+        computer.setId(Integer.parseInt(c));
+        computer = serviceComputer.getComputer(computer).get(0);
+        logger.debug("Deleting computer: " + computer.getName());
+        serviceComputer.delete(computer);
+      }
     }
 
     return new ModelAndView("dashboard");
   }
 
   /**
-   * Sets the ModelAndView.
+   * Handle 404 error.
+   *
+   * @return the model and view
+   */
+  @ExceptionHandler(Error404.class)
+  public ModelAndView handle404Error() {
+
+    return new ModelAndView("404");
+  }
+
+  /**
+   * Sets the mv.
    *
    * @param computers the computers
-   * @param order the order
-   * @param page the page
-   * @param limit the limit
+   * @param order     the order
+   * @param page      the page
+   * @param limit     the limit
    * @return the model and view
    */
   public ModelAndView setMv(List<Computer> computers, String order, int page, int limit) {
@@ -135,30 +156,26 @@ public class Dashboard {
     } else {
       order = "ASC";
     }
-    
+
     List<ComputerDto> dto = mapper.listDtos(computers);
-    
-    ModelAndView mv = new ModelAndView();
+
+    ModelAndView mv = new ModelAndView("dashboard");
     mv.addObject("page", page / 20);
     mv.addObject("maxId", serviceComputer.getMaxId());
     mv.addObject("limit", limit);
     mv.addObject("computers", dto);
     mv.addObject("Order", order);
-    mv.setViewName("dashboard");
-
     return mv;
   }
 
   /**
    * Sets the limit.
    *
-   * @param request the request
+   * @param limitString the limit string
    * @return the int
    */
-  public int setLimit(HttpServletRequest request) {
-    String limitString = null;
+  public int setLimit(String limitString) {
     int limit = 20;
-    limitString = request.getParameter("limit");
 
     try {
       if (limitString != null) {
@@ -174,13 +191,11 @@ public class Dashboard {
   /**
    * Sets the page.
    *
-   * @param request the request
+   * @param pageString the page string
    * @return the int
    */
-  public int setPage(HttpServletRequest request) {
-    String pageString = null;
+  public int setPage(String pageString) {
     int page = 0;
-    pageString = request.getParameter("page");
 
     try {
       if (pageString != null) {

@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 import mapper.RowMapperComputer;
+
 import model.Company;
 import model.Computer;
 
@@ -14,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-// TODO: stream
 @Repository
 public class ComputerDaoImp extends Dao implements ComputerDao {
 

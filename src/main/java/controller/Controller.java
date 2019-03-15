@@ -237,7 +237,7 @@ public class Controller {
     view.setComputerCompanyId();
     Company company = new Company();
     Scanner sc = new Scanner(System.in);
-    company.setName(sc.nextLine());
+    company.setName(sc.nextLine().trim());
     logger.debug("Setting company Id: " + company.getName());
     company = serviceCompany.getCompany(company).get(0);
     return company;
