@@ -2,12 +2,8 @@ package dao;
 
 import com.zaxxer.hikari.HikariDataSource;
 
-import mapper.RowMapperComputer;
-import model.Computer;
-
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 

@@ -12,7 +12,7 @@ public interface ComputerDao {
    *
    * @return the list
    */
-  List<Computer> list();
+  public List<Computer> list();
 
   /**
    * Delete computer.
