@@ -1,104 +1,113 @@
 package servlet;
 
-import java.io.IOException;
+import dto.ComputerDto;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+
 import java.util.Date;
 import java.util.List;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import mapper.DtoMapper;
 
 import model.Company;
 import model.Computer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import service.ServiceCompany;
 import service.ServiceComputer;
 
-@WebServlet("/AddComputer")
-@Configurable
-public class AddComputer extends HttpServlet {
-  private static final long serialVersionUID = 1L;
+@Controller
+public class AddComputer {
   private static final Logger logger = LoggerFactory.getLogger(AddComputer.class);
-  
-  @Autowired
+
   private ServiceComputer serviceComputer;
-  
-  @Autowired
   private ServiceCompany serviceCompany;
-  
-  @Override
-  public void init(ServletConfig config) throws ServletException {
-    super.init(config);
-    SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+  private Dashboard dashboard;
+  private DtoMapper mapper;
+
+  /**
+   * Instantiates a new adds the computer.
+   *
+   * @param serviceCompany  the service company
+   * @param serviceComputer the service computer
+   * @param dashboard       the dashboard
+   */
+  @Autowired
+  public AddComputer(DtoMapper mapper, ServiceCompany serviceCompany,
+      ServiceComputer serviceComputer, Dashboard dashboard) {
+    this.serviceComputer = serviceComputer;
+    this.serviceCompany = serviceCompany;
+    this.dashboard = dashboard;
+    this.mapper = mapper;
   }
 
   /**
-   * Do get.
+   * Sets the add Computer page.
    *
-   * @param request  the request
-   * @param response the response
-   * @throws ServletException the servlet exception
-   * @throws IOException      Signals that an I/O exception has occurred.
-   * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+   * @return the model and view
    */
-  protected void doGet(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
+  @GetMapping(value = "/AddComputer")
+  public ModelAndView setAdd() {
+
     List<Company> companies = serviceCompany.listCompany();
     logger.debug("Size of companies: " + companies.size());
-    request.setAttribute("companies", companies);
-    this.getServletContext().getRequestDispatcher("/views/addComputer.jsp").forward(request,
-        response);
+
+    ModelAndView mv = new ModelAndView();
+    mv.addObject("companies", companies);
+    mv.setViewName("addComputer");
+    return mv;
   }
 
   /**
    * Do post.
    *
-   * @param request  the request
-   * @param response the response
-   * @throws ServletException the servlet exception
-   * @throws IOException      Signals that an I/O exception has occurred.
-   * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+   * @param computerName the computer name
+   * @param introString  the intro string
+   * @param discString   the disc string
+   * @param companyName  the company name
+   * @return the model and view
    */
-  protected void doPost(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
-
-    Computer computer = new Computer();
-    computer.setName(request.getParameter("name"));
-
-    String introString = request.getParameter("intro");
-    Date intro = setComputerIntro(introString);
-    computer.setDateIntro(intro);
-
-    String disc = request.getParameter("disc"); // TODO: handle situation where disc>intro
-    computer.setDateDiscontinuation(setComputerDisc(intro, disc));
-    
+  @PostMapping(value = "/AddComputer")
+  public ModelAndView doPost(@RequestParam(name = "name") String computerName,
+      @RequestParam(required = false, name = "intro") String introString,
+      @RequestParam(required = false, name = "disc") String discString,
+      @RequestParam(required = false, name = "companyname") String companyName) {
     Company company = new Company();
-    company.setName(request.getParameter("companyname"));
-
+    company.setName(companyName);
     company = serviceCompany.getCompany(company).get(0);
+    
+    
+    ComputerDto dto = new ComputerDto();
+    dto.setName(computerName);
+    dto.setIntro(introString);
+    dto.setDiscontinuation(discString);
 
-    computer.setCompany(company);
+    dto.setCompanyName(company.getName());
+    dto.setIdCompany(company.getId());
+
+    Computer computer = mapper.dtoToComputer(dto);
+
     logger.debug("Adding computer" + computer);
     serviceComputer.add(computer);
-    response.sendRedirect(request.getContextPath() + "/Dashboard");
+
+    return dashboard.setDashboard("0", "20");
   }
 
   /**
-   * Sets the timestamp.
+   * Sets the date.
    *
-   * @param timestamp the timestamp to change
-   * @return the timestamp
+   * @param timestamp the timestamp
+   * @return the date
    */
   public Date setDate(String timestamp) {
     timestamp = timestamp + " 00:00:00";// timestamp format: YYYY-MM-DD (user input) + 00:00:00
@@ -115,7 +124,7 @@ public class AddComputer extends HttpServlet {
    * Sets the computer intro.
    *
    * @param introString the intro string
-   * @return the timestamp
+   * @return the date
    */
   public Date setComputerIntro(String introString) {
     Date intro = null;

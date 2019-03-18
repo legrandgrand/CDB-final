@@ -1,9 +1,12 @@
 package controller;
 
+import exception.ComputerValidationException;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import java.util.Date;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -19,105 +22,184 @@ import service.ServiceCompany;
 import service.ServiceComputer;
 
 import validator.ComputerValidator;
+import view.View;
 
 @Component
 public class Controller {
 
-  
   private static final Logger logger = LoggerFactory.getLogger(Controller.class);
-  
-  @Autowired
+
+  private View view;
   private ServiceComputer serviceComputer;
-  
-  @Autowired
   private ServiceCompany serviceCompany;
-  
-  @Autowired
   private ComputerValidator computerValidator;
 
-  private Controller() {}
-
   /**
-   * List company.
+   * Instantiates a new controller.
    *
-   * @return the list
+   * @param computerValidator the computer validator
+   * @param serviceCompany    the service company
+   * @param serviceComputer   the service computer
+   * @param view              the view
    */
-  public List<Company> listCompany() {
-    logger.debug("Listing companies");
-    return serviceCompany.listCompany();
+  @Autowired
+  public Controller(ComputerValidator computerValidator, ServiceCompany serviceCompany,
+      ServiceComputer serviceComputer, View view) {
+    this.view = view;
+    this.serviceCompany = serviceCompany;
+    this.serviceComputer = serviceComputer;
+    this.computerValidator = computerValidator;
   }
 
   /**
-   * List computer.
-   *
-   * @return the list
+   * Start.
    */
-  public List<Computer> listComputer() {
+  public void start() {
+    view.start();
+    mainMenu();
+  }
+
+  /**
+   * Main menu.
+   */
+  public void mainMenu() {
+    view.mainMenu();
+    Scanner sc = new Scanner(System.in);
+
+    try {
+      int userChoice = sc.nextInt();
+      switch (userChoice) { // TODO: enums
+        case 1:
+          listCompany();
+          break;
+        case 2:
+          listComputers();
+          break;
+        case 3:
+          addComputer(sc);
+          break;
+        case 4:
+          deleteComputer(sc);
+          break;
+        case 5:
+          deleteCompany(sc);
+          break;
+        case 6:
+          updateComputer(sc);
+          break;
+        case 7:
+          view.exit();
+          sc.close();
+          break;
+        default:
+          view.invalidInput();
+          mainMenu();
+          break;
+      }
+    } catch (InputMismatchException e) {
+      view.invalidInput();
+      mainMenu();
+    }
+  }
+
+  /**
+   * List company.
+   */
+  public void listCompany() {
+    view.startListCompanies();
+    logger.debug("Listing companies");
+    List<Company> list = serviceCompany.listCompany();
+    view.listCompanies(list);
+    mainMenu();
+  }
+
+  /**
+   * List computers.
+   */
+  public void listComputers() {
+    view.startListComputers();
     logger.debug("Listing computers");
-    return serviceComputer.list();
+    List<Computer> list = serviceComputer.list();
+    view.listComputers(list);
+    mainMenu();
   }
 
   /**
    * Delete computer.
-   *
-   * @param name the name
    */
-  public void deleteComputer(String name) {
+  public void deleteComputer(Scanner sc) {
+    sc.nextLine();
+    view.deleteComputer();
+    
+    String name = null;
+    name = sc.nextLine();
+
     Computer computer = new Computer();
     computer.setName(name);
-    logger.debug("Deleting computer named" + name);
     serviceComputer.delete(computer);
+    view.deletedComputer(name);
+
+    logger.debug("Deleting computer named" + name);
+    mainMenu();
   }
-  
+
   /**
    * Delete company.
-   *
-   * @param id the id
    */
-  public void deleteCompany(int id) {
+  public void deleteCompany(Scanner sc) {
+    sc.nextLine();
+    view.startDeleteCompany();
+    
+    int companyId = sc.nextInt();
     Company company = new Company();
-    company.setId(id);
-    logger.debug("Deleting company of id: " + id);
+    company.setId(companyId);
+    logger.debug("Deleting company of id: " + companyId);
     serviceCompany.delete(company);
+    view.deleteCompany(company);
+    sc.nextLine();
+    mainMenu();
   }
 
   /**
    * Sets the computer name.
    *
-   * @param sc the scanner
-   * @return the ComputerName
-   * @throws Exception exception
+   * @return the string
+   * @throws ComputerValidationException the computer validation exception
    */
-  public String setComputerName(Scanner sc) throws Exception {
+  public String setComputerName(Scanner sc) throws ComputerValidationException {
+    view.setComputerName();
     String name = sc.nextLine();
+
     try {
       computerValidator.validateName(name);
       logger.debug("Setting computer name: " + name);
       return name;
-    } catch (Exception e) {
-      throw new Exception(e);
+    } catch (ComputerValidationException e) {
+      throw e;
     }
   }
 
   /**
    * Sets the computer intro.
    *
-   * @param sc the scanner
-   * @return the timestamp
-   * @throws Exception the exception
+   * @return the date
+   * @throws ComputerValidationException the computer validation exception
    */
-  public Date setComputerIntro(Scanner sc) throws Exception {
+  public Date setComputerIntro(Scanner sc) throws ComputerValidationException {
+    view.addComputerDateIntro();
     Date intro = null;
     String timestamp = null;
     timestamp = sc.nextLine();
+
     try {
       computerValidator.validateDateFormatIntro(timestamp);
-      if (!timestamp.equals("")) {
-        intro = setDate(timestamp);
-      }
-    } catch (Exception e) {
-      throw new Exception(e);
+    } catch (ComputerValidationException e) {
+      throw e;
     }
+    if (!timestamp.equals("")) {
+      intro = setDate(timestamp);
+    }
+
     logger.debug("Setting computer date of introduction: " + intro);
     return intro;
   }
@@ -125,92 +207,105 @@ public class Controller {
   /**
    * Sets the computer disc.
    *
-   * @param sc    the scanner
-   * @param intro the date of introduction
-   * @return the date of discontinuation
-   * @throws Exception the exception
+   * @return the date
+   * @throws ComputerValidationException the computer validation exception
    */
-  public Date setComputerDisc(Scanner sc, Date intro) throws Exception {
+  public Date setComputerDisc(Scanner sc) throws ComputerValidationException {
+    view.addComputerDateDisc();
     Date discontinuation = null;
     String timestamp = null;
-    do {
-      timestamp = sc.nextLine();
-      try { 
-        computerValidator.validateDateFormatDisc(timestamp);
-        if (!timestamp.equals("")) {
-          discontinuation = setDate(timestamp);
-          if (null != intro) {
-            break;
-          }
-          if (discontinuation.before(intro)) {
-            logger.info("The date you entered happened before the date of introduction. "
-                + "Please enter a valid date.");
-          }
-        } else {
-          break;
-        }
-      } catch (Exception e) {
-        throw new Exception(e);
-      }
+    timestamp = sc.nextLine();
 
-    } while (null != intro || discontinuation.before(intro));
+    try {
+      computerValidator.validateDateFormatDisc(timestamp);
+    } catch (ComputerValidationException e) {
+      throw e;
+    }
+    if (!timestamp.equals("")) {
+      discontinuation = setDate(timestamp);
+    }
+
     logger.debug("Setting computer date of discontinuation: " + discontinuation);
     return discontinuation;
 
   }
 
   /**
-   * Sets the computer company id.
+   * Sets the computer company.
    *
-   * @param sc the scanner
-   * @return the Company Id
+   * @return the company
    */
-  public Company setComputerCompany(Scanner sc) {
+  public Company setComputerCompany(Scanner sc) throws ComputerValidationException {
+    view.setComputerCompanyId();
     Company company = new Company();
-    company.setName(sc.nextLine());
+    company.setName(sc.nextLine().trim());
     logger.debug("Setting company Id: " + company.getName());
-    company = (Company) serviceCompany.getCompany(company).get(0);
-    //sc.nextLine();
+    List<Company> list = serviceCompany.getCompany(company);
+
+    try {
+      company = list.get(0);
+    } catch (IndexOutOfBoundsException e) {
+      throw new ComputerValidationException("The company name you entered doesn't exist");
+    }
     return company;
   }
 
   /**
    * Adds the computer.
-   *
-   * @param name            the name
-   * @param intro           the date of introduction
-   * @param discontinuation the date of discontinuation
-   * @param companyId       the company id
-   * @return the computer
    */
-  public Computer addComputer(String name, Date intro, Date discontinuation, Company companyId) {
-    Computer computer = new Computer(name, companyId, intro, discontinuation, 0);
+  public void addComputer(Scanner sc) {
+    sc.nextLine();
+    view.startAddComputer();
+    
+    Computer computer = setComputer(sc);
     logger.debug("Adding computer: " + computer);
     serviceComputer.add(computer);
-    return computer;
+    view.addComputer(computer);
+    mainMenu();
   }
 
   /**
    * Update computer.
-   *
-   * @param name            the computer name
-   * @param intro           the date of introduction
-   * @param discontinuation the date of discontinuation
-   * @param companyId       the company id
-   * @return the computer
    */
-  public Computer updateComputer(String name, Date intro, Date discontinuation, Company companyId) {
-    Computer computer = new Computer(name, companyId, intro, discontinuation, 0);
+  public void updateComputer(Scanner sc) {
+    sc.nextLine();
+    view.startUpdateComputer();
+    
+    Computer computer = setComputer(sc);
     logger.debug("Updating computer: " + computer);
     serviceComputer.update(computer);
-    return computer;
+    view.updateComputer(computer);
+    mainMenu();
   }
 
   /**
-   * Sets the timestamp.
+   * Sets the computer.
    *
-   * @param timestamp the timestamp to change
-   * @return the timestamp
+   * @return the computer
+   */
+  public Computer setComputer(Scanner sc) {
+    String name = null;
+    Date intro = null;
+    Date discontinuation = null;
+    Company company = new Company();
+    try {
+      name = setComputerName(sc);
+      intro = setComputerIntro(sc);
+      discontinuation = setComputerDisc(sc);
+      company = setComputerCompany(sc);
+    } catch (ComputerValidationException e) {
+      logger.error(e.getMessage(), e);
+      view.invalidComputer(e.getMessage());
+      mainMenu();
+    }
+    return new Computer(name, company, intro, discontinuation, 0);
+  }
+
+  /**
+   * Sets the date.
+   *
+   * @param timestamp the timestamp
+   * @return the date
    */
   public Date setDate(String timestamp) {
     timestamp = timestamp + " 00:00:00";// timestamp format: YYYY-MM-DD (user input) + 00:00:00

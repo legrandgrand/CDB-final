@@ -5,27 +5,34 @@ import java.util.Date;
 public class Computer {
 
   private String name;// Compulsory
-  private Company company;// TODO: pas entier, mais company
-  private Date dateIntro;
-  private Date dateDiscontinuation;// Has to be higher than date B
+  private Company company;
+  private Date intro;
+  private Date discontinuation;// Has to be higher than date B
   private int id;
 
   /**
    * Instantiates a new computer.
    *
-   * @param name                the name PC
-   * @param company             the company
-   * @param dateIntro           the date intro
-   * @param dateDiscontinuation the date discontinuation
-   * @param id                  the id
+   * @param name the name
+   * @param company the company
+   * @param intro the intro
+   * @param discontinuation the discontinuation
+   * @param id the id
    */
-  public Computer(String name, Company company, Date dateIntro, Date dateDiscontinuation, int id) {
+  public Computer(String name, Company company, Date intro, Date discontinuation, int id) {
     this.setName(name);
     this.setCompany(company);
-    this.setDateIntro(dateIntro);
-    this.setDateDiscontinuation(dateDiscontinuation);
+    this.setIntro(intro);
+    this.setDiscontinuation(discontinuation);
     this.setId(id);
   }
+  
+  /**
+   * Instantiates a new computer.
+   */
+  public Computer() {
+  }
+
 
   public int getId() {
     return id;
@@ -35,26 +42,20 @@ public class Computer {
     this.id = id;
   }
 
-  /**
-   * Instantiates a new computer.
-   */
-  public Computer() {
+  public Date getIntro() {
+    return intro;
   }
 
-  public Date getDateIntro() {
-    return dateIntro;
+  public void setIntro(Date intro) {
+    this.intro = intro;
   }
 
-  public void setDateIntro(Date dateIntro2) {
-    this.dateIntro = dateIntro2;
+  public Date getDiscontinuation() {
+    return discontinuation;
   }
 
-  public Date getDateDiscontinuation() {
-    return dateDiscontinuation;
-  }
-
-  public void setDateDiscontinuation(Date dateF) {
-    this.dateDiscontinuation = dateF;
+  public void setDiscontinuation(Date date) {
+    this.discontinuation = date;
   }
 
   public Company getCompany() {
@@ -73,22 +74,27 @@ public class Computer {
     this.name = name;
   }
 
-  /*
-   * (non-Javadoc)
-   * 
+  /* (non-Javadoc)
    * @see java.lang.Object#toString()
    */
   @Override
   public String toString() {
-    return "Name: " + name + "\n Introduction : " + dateIntro + "\n Discontinuation: "
-        + dateDiscontinuation + "\n Company: " + company;
+    return "Name: " + name + "\n Introduction : " + intro + "\n Discontinuation: "
+        + discontinuation + "\n Company: " + company;
   }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see java.lang.Object#equals(java.lang.Object)
-   */
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((company == null) ? 0 : company.hashCode());
+    result = prime * result + ((discontinuation == null) ? 0 : discontinuation.hashCode());
+    result = prime * result + ((intro == null) ? 0 : intro.hashCode());
+    result = prime * result + id;
+    result = prime * result + ((name == null) ? 0 : name.hashCode());
+    return result;
+  }
+
   @Override
   public boolean equals(Object obj) {
     if (this == obj) {
@@ -101,6 +107,30 @@ public class Computer {
       return false;
     }
     Computer other = (Computer) obj;
+    if (company == null) {
+      if (other.company != null) {
+        return false;
+      }
+    } else if (!company.equals(other.company)) {
+      return false;
+    }
+    if (discontinuation == null) {
+      if (other.discontinuation != null) {
+        return false;
+      }
+    } else if (!discontinuation.equals(other.discontinuation)) {
+      return false;
+    }
+    if (intro == null) {
+      if (other.intro != null) {
+        return false;
+      }
+    } else if (!intro.equals(other.intro)) {
+      return false;
+    }
+    if (id != other.id) {
+      return false;
+    }
     if (name == null) {
       if (other.name != null) {
         return false;
@@ -113,13 +143,13 @@ public class Computer {
 
   public static class ComputerBuilder {
     private String name;// Compulsory
-    private Company company;// TODO: pas entier, mais company
-    private Date dateIntro;
-    private Date dateDiscontinuation;// Has to be higher than date B
+    private Company company;
+    private Date intro;
+    private Date discontinuation;// Has to be higher than date B
     private int id;
 
     /**
-     * Builds the Computer.
+     * Builds the.
      *
      * @return the computer
      */
@@ -128,8 +158,8 @@ public class Computer {
 
       computer.setId(this.id);
       computer.setCompany(this.company);
-      computer.setDateIntro(this.dateIntro);
-      computer.setDateDiscontinuation(this.dateDiscontinuation);
+      computer.setIntro(this.intro);
+      computer.setDiscontinuation(this.discontinuation);
       computer.setName(this.name);
 
       return computer;
@@ -158,24 +188,24 @@ public class Computer {
     }
 
     /**
-     * Sets the date intro.
+     * Sets the intro.
      *
      * @param dateIntro the date intro
      * @return the computer builder
      */
-    public ComputerBuilder setDateIntro(Date dateIntro) {
-      this.dateIntro = dateIntro;
+    public ComputerBuilder setIntro(Date dateIntro) {
+      this.intro = dateIntro;
       return this;
     }
 
     /**
-     * Sets the date discontinuation.
+     * Sets the discontinuation.
      *
-     * @param dateDiscontinuation the date discontinuation
+     * @param discontinuation the discontinuation
      * @return the computer builder
      */
-    public ComputerBuilder setDateDiscontinuation(Date dateDiscontinuation) {
-      this.dateDiscontinuation = dateDiscontinuation;
+    public ComputerBuilder setDiscontinuation(Date discontinuation) {
+      this.discontinuation = discontinuation;
       return this;
     }
 

@@ -1,11 +1,13 @@
+package main;
+
 import config.SpringConfig;
+import controller.Controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
-import view.View;
 
 public class Cdb {
 
@@ -22,8 +24,10 @@ public class Cdb {
     
     logger.debug("Starting program");
     
-    View view = View.class.cast(applicationContext.getBean("view", View.class));
-    view.start();
+    Controller controller = applicationContext.getBean("controller", Controller.class);
+    controller.start();
+    
+    ((ConfigurableApplicationContext)applicationContext).close();
   }
 
 }

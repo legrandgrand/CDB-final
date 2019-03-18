@@ -1,205 +1,127 @@
 package view;
 
-import controller.Controller;
-
-import java.util.Date;
-import java.util.InputMismatchException;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Scanner;
 
 import model.Company;
 import model.Computer;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class View {
-  
-  @Autowired
-  private Controller controller;
 
   /**
    * Instantiates a new view.
-   *
-   * @param controller the controller
    */
   private View() {
-    //this.controller = controller;
-    //start();
   }
-  
+
+  /**
+   * Start.
+   */
   public void start() {
     System.out.print("Welcome to the computer database program.");
-    mainMenu();
   }
 
   /**
    * Main menu.
    */
   public void mainMenu() {
-    System.out.println("What would you like to do?"
-        + "\n1. List Manufacturer companies."
-        + "\n2. List Computer database."
-        + "\n3. Add a Computer to the database."
+    System.out.println("What would you like to do?" + "\n1. List Manufacturer companies."
+        + "\n2. List Computer database." + "\n3. Add a Computer to the database."
         + "\n4. Delete a Computer from the database."
         + "\n5. Delete a Company (and associated Computers) from the database."
-        + "\n6. Update a Computer in the database."
-        + "\n7. Exit program.");
-    Scanner sc = new Scanner(System.in);
-    try {
-      int userChoice = sc.nextInt();
-      switch (userChoice) { // TODO: enums
-        case 1:
-          listCompanies();
-          break;
-        case 2:
-          listComputers();
-          break;
-        case 3:
-          addComputer();
-          break;
-        case 4:
-          deleteComputer();
-          break;
-        case 5:
-          deleteCompany();
-          break;
-        case 6:
-          updateComputer();
-          break;
-        case 7:
-          System.out.println("Exiting program");
-          sc.close();
-          System.exit(0);
-          break;
-        default:
-          System.out.println("Not a valid statement.");
-          mainMenu();
-          break;
-      }
-    } catch (InputMismatchException e) {
-      System.out.println("Not a valid input.");
-
-      mainMenu();
-    }
-
+        + "\n6. Update a Computer in the database." + "\n7. Exit program.");
   }
 
   /**
    * List companies.
    */
-  public void listCompanies() {
+  public void startListCompanies() {
     System.out.println("We will now list all companies of manufacturers.");
-    List<Company> list = controller.listCompany();
-    Company company = new Company();
+  }
+
+  /**
+   * List companies.
+   *
+   * @param list the list
+   */
+  public void listCompanies(List<Company> list) {
+    Company company;
     Iterator<Company> itr = list.iterator();
     while (itr.hasNext()) {
-      company = (Company) itr.next();
+      company = itr.next();
       System.out.println(company);
     }
-    mainMenu();
   }
 
   /**
    * List computers.
    */
-  public void listComputers() {
+  public void startListComputers() {
     System.out.println("We will now list all computers of the database.");
-    List<Computer> list = controller.listComputer();
-    Computer computer = new Computer();
+  }
+
+  /**
+   * List computers.
+   *
+   * @param list the list
+   */
+  public void listComputers(List<Computer> list) {
+    Computer computer;
     Iterator<Computer> itr = list.iterator();
     while (itr.hasNext()) {
-      computer = (Computer) itr.next();
+      computer = itr.next();
       System.out.println(computer);
     }
-    mainMenu();
   }
 
   /**
    * Adds the computer.
+   *
+   * @param computer the computer
    */
-  public void addComputer() {
-    Scanner sc = new Scanner(System.in);
-    System.out.println("We will now add a new computer.");
-    try {
-      String name = setComputerName(sc);
-
-      Date intro = addComputerDateIntro(sc);
-
-      Date discontinuation = addComputerDateDisc(sc, intro);
-
-      Company companyId = setComputerCompanyId(sc);
-
-      Computer computer = controller.addComputer(name, intro, discontinuation, companyId);
-
-      System.out.println(computer + " a été rajouté");
-      mainMenu();
-    } catch (IllegalArgumentException e) {
-      System.out
-          .println("The argument you entered doesn't have the correct format. Please try again.");
-
-      addComputer();
-    } catch (InputMismatchException e) {
-      System.out.println("Not a valid input. Please try again.");
-      addComputer();
-
-    } catch (Exception e) {
-      System.out.println(e);
-      addComputer();
-    }
+  public void addComputer(Computer computer) {
+    System.out.println(computer + " a été rajouté");
   }
 
   /**
-   * Adds the computer date intro.
-   *
-   * @param sc the sc
-   * @return the date
-   * @throws Exception the exception
+   * Start add computer.
    */
-  public Date addComputerDateIntro(Scanner sc) throws Exception {
-    System.out.println("Please enter the date of introduction. "
-        + "Format should be YYYY-MM-DD. (If the date is unknown, just press enter.)");
-    return controller.setComputerIntro(sc);
+  public void startAddComputer() {
+    System.out.println("We will now add a new computer.");
   }
 
   /**
    * Sets the computer name.
-   *
-   * @param sc the sc
-   * @return the string
-   * @throws Exception exception
    */
-  public String setComputerName(Scanner sc) throws Exception {
+  public void setComputerName() {
     System.out.println("Please enter the computer's name you want to add or update");
-    return controller.setComputerName(sc);
   }
 
   /**
    * Adds the computer date disc.
-   *
-   * @param sc    the sc
-   * @param intro the intro
-   * @return the date
-   * @throws Exception the exception
    */
-  public Date addComputerDateDisc(Scanner sc, Date intro) throws Exception {
+  public void addComputerDateDisc() {
     System.out
         .println("Please enter the date of discontinuation. " + "Format should be YYYY-MM-DD. "
             + "(If the date is unknown or the computer is still continuing, just press enter.)");
-    return controller.setComputerDisc(sc, intro);
+  }
+
+  /**
+   * Adds the computer date intro.
+   */
+  public void addComputerDateIntro() {
+    System.out.println("Please enter the date of introduction. "
+        + "Format should be YYYY-MM-DD. (If the date is unknown, just press enter.)");
   }
 
   /**
    * Sets the computer company id.
-   *
-   * @param sc the sc
-   * @return the int
    */
-  public Company setComputerCompanyId(Scanner sc) {
+  public void setComputerCompanyId() {
     System.out.println("Please enter the company's name");
-    return controller.setComputerCompany(sc);
   }
 
   /**
@@ -208,62 +130,61 @@ public class View {
   public void deleteComputer() {
     System.out.println("We will now delete a computer from the database."
         + "Please enter the computer's name you want to delete.");
-    try (Scanner sc = new Scanner(System.in)) {
-      String computerName = sc.nextLine();
-      controller.deleteComputer(computerName);
-      System.out.println(computerName + "a été supprimé");
-      mainMenu();
-    }
-
   }
-  
+
   /**
    * Delete company.
    */
-  public void deleteCompany() {
+  public void startDeleteCompany() {
     System.out.println("We will now delete a company (and associated Computers) from the database."
         + "Please enter the company's id you want to delete.");
-    try (Scanner sc = new Scanner(System.in)) {
-      int companyId = sc.nextInt();
-      controller.deleteCompany(companyId);
-      System.out.println(companyId + "a été supprimé");
-      sc.nextLine();
-      mainMenu();
-    }
+  }
 
+  /**
+   * Delete company.
+   *
+   * @param company the company
+   */
+  public void deleteCompany(Company company) {
+    System.out.println(company.getName() + "a été supprimé");
   }
 
   /**
    * Update computer.
+   *
+   * @param computer the computer
    */
-  public void updateComputer() {
+  public void updateComputer(Computer computer) {
+    System.out.println(computer + " was updated");
+  }
 
+  /**
+   * Start update computer.
+   */
+  public void startUpdateComputer() {
     System.out.println("We will now update a computer from the database.");
-    Scanner sc = new Scanner(System.in);
-    try {
-      String name = setComputerName(sc);
+  }
 
-      Date intro = addComputerDateIntro(sc);
+  /**
+   * Deleted computer.
+   *
+   * @param name the name
+   */
+  public void deletedComputer(String name) {
+    System.out.println(name + "a été supprimé");
+  }
+  
+  public void invalidInput() {
+    System.out.println("Not a valid input. Please try again.");
+  }
 
-      Date discontinuation = addComputerDateDisc(sc, intro);
+  public void exit() {
+    System.out.println("Exiting program");   
+  }
 
-      Company companyId = setComputerCompanyId(sc);
-
-      Computer computer = controller.updateComputer(name, intro, discontinuation, companyId);
-      System.out.println(computer + " was updated");
-
-      mainMenu();
-    } catch (IllegalArgumentException e) {
-      System.out
-          .println("The argument you entered doesn't have the correct format. Please try again.");
-      updateComputer();
-    } catch (InputMismatchException e) {
-      System.out.println("Not a valid input. Please try again.");
-      updateComputer();
-    } catch (Exception e) {
-      System.out.println(e);
-      updateComputer();
-    }
+  public void invalidComputer(String message) {
+    System.out.println(message);   
+    
   }
 
 }

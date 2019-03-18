@@ -38,21 +38,12 @@ public class Company {
     this.name = name;
   }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see java.lang.Object#toString()
-   */
+  
   @Override
   public String toString() {
     return name;
   }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see java.lang.Object#hashCode()
-   */
   @Override
   public int hashCode() {
     final int prime = 31;
@@ -61,11 +52,6 @@ public class Company {
     return result;
   }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see java.lang.Object#equals(java.lang.Object)
-   */
   @Override
   public boolean equals(Object obj) {
     if (this == obj) {
@@ -109,23 +95,11 @@ public class Company {
       return company;
     }
 
-    /**
-     * Sets the name company.
-     *
-     * @param name the name
-     * @return the company builder
-     */
     public CompanyBuilder setNameCompany(String name) {
       this.name = name;
       return this;
     }
 
-    /**
-     * Sets the company id.
-     *
-     * @param id the id
-     * @return the company builder
-     */
     public CompanyBuilder setCompanyId(int id) {
       this.id = id;
       return this;

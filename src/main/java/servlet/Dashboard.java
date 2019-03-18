@@ -2,99 +2,168 @@ package servlet;
 
 import dto.ComputerDto;
 
-import java.io.IOException;
 import java.util.List;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import mapper.Mapper;
+import mapper.DtoMapper;
 
 import model.Computer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import service.ServiceComputer;
 
-@WebServlet("/Dashboard")
-@Configurable
-public class Dashboard extends HttpServlet {
-  private static final long serialVersionUID = 1L;
+@Controller
+public class Dashboard {
   private static final Logger logger = LoggerFactory.getLogger(Dashboard.class);
 
-  @Autowired
   private ServiceComputer serviceComputer;
-  
-  @Autowired
-  private Mapper mapper;
-  
-  @Override
-  public void init(ServletConfig config) throws ServletException {
-    super.init(config);
-    SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
-  }
+  private DtoMapper mapper;
 
   /**
-   * Do get.
-   * 
-   * @param request  the request
-   * @param response the response
-   * @throws ServletException the servlet exception
-   * @throws IOException      Signals that an I/O exception has occurred.
-   * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-   */
-  protected void doGet(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
-
-    int page = setPage(request);
-    int limit = setLimit(request);
-    
-    
-    List<Computer> computers = serviceComputer.listPage(limit, page);
-    List<ComputerDto> dto = mapper.listDtos(computers);
-    
-    request.setAttribute("page", page / 20);
-    request.setAttribute("maxId", serviceComputer.getMaxId()); 
-    request.setAttribute("limit", limit);
-    request.setAttribute("computers", dto);
-    request.setAttribute("Order", "ASC");
-
-    this.getServletContext().getRequestDispatcher("/views/dashboard.jsp").forward(request,
-        response);
-  }
-
-  /**
-   * Do post.
+   * Instantiates a new dashboard.
    *
-   * @param request  the request
-   * @param response the response
-   * @throws ServletException the servlet exception
-   * @throws IOException      Signals that an I/O exception has occurred.
-   * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+   * @param mapper          the mapper
+   * @param serviceComputer the service computer
    */
-  protected void doPost(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
-
+  @Autowired
+  public Dashboard(DtoMapper mapper, ServiceComputer serviceComputer) {
+    this.serviceComputer = serviceComputer;
+    this.mapper = mapper;
   }
-  
+
+  /**
+   * Sets the dashboard.
+   *
+   * @param pageString  the page string
+   * @param limitString the limit string
+   * @return the model and view
+   */
+  @GetMapping(value = "/Dashboard")
+  public ModelAndView setDashboard(
+      @RequestParam(defaultValue = "0", name = "page") String pageString,
+      @RequestParam(defaultValue = "20", name = "limit") String limitString) {
+
+    int page = setPage(pageString);
+    int limit = setLimit(limitString);
+    String order = "ASC";
+    List<Computer> computers = serviceComputer.listPage(limit, page);
+
+    return setMv(computers, order, page, limit);
+  }
+
+  /**
+   * Sets the computer.
+   *
+   * @param pageString  the page string
+   * @param limitString the limit string
+   * @param order       the order
+   * @param type        the type
+   * @return the model and view
+   */
+  @GetMapping(value = "/OrderBy")
+  public ModelAndView setComputer(
+      @RequestParam(defaultValue = "0", name = "page") String pageString,
+      @RequestParam(defaultValue = "20", name = "limit") String limitString,
+      @RequestParam(defaultValue = "ASC", name = "Order") String order,
+      @RequestParam(defaultValue = "id", name = "type") String type) {
+
+    int page = setPage(pageString);
+    int limit = setLimit(limitString);
+
+    List<Computer> computers = serviceComputer.orderBy(type, order, limit, page);
+    return setMv(computers, order, page, limit);
+  }
+
+  /**
+   * Gets the computer.
+   *
+   * @param computerName the computer name
+   * @return the computer
+   */
+  @GetMapping(value = "/GetComputer")
+  public ModelAndView getComputer(@RequestParam(name = "search") String computerName) {
+
+    Computer computer = new Computer();
+    computer.setName(computerName);
+    // TODO: get computers from companyName
+    List<Computer> computers = serviceComputer.getComputerFromName(computer);
+    List<ComputerDto> dto = mapper.listDtos(computers);
+
+    ModelAndView mv = new ModelAndView("dashboard");
+    mv.addObject("computers", dto);
+    mv.addObject("maxId", dto.size());
+    return mv;
+  }
+
+  /**
+   * Delete computer.
+   *
+   * @param idString the id string
+   * @return the model and view
+   */
+  @GetMapping(value = "/DeleteComputer")
+  public ModelAndView deleteComputer(
+      @RequestParam(required = false, name = "selection") String idString) {
+    Computer computer = new Computer();
+
+    if (idString != null) {
+      String[] idStringTable = idString.split(",");
+
+      for (String c : idStringTable) {
+        computer.setId(Integer.parseInt(c));
+        computer = serviceComputer.getComputer(computer).get(0);
+        logger.debug("Deleting computer: " + computer.getName());
+        serviceComputer.delete(computer);
+      }
+    }
+
+    return new ModelAndView("dashboard");
+  }
+
+  /**
+   * Sets the mv.
+   *
+   * @param computers the computers
+   * @param order     the order
+   * @param page      the page
+   * @param limit     the limit
+   * @return the model and view
+   */
+  public ModelAndView setMv(List<Computer> computers, String order, int page, int limit) {
+
+    if (order.equals("ASC")) {
+      order = "DESC";
+    } else {
+      order = "ASC";
+    }
+
+    List<ComputerDto> dto = mapper.listDtos(computers);
+
+    ModelAndView mv = new ModelAndView("dashboard");
+    mv.addObject("page", page / 20);
+    mv.addObject("maxId", serviceComputer.getMaxId());
+    mv.addObject("limit", limit);
+    mv.addObject("computers", dto);
+    mv.addObject("Order", order);
+    return mv;
+  }
+
   /**
    * Sets the limit.
    *
-   * @param request the request
+   * @param limitString the limit string
    * @return the int
    */
-  public int setLimit(HttpServletRequest request) {
-    String limitString = null;
+  public int setLimit(String limitString) {
     int limit = 20;
-    limitString = request.getParameter("limit");
+
     try {
       if (limitString != null) {
         limit = Integer.parseInt(limitString);
@@ -102,19 +171,19 @@ public class Dashboard extends HttpServlet {
     } catch (NumberFormatException se) {
       logger.error("PageString not valid");
     }
+
     return limit;
   }
-  
+
   /**
    * Sets the page.
    *
-   * @param request the request
+   * @param pageString the page string
    * @return the int
    */
-  public int setPage(HttpServletRequest request) {
-    String pageString = null;
+  public int setPage(String pageString) {
     int page = 0;
-    pageString = request.getParameter("page");
+
     try {
       if (pageString != null) {
         page = Integer.parseInt(pageString) * 20;
@@ -122,7 +191,7 @@ public class Dashboard extends HttpServlet {
     } catch (NumberFormatException e) {
       logger.error("PageString not valid");
     }
-    Math.floor(page);
+
     return page;
   }
 

@@ -2,6 +2,7 @@ package dao;
 
 import java.util.List;
 
+import model.Company;
 import model.Computer;
 
 public interface ComputerDao {
@@ -61,5 +62,9 @@ public interface ComputerDao {
   int getMaxId();
 
   List<Computer> orderBy(String column, String type, int limit, int offset);
+
+  void deleteComputerOfCompanyId(Company company);
+
+
 
 }

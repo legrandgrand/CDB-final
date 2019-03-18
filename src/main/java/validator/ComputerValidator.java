@@ -16,21 +16,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-
-
 @Component
 public class ComputerValidator {
-  
+
   private static final int MIN_ID = 0;
   private static final int MAX_ID = 43;
-  
+
   private static final Logger logger = LoggerFactory.getLogger(ComputerValidator.class);
 
   /**
    * Instantiates a new computer validator.
    */
-  private ComputerValidator() {}
-  
+  private ComputerValidator() {
+  }
+
   /**
    * Validate dto.
    *
@@ -39,8 +38,9 @@ public class ComputerValidator {
    */
   public void validateDto(ComputerDto dto) throws ComputerValidationException {
     validateName(dto.getName());
-    validateDateFormatDisc(dto.getDateDiscontinuation());
-    validateDateFormatIntro(dto.getDateIntro());
+    validateDateFormatDisc(dto.getDiscontinuation());
+    validateDateFormatIntro(dto.getIntro());
+    validateId(dto.getIdCompany());
   }
 
   /**
@@ -53,7 +53,7 @@ public class ComputerValidator {
     if (!name.equals("")) {
       logger.info("valid");
     } else {
-      throw new ComputerNameValidationException("Invalid name");
+      throw new ComputerNameValidationException("The name you entered is empty. Please try again.");
     }
   }
 
@@ -70,14 +70,14 @@ public class ComputerValidator {
         dt.parse(intro);
       }
     } catch (ParseException e) {
-      throw new ComputerIntroValidationException("Invalid type of Introduction");
+      throw new ComputerIntroValidationException("Date of introduction isn't of the valid format.");
     }
   }
 
   /**
    * Validate disc.
    *
-   * @param disc  the disc
+   * @param disc the disc
    * @throws ComputerDiscValidationException the computer disc validation exception
    */
   public void validateDateFormatDisc(String disc) throws ComputerDiscValidationException {
@@ -87,25 +87,23 @@ public class ComputerValidator {
         dt.parse(disc);
       }
     } catch (ParseException e) {
-      throw new ComputerDiscValidationException("Invalid type of Date of Discontinuation");
+      throw new ComputerDiscValidationException(
+          "Date of Discontinuation isn't of the valid format.");
     }
   }
-  
+
   /**
    * Validate date of disc.
    *
    * @param intro the intro
-   * @param disc the disc
+   * @param disc  the disc
    * @throws ComputerValidationException the computer validation exception
    */
-  public void validateDiscBeforeIntro(Date intro, Date disc) 
-      throws ComputerValidationException {
-    if (disc != null) {
-      if (disc.before(intro)) {
-        logger.info("");
-        throw new ComputerValidationException("The date you entered happened "
-            + "before the date of introduction. Please enter a valid date.");
-      }
+  public void validateDiscBeforeIntro(Date intro, Date disc) throws ComputerValidationException {
+    if (disc != null && disc.before(intro)) {
+      logger.info("");
+      throw new ComputerValidationException("The date you entered happened "
+          + "before the date of introduction. Please enter a valid date.");
     }
   }
 
@@ -120,7 +118,5 @@ public class ComputerValidator {
       throw new ComputerIdValidationException("Invalid company Id");
     }
   }
-  
-
 
 }

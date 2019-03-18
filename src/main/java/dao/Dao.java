@@ -7,7 +7,7 @@ import java.sql.SQLException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class Dao {
+public abstract class Dao {
   
   private Connection connection = null;
   
@@ -26,5 +26,12 @@ public class Dao {
     }
     return connection;
   }
+  
+  public HikariDataSource getDataSource() {
+    return ds;
+  }
+  
+  
+  
 
 }

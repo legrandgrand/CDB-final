@@ -1,26 +1,22 @@
 package servlet;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import model.Company;
 import model.Computer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import service.ServiceCompany;
 import service.ServiceComputer;
@@ -28,87 +24,92 @@ import service.ServiceComputer;
 /**
  * Servlet implementation class EditServlet.
  */
-@WebServlet("/EditComputer")
-@Configurable
-public class EditComputer extends HttpServlet {
-  private static final long serialVersionUID = 1L;
+@Controller
+public class EditComputer {
   private static final Logger logger = LoggerFactory.getLogger(EditComputer.class);
-  
-  @Autowired
+
   private ServiceComputer serviceComputer;
-  
-  @Autowired
   private ServiceCompany serviceCompany;
-  
-  @Override
-  public void init(ServletConfig config) throws ServletException {
-    super.init(config);
-    SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+  private Dashboard dashboard;
+
+  /**
+   * Instantiates a new edits the computer.
+   *
+   * @param serviceCompany the service company
+   * @param serviceComputer the service computer
+   * @param dashboard the dashboard
+   */
+  @Autowired
+  public EditComputer(ServiceCompany serviceCompany, ServiceComputer serviceComputer,
+      Dashboard dashboard) {
+    this.serviceComputer = serviceComputer;
+    this.serviceCompany = serviceCompany;
+    this.dashboard = dashboard;
   }
 
   /**
    * Do get.
    *
-   * @param request  the request
-   * @param response the response
-   * @throws ServletException the servlet exception
-   * @throws IOException      Signals that an I/O exception has occurred.
-   * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+   * @param stringId the string id
+   * @return the model and view
    */
-  protected void doGet(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
+  @GetMapping(value = "/EditComputer")
+  public ModelAndView doGet(@RequestParam(name = "id") String stringId) {
     List<Company> companies = serviceCompany.listCompany();
     logger.debug("Size of companies: " + companies.size());
-    request.setAttribute("companies", companies);
 
     Computer computer = new Computer();
-    String stringId = request.getQueryString();
     computer.setId(Integer.parseInt(stringId));
-    
     computer = serviceComputer.getComputer(computer).get(0);
-    request.setAttribute("computer", computer);
 
-    this.getServletContext().getRequestDispatcher("/views/editComputer.jsp").forward(request,
-        response);
+    ModelAndView mv = new ModelAndView();
+    mv.addObject("companies", companies);
+    mv.addObject("computer", computer);
+    mv.setViewName("editComputer");
+    return mv;
+
   }
 
   /**
    * Do post.
    *
-   * @param request  the request
-   * @param response the response
-   * @throws ServletException the servlet exception
-   * @throws IOException      Signals that an I/O exception has occurred.
-   * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+   * @param computerName the computer name
+   * @param introString the intro string
+   * @param discString the disc string
+   * @param companyName the company name
+   * @return the model and view
    */
-  protected void doPost(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
+  @PostMapping(value = "/EditComputer")
+  public ModelAndView doPost(@RequestParam(name = "name") String computerName,
+      @RequestParam(required = false, name = "intro") String introString,
+      @RequestParam(required = false, name = "disc") String discString,
+      @RequestParam(required = false, name = "companyname") String companyName) {
     Computer computer = new Computer();
-    computer.setName(request.getParameter("name"));
+    computer.setName(computerName);
 
-    String introString = request.getParameter("intro");
-    Date intro = setComputerIntro(introString);
-    computer.setDateIntro(intro);
+    Date intro = setComputerDate(introString);
+    computer.setIntro(intro);
 
-    String disc = request.getParameter("disc"); // TODO: handle situation where disc>intro
-    computer.setDateDiscontinuation(setComputerDisc(intro, disc));
-    
+    computer.setDiscontinuation(setComputerDate(discString));
+
     Company company = new Company();
-    company.setName(request.getParameter("companyname"));
+    company.setName(companyName);
 
     company = serviceCompany.getCompany(company).get(0);
 
     computer.setCompany(company);
     logger.debug("Updating computer" + computer);
     serviceComputer.update(computer);
-    response.sendRedirect(request.getContextPath() + "/Dashboard");
+
+    return dashboard.setDashboard("0", "20");
+
   }
 
   /**
-   * Sets the timestamp.
+   * Sets the date.
    *
-   * @param timestamp the timestamp to change
-   * @return the timestamp
+   * @param timestamp the timestamp
+   * @return the date
    */
   public Date setDate(String timestamp) {
     timestamp = timestamp + " 00:00:00";// timestamp format: YYYY-MM-DD (user input) + 00:00:00
@@ -122,45 +123,17 @@ public class EditComputer extends HttpServlet {
   }
 
   /**
-   * Sets the computer intro.
+   * Sets the computer date.
    *
-   * @param disc the disc
-   * @return the timestamp
+   * @param stringDate the string date
+   * @return the date
    */
-  public Date setComputerIntro(String disc) {
+  public Date setComputerDate(String stringDate) {
     Date intro = null;
-    if (!disc.equals("")) {
-      intro = setDate(disc);
+    if (stringDate != null) {
+      intro = setDate(stringDate);
     }
     logger.debug("Setting computer date of introduction: " + intro);
     return intro;
-  }
-
-  /**
-   * Sets the computer disc.
-   *
-   * @param intro the intro
-   * @param disc  the disc
-   * @return the date
-   */
-  public Date setComputerDisc(Date intro, String disc) { // TODO: to change
-    Date discontinuation = null;
-    do {
-      if (!disc.equals("")) {
-        discontinuation = setDate(disc);
-        if (null != intro) { // TODO: null.equals()null
-          break;
-        }
-        if (discontinuation.before(intro)) {
-          logger.info("The date you entered happened before the date of introduction. "
-              + "Please enter a valid date.");
-        }
-      } else {
-        break;
-      }
-    } while (null != intro || discontinuation.before(intro));
-    logger.debug("Setting computer date of discontinuation: " + discontinuation);
-    return discontinuation;
-
   }
 }
