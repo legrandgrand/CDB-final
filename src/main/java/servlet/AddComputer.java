@@ -1,10 +1,14 @@
 package servlet;
 
+import dto.ComputerDto;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import java.util.Date;
 import java.util.List;
+
+import mapper.DtoMapper;
 
 import model.Company;
 import model.Computer;
@@ -29,20 +33,22 @@ public class AddComputer {
   private ServiceComputer serviceComputer;
   private ServiceCompany serviceCompany;
   private Dashboard dashboard;
+  private DtoMapper mapper;
 
   /**
    * Instantiates a new adds the computer.
    *
-   * @param serviceCompany the service company
+   * @param serviceCompany  the service company
    * @param serviceComputer the service computer
-   * @param dashboard the dashboard
+   * @param dashboard       the dashboard
    */
   @Autowired
-  public AddComputer(ServiceCompany serviceCompany, ServiceComputer serviceComputer,
-      Dashboard dashboard) {
+  public AddComputer(DtoMapper mapper, ServiceCompany serviceCompany,
+      ServiceComputer serviceComputer, Dashboard dashboard) {
     this.serviceComputer = serviceComputer;
     this.serviceCompany = serviceCompany;
     this.dashboard = dashboard;
+    this.mapper = mapper;
   }
 
   /**
@@ -66,9 +72,9 @@ public class AddComputer {
    * Do post.
    *
    * @param computerName the computer name
-   * @param introString the intro string
-   * @param discString the disc string
-   * @param companyName the company name
+   * @param introString  the intro string
+   * @param discString   the disc string
+   * @param companyName  the company name
    * @return the model and view
    */
   @PostMapping(value = "/AddComputer")
@@ -76,19 +82,20 @@ public class AddComputer {
       @RequestParam(required = false, name = "intro") String introString,
       @RequestParam(required = false, name = "disc") String discString,
       @RequestParam(required = false, name = "companyname") String companyName) {
-
-    Computer computer = new Computer();
-    computer.setName(computerName);
-
-    Date intro = setComputerIntro(introString);
-    computer.setIntro(intro);
-
-    computer.setDiscontinuation(setComputerDisc(intro, discString));
-
     Company company = new Company();
     company.setName(companyName);
     company = serviceCompany.getCompany(company).get(0);
-    computer.setCompany(company);
+    
+    
+    ComputerDto dto = new ComputerDto();
+    dto.setName(computerName);
+    dto.setIntro(introString);
+    dto.setDiscontinuation(discString);
+
+    dto.setCompanyName(company.getName());
+    dto.setIdCompany(company.getId());
+
+    Computer computer = mapper.dtoToComputer(dto);
 
     logger.debug("Adding computer" + computer);
     serviceComputer.add(computer);
@@ -132,7 +139,7 @@ public class AddComputer {
    * Sets the computer disc.
    *
    * @param intro the intro
-   * @param disc the disc
+   * @param disc  the disc
    * @return the date
    */
   public Date setComputerDisc(Date intro, String disc) { // TODO: to change

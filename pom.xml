@@ -6,7 +6,7 @@
 	<properties>
 		<maven.compiler.source>1.6</maven.compiler.source>
 		<maven.compiler.target>1.6</maven.compiler.target>
-		<checkstyle.version>8.17</checkstyle.version>
+		<checkstyle.version>8.18</checkstyle.version>
 		<mysql.version>8.0.15</mysql.version>
 		<junit.version>4.12</junit.version>
 		<mockito.version>1.9.5</mockito.version>
@@ -15,11 +15,14 @@
 		<jstl.version>1.2</jstl.version>
 		<HikariCP.version>3.2.0</HikariCP.version>
 		<spring.version>5.1.3.RELEASE</spring.version>
+		<cdb.version>0.0.1-SNAPSHOT</cdb.version>
+		<mavencheckstyle.version>3.0.0</mavencheckstyle.version>
+		<mavenccompiler.version>3.1</mavenccompiler.version>
 	</properties>
 
 	<groupId>computer-database</groupId>
 	<artifactId>computer-database</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>${cdb.version}</version>
 	<packaging>war</packaging>
 
 
@@ -122,7 +125,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
-				<version>3.0.0</version>
+				<version>${mavencheckstyle.version}</version>
 				<reportSets>
 					<reportSet>
 						<reports>
@@ -139,7 +142,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.1</version>
+				<version>${mavenccompiler.version}</version>
 				<configuration>
 					<source>10</source>
 					<target>10</target>

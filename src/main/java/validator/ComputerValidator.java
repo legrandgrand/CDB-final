@@ -40,6 +40,7 @@ public class ComputerValidator {
     validateName(dto.getName());
     validateDateFormatDisc(dto.getDiscontinuation());
     validateDateFormatIntro(dto.getIntro());
+    validateId(dto.getIdCompany());
   }
 
   /**

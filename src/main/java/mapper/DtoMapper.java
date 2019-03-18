@@ -1,6 +1,7 @@
 package mapper;
 
 import dto.ComputerDto;
+import exception.ComputerValidationException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -22,14 +23,18 @@ import validator.ComputerValidator;
 
 @Component
 public class DtoMapper {
-  
+
   private static final Logger logger = LoggerFactory.getLogger(DtoMapper.class);
-  
+
   @Autowired
   ComputerValidator validator;
 
-  private DtoMapper() {}
-  
+  /**
+   * Instantiates a new dto mapper.
+   */
+  private DtoMapper() {
+  }
+
   /**
    * Dto to computer.
    *
@@ -38,12 +43,18 @@ public class DtoMapper {
    */
   public Computer dtoToComputer(ComputerDto dto) {
     Computer computer = new Computer();
-    
-    computer.setId(dto.getIdComputer());
-    computer.setIntro(setDate(dto.getIntro()));
-    computer.setDiscontinuation(setDate(dto.getDiscontinuation()));
-    computer.setCompany(new Company(dto.getCompanyName(), dto.getIdCompany()));
-   
+    try {
+      validator.validateDto(dto);
+
+      // computer.setId(dto.getIdComputer());
+      computer.setName(dto.getName());
+      computer.setIntro(setDate(dto.getIntro()));
+      computer.setDiscontinuation(setDate(dto.getDiscontinuation()));
+      computer.setCompany(new Company(dto.getCompanyName(), dto.getIdCompany()));
+    } catch (ComputerValidationException e) {
+      logger.error(e.getMessage(), e);
+    }
+
     return computer;
   }
 
@@ -57,7 +68,7 @@ public class DtoMapper {
     ComputerDto computerDto = new ComputerDto(computer.getId(), computer.getName(),
         dateToString(computer.getIntro()), dateToString(computer.getDiscontinuation()),
         computer.getCompany().getName(), computer.getCompany().getId());
-    
+
     return computerDto;
   }
 
@@ -104,7 +115,7 @@ public class DtoMapper {
     }
     return "";
   }
-  
+
   /**
    * Sets the date.
    *

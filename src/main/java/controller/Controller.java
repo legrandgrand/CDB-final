@@ -128,7 +128,9 @@ public class Controller {
    * Delete computer.
    */
   public void deleteComputer(Scanner sc) {
+    sc.nextLine();
     view.deleteComputer();
+    
     String name = null;
     name = sc.nextLine();
 
@@ -145,7 +147,9 @@ public class Controller {
    * Delete company.
    */
   public void deleteCompany(Scanner sc) {
+    sc.nextLine();
     view.startDeleteCompany();
+    
     int companyId = sc.nextInt();
     Company company = new Company();
     company.setId(companyId);
@@ -252,6 +256,7 @@ public class Controller {
   public void addComputer(Scanner sc) {
     sc.nextLine();
     view.startAddComputer();
+    
     Computer computer = setComputer(sc);
     logger.debug("Adding computer: " + computer);
     serviceComputer.add(computer);
@@ -263,7 +268,9 @@ public class Controller {
    * Update computer.
    */
   public void updateComputer(Scanner sc) {
+    sc.nextLine();
     view.startUpdateComputer();
+    
     Computer computer = setComputer(sc);
     logger.debug("Updating computer: " + computer);
     serviceComputer.update(computer);

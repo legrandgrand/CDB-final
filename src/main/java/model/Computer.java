@@ -13,11 +13,11 @@ public class Computer {
   /**
    * Instantiates a new computer.
    *
-   * @param name                the name PC
-   * @param company             the company
-   * @param dateIntro           the date intro
-   * @param dateDiscontinuation the date discontinuation
-   * @param id                  the id
+   * @param name the name
+   * @param company the company
+   * @param intro the intro
+   * @param discontinuation the discontinuation
+   * @param id the id
    */
   public Computer(String name, Company company, Date intro, Date discontinuation, int id) {
     this.setName(name);
@@ -26,6 +26,13 @@ public class Computer {
     this.setDiscontinuation(discontinuation);
     this.setId(id);
   }
+  
+  /**
+   * Instantiates a new computer.
+   */
+  public Computer() {
+  }
+
 
   public int getId() {
     return id;
@@ -33,12 +40,6 @@ public class Computer {
 
   public void setId(int id) {
     this.id = id;
-  }
-
-  /**
-   * Instantiates a new computer.
-   */
-  public Computer() {
   }
 
   public Date getIntro() {
@@ -73,6 +74,9 @@ public class Computer {
     this.name = name;
   }
 
+  /* (non-Javadoc)
+   * @see java.lang.Object#toString()
+   */
   @Override
   public String toString() {
     return "Name: " + name + "\n Introduction : " + intro + "\n Discontinuation: "
@@ -145,7 +149,7 @@ public class Computer {
     private int id;
 
     /**
-     * Builds the Computer.
+     * Builds the.
      *
      * @return the computer
      */
@@ -161,26 +165,56 @@ public class Computer {
       return computer;
     }
 
+    /**
+     * Sets the name.
+     *
+     * @param name the name
+     * @return the computer builder
+     */
     public ComputerBuilder setName(String name) {
       this.name = name;
       return this;
     }
 
+    /**
+     * Sets the company.
+     *
+     * @param company the company
+     * @return the computer builder
+     */
     public ComputerBuilder setCompany(Company company) {
       this.company = company;
       return this;
     }
 
+    /**
+     * Sets the intro.
+     *
+     * @param dateIntro the date intro
+     * @return the computer builder
+     */
     public ComputerBuilder setIntro(Date dateIntro) {
       this.intro = dateIntro;
       return this;
     }
 
+    /**
+     * Sets the discontinuation.
+     *
+     * @param discontinuation the discontinuation
+     * @return the computer builder
+     */
     public ComputerBuilder setDiscontinuation(Date discontinuation) {
       this.discontinuation = discontinuation;
       return this;
     }
 
+    /**
+     * Sets the id.
+     *
+     * @param id the id
+     * @return the computer builder
+     */
     public ComputerBuilder setId(int id) {
       this.id = id;
       return this;

@@ -30,6 +30,10 @@ public class ComputerDto {
     this.idCompany = idCompany;
   }
   
+  public ComputerDto() {
+    
+  }
+  
   public int getIdComputer() {
     return idComputer;
   }

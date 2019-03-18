@@ -1,7 +1,6 @@
 package servlet;
 
 import dto.ComputerDto;
-import exception.Error404;
 
 import java.util.List;
 
@@ -14,7 +13,6 @@ import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -127,17 +125,6 @@ public class Dashboard {
     }
 
     return new ModelAndView("dashboard");
-  }
-
-  /**
-   * Handle 404 error.
-   *
-   * @return the model and view
-   */
-  @ExceptionHandler(Error404.class)
-  public ModelAndView handle404Error() {
-
-    return new ModelAndView("404");
   }
 
   /**

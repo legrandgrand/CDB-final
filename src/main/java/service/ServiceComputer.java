@@ -3,7 +3,6 @@ package service;
 import dao.ComputerDaoImp;
 import exception.ComputerValidationException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import model.Computer;
@@ -26,7 +25,7 @@ public class ServiceComputer {
   /**
    * Instantiates a new service computer.
    *
-   * @param computerDao the computer dao
+   * @param computerDao       the computer dao
    * @param computerValidator the computer validator
    */
   @Autowired
@@ -61,14 +60,6 @@ public class ServiceComputer {
    * @return the computer from name
    */
   public List<Computer> getComputerFromName(Computer computer) {
-    List<Computer> list = new ArrayList<>();//TODO: Refactor this
-    try {
-      computerValidator.validateName(computer.getName());
-      logger.error("Valid computer name");
-    } catch (ComputerValidationException e) {
-      logger.error(e.getMessage(), e);
-      return list;
-    }   
     return computerDao.getComputerFromName(computer);
   }
 
@@ -76,21 +67,20 @@ public class ServiceComputer {
    * List page.
    *
    * @param limit the limit
-   * @param page the page
+   * @param page  the page
    * @return the list
    */
   public List<Computer> listPage(int limit, int page) {
-    logger.debug("limit: " + limit + "page: " + page);
     return computerDao.listPage(limit, page);
   }
-  
+
   /**
    * Order by.
    *
    * @param column the column
-   * @param type the type
-   * @param limit the limit
-   * @param page the page
+   * @param type   the type
+   * @param limit  the limit
+   * @param page   the page
    * @return the list
    */
   public List<Computer> orderBy(String column, String type, int limit, int page) {
@@ -103,12 +93,7 @@ public class ServiceComputer {
    * @param computer the computer
    */
   public void delete(Computer computer) {
-    try {
-      computerValidator.validateName(computer.getName());
-      computerDao.delete(computer);
-    } catch (ComputerValidationException e) {
-      logger.error(e.getMessage(), e);
-    }
+    computerDao.delete(computer);
   }
 
   /**
@@ -147,6 +132,5 @@ public class ServiceComputer {
   public int getMaxId() {
     return computerDao.getMaxId();
   }
-
 
 }
