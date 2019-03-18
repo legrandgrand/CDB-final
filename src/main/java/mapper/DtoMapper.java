@@ -46,7 +46,6 @@ public class DtoMapper {
     try {
       validator.validateDto(dto);
 
-      // computer.setId(dto.getIdComputer());
       computer.setName(dto.getName());
       computer.setIntro(setDate(dto.getIntro()));
       computer.setDiscontinuation(setDate(dto.getDiscontinuation()));

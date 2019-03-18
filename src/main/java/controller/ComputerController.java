@@ -1,11 +1,14 @@
-package servlet;
+package controller;
 
 import dto.ComputerDto;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import mapper.DtoMapper;
-
+import model.Company;
 import model.Computer;
 
 import org.slf4j.Logger;
@@ -14,16 +17,19 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import service.ServiceCompany;
 import service.ServiceComputer;
 
 @Controller
-public class Dashboard {
-  private static final Logger logger = LoggerFactory.getLogger(Dashboard.class);
+public class ComputerController {
+  private static final Logger logger = LoggerFactory.getLogger(ComputerController.class);
 
   private ServiceComputer serviceComputer;
+  private ServiceCompany serviceCompany;
   private DtoMapper mapper;
 
   /**
@@ -33,8 +39,9 @@ public class Dashboard {
    * @param serviceComputer the service computer
    */
   @Autowired
-  public Dashboard(DtoMapper mapper, ServiceComputer serviceComputer) {
+  public ComputerController(DtoMapper mapper, ServiceCompany serviceCompany, ServiceComputer serviceComputer) {
     this.serviceComputer = serviceComputer;
+    this.serviceCompany = serviceCompany;
     this.mapper = mapper;
   }
 
@@ -147,12 +154,137 @@ public class Dashboard {
     List<ComputerDto> dto = mapper.listDtos(computers);
 
     ModelAndView mv = new ModelAndView("dashboard");
-    mv.addObject("page", page / 20);
-    mv.addObject("maxId", serviceComputer.getMaxId());
-    mv.addObject("limit", limit);
     mv.addObject("computers", dto);
+    mv.addObject("page", page / 20);
+    mv.addObject("limit", limit);
     mv.addObject("Order", order);
+    mv.addObject("maxId", serviceComputer.getMaxId());
     return mv;
+  }
+  
+  /**
+   * Sets the add Computer page.
+   *
+   * @return the model and view
+   */
+  @GetMapping(value = "/AddComputer")
+  public ModelAndView getAdd() {
+
+    List<Company> companies = serviceCompany.listCompany();
+    logger.debug("Size of companies: " + companies.size());
+
+    ModelAndView mv = new ModelAndView();
+    mv.addObject("companies", companies);
+    mv.setViewName("addComputer");
+    return mv;
+  }
+  
+  /**
+   * Do post.
+   *
+   * @param computerName the computer name
+   * @param introString  the intro string
+   * @param discString   the disc string
+   * @param companyName  the company name
+   * @return the model and view
+   */
+  @PostMapping(value = "/AddComputer")
+  public ModelAndView postAdd(@RequestParam(name = "name") String computerName,
+      @RequestParam(required = false, name = "intro") String introString,
+      @RequestParam(required = false, name = "disc") String discString,
+      @RequestParam(required = false, name = "companyname") String companyName) {
+    
+    Company company = new Company();
+    company.setName(companyName);
+    company = serviceCompany.getCompany(company).get(0);
+        
+    ComputerDto dto = new ComputerDto();
+    dto.setName(computerName);
+    dto.setIntro(introString);
+    dto.setDiscontinuation(discString);
+    dto.setCompanyName(company.getName());
+    dto.setIdCompany(company.getId());
+
+    Computer computer = mapper.dtoToComputer(dto);
+
+    logger.debug("Adding computer" + computer);
+    serviceComputer.add(computer);
+
+    return setDashboard("0", "20");
+  }
+  
+  /**
+   * Do get.
+   *
+   * @param stringId the string id
+   * @return the model and view
+   */
+  @GetMapping(value = "/EditComputer")
+  public ModelAndView getEdit(@RequestParam(name = "id") String stringId) {
+    List<Company> companies = serviceCompany.listCompany();
+    logger.debug("Size of companies: " + companies.size());
+
+    Computer computer = new Computer();
+    computer.setId(Integer.parseInt(stringId));
+    computer = serviceComputer.getComputer(computer).get(0);
+
+    ModelAndView mv = new ModelAndView();
+    mv.addObject("companies", companies);
+    mv.addObject("computer", computer);
+    mv.setViewName("editComputer");
+    return mv;
+
+  }
+
+  /**
+   * Do post.
+   *
+   * @param computerName the computer name
+   * @param introString the intro string
+   * @param discString the disc string
+   * @param companyName the company name
+   * @return the model and view
+   */
+  @PostMapping(value = "/EditComputer")
+  public ModelAndView postEdit(@RequestParam(name = "name") String computerName,
+      @RequestParam(required = false, name = "intro") String introString,
+      @RequestParam(required = false, name = "disc") String discString,
+      @RequestParam(required = false, name = "companyname") String companyName) {
+    
+    Company company = new Company();
+    company.setName(companyName);
+    company = serviceCompany.getCompany(company).get(0);
+        
+    ComputerDto dto = new ComputerDto();
+    dto.setName(computerName);
+    dto.setIntro(introString);
+    dto.setDiscontinuation(discString);
+    dto.setCompanyName(company.getName());
+    dto.setIdCompany(company.getId());
+
+    Computer computer = mapper.dtoToComputer(dto);
+    logger.debug("Updating computer" + computer);
+    serviceComputer.update(computer);
+
+    return setDashboard("0", "20");
+
+  }
+
+  /**
+   * Sets the date.
+   *
+   * @param timestamp the timestamp
+   * @return the date
+   */
+  public Date setDate(String timestamp) {
+    timestamp = timestamp + " 00:00:00";// timestamp format: YYYY-MM-DD (user input) + 00:00:00
+    SimpleDateFormat dt = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+    try {
+      return dt.parse(timestamp);
+    } catch (ParseException e) {
+      logger.error(e.getMessage(), e);
+    }
+    return null;
   }
 
   /**
