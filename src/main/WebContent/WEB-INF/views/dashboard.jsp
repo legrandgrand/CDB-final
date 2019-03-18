@@ -24,8 +24,8 @@
 			</span> 
 			<span class="pull-right"> 
 				<select id="locales">
-					<option value="en" th:text="<spring:message code="lang.eng" text="default"/>"><spring:message code="english" /></option>
-					<option value="fr" th:text="<spring:message code="lang.fr" text="default"/>"><spring:message code="french" /></option>
+					<option value="lang.en" th:text="<spring:message code="lang.eng" text="default"/>"><spring:message code="english" /></option>
+					<option value="lang.fr" th:text="<spring:message code="lang.fr" text="default"/>"><spring:message code="french" /></option>
 				</select>
 			</span>
 
@@ -35,8 +35,7 @@
 	<section id="main">
 		<div class="container">
 			<h1 id="homeTitle">
-				<c:out value="${maxId}" />
-				<spring:message code="amount" />
+				${maxId} <spring:message code="amount" />
 			</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
@@ -101,8 +100,8 @@
 								value="${computer.idComputer}"></td>
 							<td><a href="EditComputer?id=${computer.idComputer}"
 								onclick=""><c:out value="${computer.name}" /></a></td>
-							<td><c:out value="${computer.dateIntro}" /></td>
-							<td><c:out value="${computer.dateDiscontinuation}" /></td>
+							<td><c:out value="${computer.intro}" /></td>
+							<td><c:out value="${computer.discontinuation}" /></td>
 							<td><c:out value="${computer.companyName}" /></td>
 						</tr>
 					</c:forEach>

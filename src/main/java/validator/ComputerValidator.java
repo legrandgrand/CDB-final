@@ -38,8 +38,8 @@ public class ComputerValidator {
    */
   public void validateDto(ComputerDto dto) throws ComputerValidationException {
     validateName(dto.getName());
-    validateDateFormatDisc(dto.getDateDiscontinuation());
-    validateDateFormatIntro(dto.getDateIntro());
+    validateDateFormatDisc(dto.getDiscontinuation());
+    validateDateFormatIntro(dto.getIntro());
   }
 
   /**
@@ -52,7 +52,7 @@ public class ComputerValidator {
     if (!name.equals("")) {
       logger.info("valid");
     } else {
-      throw new ComputerNameValidationException("Invalid name");
+      throw new ComputerNameValidationException("The name you entered is empty. Please try again.");
     }
   }
 
@@ -69,7 +69,7 @@ public class ComputerValidator {
         dt.parse(intro);
       }
     } catch (ParseException e) {
-      throw new ComputerIntroValidationException("Invalid type of Introduction");
+      throw new ComputerIntroValidationException("Date of introduction isn't of the valid format.");
     }
   }
 
@@ -86,7 +86,8 @@ public class ComputerValidator {
         dt.parse(disc);
       }
     } catch (ParseException e) {
-      throw new ComputerDiscValidationException("Invalid type of Date of Discontinuation");
+      throw new ComputerDiscValidationException(
+          "Date of Discontinuation isn't of the valid format.");
     }
   }
 

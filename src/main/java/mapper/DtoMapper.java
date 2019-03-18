@@ -40,8 +40,8 @@ public class DtoMapper {
     Computer computer = new Computer();
     
     computer.setId(dto.getIdComputer());
-    computer.setDateIntro(setDate(dto.getDateIntro()));
-    computer.setDateDiscontinuation(setDate(dto.getDateDiscontinuation()));
+    computer.setIntro(setDate(dto.getIntro()));
+    computer.setDiscontinuation(setDate(dto.getDiscontinuation()));
     computer.setCompany(new Company(dto.getCompanyName(), dto.getIdCompany()));
    
     return computer;
@@ -55,7 +55,7 @@ public class DtoMapper {
    */
   public ComputerDto computerToDto(Computer computer) {
     ComputerDto computerDto = new ComputerDto(computer.getId(), computer.getName(),
-        dateToString(computer.getDateIntro()), dateToString(computer.getDateDiscontinuation()),
+        dateToString(computer.getIntro()), dateToString(computer.getDiscontinuation()),
         computer.getCompany().getName(), computer.getCompany().getId());
     
     return computerDto;

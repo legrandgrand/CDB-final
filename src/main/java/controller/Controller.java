@@ -38,13 +38,13 @@ public class Controller {
    * Instantiates a new controller.
    *
    * @param computerValidator the computer validator
-   * @param serviceCompany the service company
-   * @param serviceComputer the service computer
-   * @param view the view
+   * @param serviceCompany    the service company
+   * @param serviceComputer   the service computer
+   * @param view              the view
    */
   @Autowired
-  public Controller(ComputerValidator computerValidator, 
-      ServiceCompany serviceCompany, ServiceComputer serviceComputer, View view) {
+  public Controller(ComputerValidator computerValidator, ServiceCompany serviceCompany,
+      ServiceComputer serviceComputer, View view) {
     this.view = view;
     this.serviceCompany = serviceCompany;
     this.serviceComputer = serviceComputer;
@@ -65,6 +65,7 @@ public class Controller {
   public void mainMenu() {
     view.mainMenu();
     Scanner sc = new Scanner(System.in);
+
     try {
       int userChoice = sc.nextInt();
       switch (userChoice) { // TODO: enums
@@ -75,30 +76,28 @@ public class Controller {
           listComputers();
           break;
         case 3:
-          addComputer();
+          addComputer(sc);
           break;
         case 4:
-          deleteComputer();
+          deleteComputer(sc);
           break;
         case 5:
-          deleteCompany();
+          deleteCompany(sc);
           break;
         case 6:
-          updateComputer();
+          updateComputer(sc);
           break;
         case 7:
-          System.out.println("Exiting program");
+          view.exit();
           sc.close();
-          System.exit(0);
           break;
         default:
-          System.out.println("Not a valid statement.");
+          view.invalidInput();
           mainMenu();
           break;
       }
     } catch (InputMismatchException e) {
-      System.out.println("Not a valid input.");
-
+      view.invalidInput();
       mainMenu();
     }
   }
@@ -128,15 +127,16 @@ public class Controller {
   /**
    * Delete computer.
    */
-  public void deleteComputer() {
+  public void deleteComputer(Scanner sc) {
     view.deleteComputer();
     String name = null;
-    Scanner sc = new Scanner(System.in);
     name = sc.nextLine();
+
     Computer computer = new Computer();
     computer.setName(name);
     serviceComputer.delete(computer);
     view.deletedComputer(name);
+
     logger.debug("Deleting computer named" + name);
     mainMenu();
   }
@@ -144,18 +144,16 @@ public class Controller {
   /**
    * Delete company.
    */
-  public void deleteCompany() {
+  public void deleteCompany(Scanner sc) {
     view.startDeleteCompany();
-    try (Scanner sc = new Scanner(System.in)) {
-      int companyId = sc.nextInt();
-      Company company = new Company();
-      company.setId(companyId);
-      logger.debug("Deleting company of id: " + companyId);
-      serviceCompany.delete(company);
-      view.deleteCompany(company);
-      sc.nextLine();
-      mainMenu();
-    }
+    int companyId = sc.nextInt();
+    Company company = new Company();
+    company.setId(companyId);
+    logger.debug("Deleting company of id: " + companyId);
+    serviceCompany.delete(company);
+    view.deleteCompany(company);
+    sc.nextLine();
+    mainMenu();
   }
 
   /**
@@ -164,10 +162,10 @@ public class Controller {
    * @return the string
    * @throws ComputerValidationException the computer validation exception
    */
-  public String setComputerName() throws ComputerValidationException {
+  public String setComputerName(Scanner sc) throws ComputerValidationException {
     view.setComputerName();
-    Scanner sc = new Scanner(System.in);
     String name = sc.nextLine();
+
     try {
       computerValidator.validateName(name);
       logger.debug("Setting computer name: " + name);
@@ -183,12 +181,12 @@ public class Controller {
    * @return the date
    * @throws ComputerValidationException the computer validation exception
    */
-  public Date setComputerIntro() throws ComputerValidationException {
+  public Date setComputerIntro(Scanner sc) throws ComputerValidationException {
     view.addComputerDateIntro();
-    Scanner sc = new Scanner(System.in);
     Date intro = null;
     String timestamp = null;
     timestamp = sc.nextLine();
+
     try {
       computerValidator.validateDateFormatIntro(timestamp);
     } catch (ComputerValidationException e) {
@@ -208,12 +206,12 @@ public class Controller {
    * @return the date
    * @throws ComputerValidationException the computer validation exception
    */
-  public Date setComputerDisc() throws ComputerValidationException {
+  public Date setComputerDisc(Scanner sc) throws ComputerValidationException {
     view.addComputerDateDisc();
     Date discontinuation = null;
     String timestamp = null;
-    Scanner sc = new Scanner(System.in);
     timestamp = sc.nextLine();
+
     try {
       computerValidator.validateDateFormatDisc(timestamp);
     } catch (ComputerValidationException e) {
@@ -233,35 +231,40 @@ public class Controller {
    *
    * @return the company
    */
-  public Company setComputerCompany() {
+  public Company setComputerCompany(Scanner sc) throws ComputerValidationException {
     view.setComputerCompanyId();
     Company company = new Company();
-    Scanner sc = new Scanner(System.in);
     company.setName(sc.nextLine().trim());
     logger.debug("Setting company Id: " + company.getName());
-    company = serviceCompany.getCompany(company).get(0);
+    List<Company> list = serviceCompany.getCompany(company);
+
+    try {
+      company = list.get(0);
+    } catch (IndexOutOfBoundsException e) {
+      throw new ComputerValidationException("The company name you entered doesn't exist");
+    }
     return company;
   }
 
   /**
    * Adds the computer.
    */
-  public void addComputer() {
+  public void addComputer(Scanner sc) {
+    sc.nextLine();
     view.startAddComputer();
-    Computer computer = setComputer();
+    Computer computer = setComputer(sc);
     logger.debug("Adding computer: " + computer);
     serviceComputer.add(computer);
     view.addComputer(computer);
     mainMenu();
   }
 
-
   /**
    * Update computer.
    */
-  public void updateComputer() {
+  public void updateComputer(Scanner sc) {
     view.startUpdateComputer();
-    Computer computer = setComputer();
+    Computer computer = setComputer(sc);
     logger.debug("Updating computer: " + computer);
     serviceComputer.update(computer);
     view.updateComputer(computer);
@@ -273,25 +276,19 @@ public class Controller {
    *
    * @return the computer
    */
-  public Computer setComputer() {
+  public Computer setComputer(Scanner sc) {
     String name = null;
     Date intro = null;
     Date discontinuation = null;
     Company company = new Company();
     try {
-      name = setComputerName();
-      intro = setComputerIntro();
-      discontinuation = setComputerDisc();
-      company = setComputerCompany();
+      name = setComputerName(sc);
+      intro = setComputerIntro(sc);
+      discontinuation = setComputerDisc(sc);
+      company = setComputerCompany(sc);
     } catch (ComputerValidationException e) {
       logger.error(e.getMessage(), e);
-      mainMenu();
-    } catch (IllegalArgumentException e) {
-      System.out
-          .println("The argument you entered doesn't have the correct format. Please try again.");
-      mainMenu();
-    } catch (InputMismatchException e) {
-      System.out.println("Not a valid input. Please try again.");
+      view.invalidComputer(e.getMessage());
       mainMenu();
     }
     return new Computer(name, company, intro, discontinuation, 0);

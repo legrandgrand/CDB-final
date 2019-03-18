@@ -2,6 +2,7 @@ package servlet;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+
 import java.util.Date;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import model.Computer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -79,9 +81,9 @@ public class AddComputer {
     computer.setName(computerName);
 
     Date intro = setComputerIntro(introString);
-    computer.setDateIntro(intro);
+    computer.setIntro(intro);
 
-    computer.setDateDiscontinuation(setComputerDisc(intro, discString));
+    computer.setDiscontinuation(setComputerDisc(intro, discString));
 
     Company company = new Company();
     company.setName(companyName);

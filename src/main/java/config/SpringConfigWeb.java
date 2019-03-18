@@ -74,17 +74,27 @@ public class SpringConfigWeb extends SpringConfig
    *
    * @return the locale resolver
    */
-//  @Bean
-//  public LocaleResolver localeResolver() {
-//    CookieLocaleResolver localeResolver = new CookieLocaleResolver();
-//    return localeResolver;
-//  }
+  @Bean
+  public LocaleResolver localeResolver() {
+    CookieLocaleResolver localeResolver = new CookieLocaleResolver();
+    return localeResolver;
+  }
+
+  /**
+   * Locale change interceptor.
+   *
+   * @return the locale change interceptor
+   */
+  @Bean
+  public LocaleChangeInterceptor localeChangeInterceptor() {
+    LocaleChangeInterceptor lci = new LocaleChangeInterceptor();
+    lci.setParamName("lang");
+    return lci;
+  }
 
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
-    LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
-    localeChangeInterceptor.setParamName("lang");
-    registry.addInterceptor(localeChangeInterceptor);
+    registry.addInterceptor(localeChangeInterceptor());
   }
 
   // HandlerExceptionResolver

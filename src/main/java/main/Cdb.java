@@ -6,6 +6,7 @@ import controller.Controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class Cdb {
@@ -25,6 +26,8 @@ public class Cdb {
     
     Controller controller = applicationContext.getBean("controller", Controller.class);
     controller.start();
+    
+    ((ConfigurableApplicationContext)applicationContext).close();
   }
 
 }

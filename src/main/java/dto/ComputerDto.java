@@ -5,8 +5,8 @@ public class ComputerDto {
   private int idComputer;
   private int idCompany; 
   private String name;// Compulsory
-  private String dateIntro;
-  private String dateDiscontinuation;// Has to be higher than date B
+  private String intro;
+  private String discontinuation;// Has to be higher than date B
   private String companyName;
 
   /**
@@ -14,18 +14,18 @@ public class ComputerDto {
    *
    * @param idComputer the id computer
    * @param name the name
-   * @param dateIntro the date intro
-   * @param dateDiscontinuation the date discontinuation
+   * @param intro the date intro
+   * @param discontinuation the date discontinuation
    * @param companyName the company name
    * @param idCompany the id company
    */
-  public ComputerDto(int idComputer, String name, String dateIntro, String dateDiscontinuation,
+  public ComputerDto(int idComputer, String name, String intro, String discontinuation,
       String companyName, int idCompany) {
     super();
     this.idComputer = idComputer;
     this.name = name;
-    this.dateIntro = dateIntro;
-    this.dateDiscontinuation = dateDiscontinuation;
+    this.intro = intro;
+    this.discontinuation = discontinuation;
     this.companyName = companyName;
     this.idCompany = idCompany;
   }
@@ -54,20 +54,20 @@ public class ComputerDto {
     this.name = name;
   }
 
-  public String getDateIntro() {
-    return dateIntro;
+  public String getIntro() {
+    return intro;
   }
 
-  public void setDateIntro(String dateIntro) {
-    this.dateIntro = dateIntro;
+  public void setIntro(String intro) {
+    this.intro = intro;
   }
 
-  public String getDateDiscontinuation() {
-    return dateDiscontinuation;
+  public String getDiscontinuation() {
+    return discontinuation;
   }
 
-  public void setDateDiscontinuation(String dateDiscontinuation) {
-    this.dateDiscontinuation = dateDiscontinuation;
+  public void setDiscontinuation(String discontinuation) {
+    this.discontinuation = discontinuation;
   }
 
   public String getCompanyName() {
@@ -78,13 +78,10 @@ public class ComputerDto {
     this.companyName = companyName;
   }
  
-  /* (non-Javadoc)
-   * @see java.lang.Object#toString()
-   */
   @Override
   public String toString() {
     return "ComputerDto [idComputer=" + idComputer + ", name=" + name
-        + ", dateIntro=" + dateIntro + ", dateDiscontinuation=" + dateDiscontinuation
+        + ", dateIntro=" + intro + ", dateDiscontinuation=" + discontinuation
         + ", companyName=" + companyName + ", idCompany=" + idCompany + "]";
   }
 

@@ -6,8 +6,8 @@ public class Computer {
 
   private String name;// Compulsory
   private Company company;
-  private Date dateIntro;
-  private Date dateDiscontinuation;// Has to be higher than date B
+  private Date intro;
+  private Date discontinuation;// Has to be higher than date B
   private int id;
 
   /**
@@ -19,11 +19,11 @@ public class Computer {
    * @param dateDiscontinuation the date discontinuation
    * @param id                  the id
    */
-  public Computer(String name, Company company, Date dateIntro, Date dateDiscontinuation, int id) {
+  public Computer(String name, Company company, Date intro, Date discontinuation, int id) {
     this.setName(name);
     this.setCompany(company);
-    this.setDateIntro(dateIntro);
-    this.setDateDiscontinuation(dateDiscontinuation);
+    this.setIntro(intro);
+    this.setDiscontinuation(discontinuation);
     this.setId(id);
   }
 
@@ -41,20 +41,20 @@ public class Computer {
   public Computer() {
   }
 
-  public Date getDateIntro() {
-    return dateIntro;
+  public Date getIntro() {
+    return intro;
   }
 
-  public void setDateIntro(Date dateIntro2) {
-    this.dateIntro = dateIntro2;
+  public void setIntro(Date intro) {
+    this.intro = intro;
   }
 
-  public Date getDateDiscontinuation() {
-    return dateDiscontinuation;
+  public Date getDiscontinuation() {
+    return discontinuation;
   }
 
-  public void setDateDiscontinuation(Date dateF) {
-    this.dateDiscontinuation = dateF;
+  public void setDiscontinuation(Date date) {
+    this.discontinuation = date;
   }
 
   public Company getCompany() {
@@ -73,15 +73,10 @@ public class Computer {
     this.name = name;
   }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see java.lang.Object#toString()
-   */
   @Override
   public String toString() {
-    return "Name: " + name + "\n Introduction : " + dateIntro + "\n Discontinuation: "
-        + dateDiscontinuation + "\n Company: " + company;
+    return "Name: " + name + "\n Introduction : " + intro + "\n Discontinuation: "
+        + discontinuation + "\n Company: " + company;
   }
 
   @Override
@@ -89,8 +84,8 @@ public class Computer {
     final int prime = 31;
     int result = 1;
     result = prime * result + ((company == null) ? 0 : company.hashCode());
-    result = prime * result + ((dateDiscontinuation == null) ? 0 : dateDiscontinuation.hashCode());
-    result = prime * result + ((dateIntro == null) ? 0 : dateIntro.hashCode());
+    result = prime * result + ((discontinuation == null) ? 0 : discontinuation.hashCode());
+    result = prime * result + ((intro == null) ? 0 : intro.hashCode());
     result = prime * result + id;
     result = prime * result + ((name == null) ? 0 : name.hashCode());
     return result;
@@ -115,18 +110,18 @@ public class Computer {
     } else if (!company.equals(other.company)) {
       return false;
     }
-    if (dateDiscontinuation == null) {
-      if (other.dateDiscontinuation != null) {
+    if (discontinuation == null) {
+      if (other.discontinuation != null) {
         return false;
       }
-    } else if (!dateDiscontinuation.equals(other.dateDiscontinuation)) {
+    } else if (!discontinuation.equals(other.discontinuation)) {
       return false;
     }
-    if (dateIntro == null) {
-      if (other.dateIntro != null) {
+    if (intro == null) {
+      if (other.intro != null) {
         return false;
       }
-    } else if (!dateIntro.equals(other.dateIntro)) {
+    } else if (!intro.equals(other.intro)) {
       return false;
     }
     if (id != other.id) {
@@ -145,8 +140,8 @@ public class Computer {
   public static class ComputerBuilder {
     private String name;// Compulsory
     private Company company;
-    private Date dateIntro;
-    private Date dateDiscontinuation;// Has to be higher than date B
+    private Date intro;
+    private Date discontinuation;// Has to be higher than date B
     private int id;
 
     /**
@@ -159,8 +154,8 @@ public class Computer {
 
       computer.setId(this.id);
       computer.setCompany(this.company);
-      computer.setDateIntro(this.dateIntro);
-      computer.setDateDiscontinuation(this.dateDiscontinuation);
+      computer.setIntro(this.intro);
+      computer.setDiscontinuation(this.discontinuation);
       computer.setName(this.name);
 
       return computer;
@@ -176,13 +171,13 @@ public class Computer {
       return this;
     }
 
-    public ComputerBuilder setDateIntro(Date dateIntro) {
-      this.dateIntro = dateIntro;
+    public ComputerBuilder setIntro(Date dateIntro) {
+      this.intro = dateIntro;
       return this;
     }
 
-    public ComputerBuilder setDateDiscontinuation(Date dateDiscontinuation) {
-      this.dateDiscontinuation = dateDiscontinuation;
+    public ComputerBuilder setDiscontinuation(Date discontinuation) {
+      this.discontinuation = discontinuation;
       return this;
     }
 

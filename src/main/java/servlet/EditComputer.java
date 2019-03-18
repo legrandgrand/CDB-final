@@ -10,6 +10,7 @@ import model.Computer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -87,9 +88,9 @@ public class EditComputer {
     computer.setName(computerName);
 
     Date intro = setComputerDate(introString);
-    computer.setDateIntro(intro);
+    computer.setIntro(intro);
 
-    computer.setDateDiscontinuation(setComputerDate(discString));
+    computer.setDiscontinuation(setComputerDate(discString));
 
     Company company = new Company();
     company.setName(companyName);

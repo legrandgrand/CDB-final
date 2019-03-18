@@ -61,7 +61,7 @@ public class ServiceComputer {
    * @return the computer from name
    */
   public List<Computer> getComputerFromName(Computer computer) {
-    List<Computer> list = new ArrayList<>();
+    List<Computer> list = new ArrayList<>();//TODO: Refactor this
     try {
       computerValidator.validateName(computer.getName());
       logger.error("Valid computer name");
@@ -118,8 +118,7 @@ public class ServiceComputer {
    */
   public void add(Computer computer) {
     try {
-      computerValidator.validateName(computer.getName());
-      computerValidator.validateId(computer.getId());
+      computerValidator.validateDiscBeforeIntro(computer.getIntro(), computer.getDiscontinuation());
       computerDao.add(computer);
     } catch (ComputerValidationException e) {
       logger.error(e.getMessage(), e);
@@ -133,8 +132,7 @@ public class ServiceComputer {
    */
   public void update(Computer computer) {
     try {
-      computerValidator.validateName(computer.getName());
-      computerValidator.validateId(computer.getId());
+      computerValidator.validateDiscBeforeIntro(computer.getIntro(), computer.getDiscontinuation());
       computerDao.update(computer);
     } catch (ComputerValidationException e) {
       logger.error(e.getMessage(), e);

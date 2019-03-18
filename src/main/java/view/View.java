@@ -173,5 +173,18 @@ public class View {
   public void deletedComputer(String name) {
     System.out.println(name + "a été supprimé");
   }
+  
+  public void invalidInput() {
+    System.out.println("Not a valid input. Please try again.");
+  }
+
+  public void exit() {
+    System.out.println("Exiting program");   
+  }
+
+  public void invalidComputer(String message) {
+    System.out.println(message);   
+    
+  }
 
 }

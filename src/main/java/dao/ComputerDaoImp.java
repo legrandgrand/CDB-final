@@ -85,8 +85,8 @@ public class ComputerDaoImp extends Dao implements ComputerDao {
   @Override
   public void update(Computer computer) {
     
-    Timestamp introduced = toTimestamp(computer.getDateIntro());
-    Timestamp discontinued = toTimestamp(computer.getDateDiscontinuation());
+    Timestamp introduced = toTimestamp(computer.getIntro());
+    Timestamp discontinued = toTimestamp(computer.getDiscontinuation());
 
     this.jdbcTemplate.update(UPDATE, computer.getName(), introduced, 
         discontinued, computer.getCompany().getId(), computer.getName());
@@ -94,8 +94,8 @@ public class ComputerDaoImp extends Dao implements ComputerDao {
 
   @Override
   public void add(Computer computer) {
-    Timestamp introduced = toTimestamp(computer.getDateIntro());
-    Timestamp discontinued = toTimestamp(computer.getDateDiscontinuation());
+    Timestamp introduced = toTimestamp(computer.getIntro());
+    Timestamp discontinued = toTimestamp(computer.getDiscontinuation());
     
     this.jdbcTemplate.update(INSERT, computer.getName(), introduced, 
         discontinued, computer.getCompany().getId());
