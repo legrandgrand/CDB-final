@@ -1,5 +1,7 @@
 package config;
 
+import java.util.Locale;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
@@ -11,7 +13,6 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
-import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -70,11 +71,14 @@ public class SpringConfigWeb extends SpringConfig
   /**
    * Locale resolver.
    *
-   * @return the locale resolver
+   * @return the cookie locale resolver
    */
   @Bean
-  public LocaleResolver localeResolver() {
+  public CookieLocaleResolver localeResolver() {
     CookieLocaleResolver localeResolver = new CookieLocaleResolver();
+    localeResolver.setDefaultLocale(Locale.ENGLISH);
+    localeResolver.setCookieName("my-locale-cookie");
+    localeResolver.setCookieMaxAge(3600);
     return localeResolver;
   }
 

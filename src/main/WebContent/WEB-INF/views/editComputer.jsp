@@ -22,6 +22,9 @@
             <a class="navbar-brand" href="Dashboard"> <spring:message code="title"/> </a>
         </div>
     </header>
+    
+    <span style="float: right;"><spring:message code="lang" /> : <a href="?lang=en"><spring:message code="lang.en" /></a> | <a href="?lang=fr"><spring:message code="lang.fr" /></a></span>
+    
     <section id="main">
         <div class="container">
             <div class="row">

@@ -19,23 +19,20 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<span><a class="navbar-brand" href="Dashboard"> 
-				<spring:message	code="title" /></a>
+			<span><a class="navbar-brand" href="Dashboard"> <spring:message
+						code="title" /></a>
 			</span> 
-			<span class="pull-right"> 
-				<select id="locales">
-					<option value="lang.en" th:text="<spring:message code="lang.eng" text="default"/>"><spring:message code="english" /></option>
-					<option value="lang.fr" th:text="<spring:message code="lang.fr" text="default"/>"><spring:message code="french" /></option>
-				</select>
-			</span>
 
 		</div>
 	</header>
+	
+	<span style="float: right;"><spring:message code="lang" /> : <a href="?lang=en"><spring:message code="lang.en" /></a> | <a href="?lang=fr"><spring:message code="lang.fr" /></a></span>
 
 	<section id="main">
 		<div class="container">
 			<h1 id="homeTitle">
-				${maxId} <spring:message code="amount" />
+				${maxId}
+				<spring:message code="amount" />
 			</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
@@ -140,7 +137,7 @@
 
 	</footer>
 
-	<script src="resources/js/international.js"></script>
+<!-- 	<script src="resources/js/international.js"></script> -->
 	<script src="resources/js/jquery.min.js"></script>
 	<script src="resources/js/bootstrap.min.js"></script>
 	<script src="resources/js/dashboard.js"></script>
