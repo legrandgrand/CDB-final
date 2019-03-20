@@ -63,7 +63,6 @@ public class ComputerController {
     int limit = setLimit(limitString);
     String order = "ASC";
     List<Computer> computers = serviceComputer.listPage(limit, page);
-
     return setMv(computers, order, page, limit);
   }
 
@@ -81,12 +80,12 @@ public class ComputerController {
       @RequestParam(defaultValue = "0", name = "page") String pageString,
       @RequestParam(defaultValue = "20", name = "limit") String limitString,
       @RequestParam(defaultValue = "ASC", name = "Order") String order,
-      @RequestParam(defaultValue = "id", name = "type") String type) {
-
+      @RequestParam(defaultValue = "id", name = "type") String column) {
+    
     int page = setPage(pageString);
     int limit = setLimit(limitString);
 
-    List<Computer> computers = serviceComputer.orderBy(type, order, limit, page);
+    List<Computer> computers = serviceComputer.orderBy(column, order, limit, page);
     return setMv(computers, order, page, limit);
   }
 
@@ -117,7 +116,7 @@ public class ComputerController {
    * @param idString the id string
    * @return the model and view
    */
-  @GetMapping(value = "/DeleteComputer")
+  @PostMapping(value = "/DeleteComputer")
   public ModelAndView deleteComputer(
       @RequestParam(required = false, name = "selection") String idString) {
     Computer computer = new Computer();
@@ -125,15 +124,15 @@ public class ComputerController {
     if (idString != null) {
       String[] idStringTable = idString.split(",");
 
-      for (String c : idStringTable) {
-        computer.setId(Integer.parseInt(c));
+      for (String id : idStringTable) {
+        computer.setId(Integer.parseInt(id));
         computer = serviceComputer.getComputer(computer).get(0);
         logger.debug("Deleting computer: " + computer.getName());
         serviceComputer.delete(computer);
       }
     }
 
-    return new ModelAndView("dashboard");
+    return setDashboard("0", "20");
   }
   
   /**

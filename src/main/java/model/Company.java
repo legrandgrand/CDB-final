@@ -1,7 +1,18 @@
 package model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "company")
 public class Company {
+  
+  @Column
   private String name;
+  
+  @Id
   private int id;
 
   /**
@@ -22,6 +33,7 @@ public class Company {
   public Company() {
   }
 
+
   public int getId() {
     return id;
   }
@@ -38,7 +50,6 @@ public class Company {
     this.name = name;
   }
 
-  
   @Override
   public String toString() {
     return name;

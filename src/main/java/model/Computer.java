@@ -2,22 +2,41 @@ package model;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "computer")
 public class Computer {
 
-  private String name;// Compulsory
-  private Company company;
-  private Date intro;
-  private Date discontinuation;// Has to be higher than date B
+  @Id
   private int id;
+
+  @Column(insertable = false, updatable = false)
+  private String name;// Compulsory
+
+  @Column(name = "introduced")
+  private Date intro;
+
+  @Column(name = "discontinued")
+  private Date discontinuation;// Has to be higher than date B
+
+  @OneToOne
+  @JoinColumn(name = "company_id")
+  private Company company;
 
   /**
    * Instantiates a new computer.
    *
-   * @param name the name
-   * @param company the company
-   * @param intro the intro
+   * @param name            the name
+   * @param company         the company
+   * @param intro           the intro
    * @param discontinuation the discontinuation
-   * @param id the id
+   * @param id              the id
    */
   public Computer(String name, Company company, Date intro, Date discontinuation, int id) {
     this.setName(name);
@@ -26,13 +45,12 @@ public class Computer {
     this.setDiscontinuation(discontinuation);
     this.setId(id);
   }
-  
+
   /**
    * Instantiates a new computer.
    */
   public Computer() {
   }
-
 
   public int getId() {
     return id;
@@ -74,13 +92,15 @@ public class Computer {
     this.name = name;
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see java.lang.Object#toString()
    */
   @Override
   public String toString() {
-    return "Name: " + name + "\n Introduction : " + intro + "\n Discontinuation: "
-        + discontinuation + "\n Company: " + company;
+    return "Name: " + name + "\n Introduction : " + intro + "\n Discontinuation: " + discontinuation
+        + "\n Company: " + company;
   }
 
   @Override

@@ -26,13 +26,14 @@ public class DtoMapper {
 
   private static final Logger logger = LoggerFactory.getLogger(DtoMapper.class);
 
-  @Autowired
   ComputerValidator validator;
 
   /**
    * Instantiates a new dto mapper.
    */
-  private DtoMapper() {
+  @Autowired
+  public DtoMapper(ComputerValidator validator) {
+    this.validator = validator;
   }
 
   /**
@@ -64,11 +65,19 @@ public class DtoMapper {
    * @return the computer dto
    */
   public ComputerDto computerToDto(Computer computer) {
-    ComputerDto computerDto = new ComputerDto(computer.getId(), computer.getName(),
-        dateToString(computer.getIntro()), dateToString(computer.getDiscontinuation()),
-        computer.getCompany().getName(), computer.getCompany().getId());
+    ComputerDto dto = new ComputerDto();
 
-    return computerDto;
+    dto.setIdComputer(computer.getId());
+    dto.setName(computer.getName());
+    dto.setIntro(dateToString(computer.getIntro()));
+    dto.setDiscontinuation(dateToString(computer.getDiscontinuation()));
+    
+    if (computer.getCompany() != null) {
+      dto.setCompanyName(computer.getCompany().getName());
+      dto.setIdCompany(computer.getCompany().getId());
+    }
+
+    return dto;
   }
 
   /**

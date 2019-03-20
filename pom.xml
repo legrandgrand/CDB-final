@@ -4,8 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<properties>
+		<cdb.version>0.0.1-SNAPSHOT</cdb.version>
 		<maven.compiler.source>1.6</maven.compiler.source>
 		<maven.compiler.target>1.6</maven.compiler.target>
+		<mavencheckstyle.version>3.0.0</mavencheckstyle.version>
+		<mavenccompiler.version>3.1</mavenccompiler.version>
 		<checkstyle.version>8.18</checkstyle.version>
 		<mysql.version>8.0.15</mysql.version>
 		<junit.version>4.12</junit.version>
@@ -15,9 +18,7 @@
 		<jstl.version>1.2</jstl.version>
 		<HikariCP.version>3.2.0</HikariCP.version>
 		<spring.version>5.1.3.RELEASE</spring.version>
-		<cdb.version>0.0.1-SNAPSHOT</cdb.version>
-		<mavencheckstyle.version>3.0.0</mavencheckstyle.version>
-		<mavenccompiler.version>3.1</mavenccompiler.version>
+		<hibernate.version>5.4.0.Final</hibernate.version>
 	</properties>
 
 	<groupId>computer-database</groupId>
@@ -48,14 +49,6 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/org.mockito/mockito-all -->
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-all</artifactId>
-			<version>${mockito.version}</version>
-			<scope>test</scope>
-		</dependency>
-
 
 		<!-- log -->
 		<dependency>
@@ -72,6 +65,14 @@
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-slf4j-impl</artifactId>
 			<version>${log4j.version}</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.mockito/mockito-all -->
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>${mockito.version}</version>
+			<scope>test</scope>
 		</dependency>
 
 		<!-- Servlet -->
@@ -95,12 +96,13 @@
 			<version>${HikariCP.version}</version>
 		</dependency>
 
-		<!-- SPRING -->
 		<dependency>
-			<groupId>org.springframework.integration</groupId>
-			<artifactId>spring-integration-file</artifactId>
-			<version>${spring.version}</version>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>${hibernate.version}</version>
 		</dependency>
+
+		<!-- SPRING -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
@@ -115,6 +117,11 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jdbc</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
 
