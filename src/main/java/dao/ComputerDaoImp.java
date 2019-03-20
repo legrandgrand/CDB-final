@@ -1,9 +1,5 @@
 package dao;
 
-import com.zaxxer.hikari.HikariDataSource;
-
-import java.sql.Timestamp;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -16,27 +12,17 @@ import model.Company;
 import model.Computer;
 
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class ComputerDaoImp extends Dao implements ComputerDao {
 
-  private static final String DELETE_COMPUTER = "DELETE FROM computer WHERE company_id= ? ";
-
-  private JdbcTemplate jdbcTemplate;
-
   private Session session;
   private CriteriaBuilder builder;
   private CriteriaQuery<Computer> criteria;
   private Root<Computer> root;
-
-  @Autowired
-  private SessionFactory sessionFactory;
 
   public ComputerDaoImp() {
   }
@@ -49,15 +35,6 @@ public class ComputerDaoImp extends Dao implements ComputerDao {
     criteria.select(root);
   }
   
-  private Session getSession() {
-    return sessionFactory.getCurrentSession();
-  }
-
-  @Autowired
-  public void setDataSource(HikariDataSource ds) {
-    this.jdbcTemplate = new JdbcTemplate(ds);
-  }
-
   @Override
   public List<Computer> list() {
     setCriteria();
@@ -159,28 +136,19 @@ public class ComputerDaoImp extends Dao implements ComputerDao {
   @Override
   public void add(Computer computer) {
     setCriteria();
+    System.out.println(computer);
     session.save(computer);//Name not added somehow
   }
 
   @Override
   public void deleteComputerOfCompanyId(Company company) {
-    this.jdbcTemplate.update(DELETE_COMPUTER, company.getId());
-  }
+    CriteriaBuilder deleteBuilder = getSession().getCriteriaBuilder();
+    CriteriaDelete<Computer> delete = deleteBuilder.createCriteriaDelete(Computer.class);
+    Root<Computer> deleteRoot = delete.from(Computer.class);
 
-  /**
-   * Changes a date to a timestamp.
-   *
-   * @param date the date
-   * @return the timestamp
-   */
-  public Timestamp toTimestamp(Date date) {
+    delete.where(deleteBuilder.equal(deleteRoot.get("company"), company.getId()));
 
-    if (null != date) {
-      return new Timestamp(date.getTime());
-    } else {
-      return null;
-    }
-
+    getSession().createQuery(delete).executeUpdate();
   }
 
 }

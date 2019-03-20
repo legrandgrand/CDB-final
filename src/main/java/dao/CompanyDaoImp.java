@@ -1,30 +1,33 @@
 package dao;
 
-import com.zaxxer.hikari.HikariDataSource;
-
 import java.util.List;
 
-import mapper.RowMapperCompany;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 import model.Company;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.hibernate.Session;
+import org.hibernate.query.Query;
+
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class CompanyDaoImp extends Dao implements CompanyDao {
 
-  private static final String SELECT = "SELECT id, name FROM company";
-  private static final String SELECT_ID = SELECT + " WHERE name LIKE ";
-  private static final String SELECT_NAME = SELECT + " WHERE id= ?";
-  private static final String DELETE_COMPANY = "DELETE FROM company WHERE id= ? ";
+  private Session session;
+  private CriteriaBuilder builder;
+  private CriteriaQuery<Company> criteria;
+  private Root<Company> root;
   
-  private JdbcTemplate jdbcTemplate;
-
-  @Autowired
-  public void setDataSource(HikariDataSource ds) {
-    this.jdbcTemplate = new JdbcTemplate(ds);
+  private void setCriteria() {
+    this.session = getSession();
+    this.builder = this.session.getCriteriaBuilder();
+    this.criteria = this.builder.createQuery(Company.class);
+    this.root = this.criteria.from(Company.class);
+    criteria.select(root);
   }
 
   private CompanyDaoImp() {
@@ -32,23 +35,40 @@ public class CompanyDaoImp extends Dao implements CompanyDao {
 
   @Override
   public List<Company> list() {
-    return this.jdbcTemplate.query(SELECT, new RowMapperCompany());
+    setCriteria();
+
+    Query<Company> query = getSession().createQuery(criteria.select(root));
+    return query.getResultList();
   }
 
   @Override
   public List<Company> getCompany(Company company) {
-    String sql = SELECT_ID + "'%" + company.getName() + "%'";
-    return this.jdbcTemplate.query(sql, new RowMapperCompany());
+    setCriteria();
+
+    criteria.select(root).where(builder.like(root.<String>get("name"), company.getName() + "%"));
+    Query<Company> query = getSession().createQuery(criteria);
+    return query.getResultList();
   }
 
   @Override
   public List<Company> getCompanyFromId(Company company) {
-    return this.jdbcTemplate.query(SELECT_NAME, new RowMapperCompany(), company.getId());
+    setCriteria();
+
+    criteria.select(root).where(builder.equal(root.get("id"), company.getId()));
+    Query<Company> query = getSession().createQuery(criteria);
+
+    return query.getResultList();
   }
 
   @Override
   public void delete(Company company) {
-    this.jdbcTemplate.update(DELETE_COMPANY, company.getId());
+    CriteriaBuilder deleteBuilder = getSession().getCriteriaBuilder();
+    CriteriaDelete<Company> delete = deleteBuilder.createCriteriaDelete(Company.class);
+    Root<Company> deleteRoot = delete.from(Company.class);
+
+    delete.where(deleteBuilder.equal(deleteRoot.get("company"), company.getId()));
+
+    getSession().createQuery(delete).executeUpdate();
   }
 
 }

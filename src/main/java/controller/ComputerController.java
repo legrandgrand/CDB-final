@@ -72,7 +72,7 @@ public class ComputerController {
    * @param pageString  the page string
    * @param limitString the limit string
    * @param order       the order
-   * @param column        the column
+   * @param column      the column
    * @return the model and view
    */
   @GetMapping(value = "/OrderBy")
@@ -166,7 +166,7 @@ public class ComputerController {
       @RequestParam(required = false, name = "disc") String discString,
       @RequestParam(required = false, name = "companyname") String companyName) {
 
-    Computer computer = setDto(computerName, introString, discString, companyName); 
+    Computer computer = setDto(computerName, introString, discString, companyName);
 
     logger.debug("Adding computer" + computer);
     serviceComputer.add(computer);

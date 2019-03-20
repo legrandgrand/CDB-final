@@ -146,7 +146,7 @@ public class View {
    * @param company the company
    */
   public void deleteCompany(Company company) {
-    System.out.println(company.getName() + "a été supprimé");
+    System.out.println(company.getId() + "a été supprimé");
   }
 
   /**
