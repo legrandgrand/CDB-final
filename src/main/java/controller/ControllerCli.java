@@ -25,9 +25,9 @@ import validator.ComputerValidator;
 import view.View;
 
 @Component
-public class ControllerCLI {
+public class ControllerCli {
 
-  private static final Logger logger = LoggerFactory.getLogger(ControllerCLI.class);
+  private static final Logger logger = LoggerFactory.getLogger(ControllerCli.class);
 
   private View view;
   private ServiceComputer serviceComputer;
@@ -43,7 +43,7 @@ public class ControllerCLI {
    * @param view              the view
    */
   @Autowired
-  public ControllerCLI(ComputerValidator computerValidator, ServiceCompany serviceCompany,
+  public ControllerCli(ComputerValidator computerValidator, ServiceCompany serviceCompany,
       ServiceComputer serviceComputer, View view) {
     this.view = view;
     this.serviceCompany = serviceCompany;

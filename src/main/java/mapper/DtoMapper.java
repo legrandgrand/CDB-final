@@ -48,8 +48,12 @@ public class DtoMapper {
       validator.validateDto(dto);
 
       computer.setName(dto.getName());
-      computer.setIntro(setDate(dto.getIntro()));
-      computer.setDiscontinuation(setDate(dto.getDiscontinuation()));
+      if (dto.getIntro() != null) {
+        computer.setIntro(setDate(dto.getIntro()));
+      }
+      if (dto.getDiscontinuation() != null) {
+        computer.setDiscontinuation(setDate(dto.getDiscontinuation()));
+      }
       computer.setCompany(new Company(dto.getCompanyName(), dto.getIdCompany()));
     } catch (ComputerValidationException e) {
       logger.error(e.getMessage(), e);
@@ -71,7 +75,7 @@ public class DtoMapper {
     dto.setName(computer.getName());
     dto.setIntro(dateToString(computer.getIntro()));
     dto.setDiscontinuation(dateToString(computer.getDiscontinuation()));
-    
+
     if (computer.getCompany() != null) {
       dto.setCompanyName(computer.getCompany().getName());
       dto.setIdCompany(computer.getCompany().getId());

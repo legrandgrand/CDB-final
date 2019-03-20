@@ -76,15 +76,15 @@
 							href="OrderBy?Order=${Order}&type=name&page=${page}&limit=${limit}"><spring:message
 									code="Name" /></a></th>
 						<th><a
-							href="OrderBy?Order=${Order}&type=introduced&page=${page}&limit=${limit}"><spring:message
+							href="OrderBy?Order=${Order}&type=intro&page=${page}&limit=${limit}"><spring:message
 									code="intro" /> </a></th>
 						<!-- Table header for Discontinued Date -->
 						<th><a
-							href="OrderBy?Order=${Order}&type=discontinued&page=${page}&limit=${limit}"><spring:message
+							href="OrderBy?Order=${Order}&type=discontinuation&page=${page}&limit=${limit}"><spring:message
 									code="disc" /> </a></th>
 						<!-- Table header for Company -->
 						<th><a
-							href="OrderBy?Order=${Order}&type=company_id&page=${page}&limit=${limit}"><spring:message
+							href="OrderBy?Order=${Order}&type=company&page=${page}&limit=${limit}"><spring:message
 									code="company" /></a></th>
 
 					</tr>
@@ -115,12 +115,12 @@
 					aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
 				</a></li>
 				<c:forEach var="i" begin="0" end="10" step="1">
-					<c:if test="${page - 5 + i >0 && page -5 +i <(maxId/20)-1}">
+					<c:if test="${page - 5 + i >0 && page -5 +i <(maxId/20)}">
 						<li><a href="Dashboard?page=${page -5 + i}&limit=${limit}">${page -5 +i}</a></li>
 					</c:if>
 				</c:forEach>
 				<li><a
-					href="Dashboard?page=${fn:substringBefore((maxId/20)-1, '.')}&limit=${limit}"
+					href="Dashboard?page=${fn:substringBefore((maxId/20), '.')}&limit=${limit}"
 					aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 				</a></li>
 			</ul>

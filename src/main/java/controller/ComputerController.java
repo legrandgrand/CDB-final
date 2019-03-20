@@ -35,13 +35,13 @@ public class ComputerController {
   /**
    * Instantiates a new computer controller.
    *
-   * @param mapper the mapper
-   * @param serviceCompany the service company
+   * @param mapper          the mapper
+   * @param serviceCompany  the service company
    * @param serviceComputer the service computer
    */
   @Autowired
-  public ComputerController(DtoMapper mapper, 
-      ServiceCompany serviceCompany, ServiceComputer serviceComputer) {
+  public ComputerController(DtoMapper mapper, ServiceCompany serviceCompany,
+      ServiceComputer serviceComputer) {
     this.serviceComputer = serviceComputer;
     this.serviceCompany = serviceCompany;
     this.mapper = mapper;
@@ -50,7 +50,7 @@ public class ComputerController {
   /**
    * Sets the dashboard.
    *
-   * @param pageString the page string
+   * @param pageString  the page string
    * @param limitString the limit string
    * @return the model and view
    */
@@ -69,10 +69,10 @@ public class ComputerController {
   /**
    * Sets the computer.
    *
-   * @param pageString the page string
+   * @param pageString  the page string
    * @param limitString the limit string
-   * @param order the order
-   * @param type the type
+   * @param order       the order
+   * @param column        the column
    * @return the model and view
    */
   @GetMapping(value = "/OrderBy")
@@ -81,7 +81,7 @@ public class ComputerController {
       @RequestParam(defaultValue = "20", name = "limit") String limitString,
       @RequestParam(defaultValue = "ASC", name = "Order") String order,
       @RequestParam(defaultValue = "id", name = "type") String column) {
-    
+
     int page = setPage(pageString);
     int limit = setLimit(limitString);
 
@@ -134,7 +134,7 @@ public class ComputerController {
 
     return setDashboard("0", "20");
   }
-  
+
   /**
    * Sets the add Computer page.
    *
@@ -150,14 +150,14 @@ public class ComputerController {
     mv.setViewName("addComputer");
     return mv;
   }
-  
+
   /**
    * Post add.
    *
    * @param computerName the computer name
-   * @param introString the intro string
-   * @param discString the disc string
-   * @param companyName the company name
+   * @param introString  the intro string
+   * @param discString   the disc string
+   * @param companyName  the company name
    * @return the model and view
    */
   @PostMapping(value = "/AddComputer")
@@ -165,15 +165,15 @@ public class ComputerController {
       @RequestParam(required = false, name = "intro") String introString,
       @RequestParam(required = false, name = "disc") String discString,
       @RequestParam(required = false, name = "companyname") String companyName) {
-    
-    Computer computer = setDto(computerName, introString, discString, companyName);
+
+    Computer computer = setDto(computerName, introString, discString, companyName); 
 
     logger.debug("Adding computer" + computer);
     serviceComputer.add(computer);
 
     return setDashboard("0", "20");
   }
-  
+
   /**
    * Gets the edits the.
    *
@@ -182,7 +182,7 @@ public class ComputerController {
    */
   @GetMapping(value = "/EditComputer")
   public ModelAndView getEdit(@RequestParam(name = "id") String stringId) {
-    
+
     List<Company> companies = serviceCompany.listCompany();
 
     Computer computer = new Computer();
@@ -201,42 +201,43 @@ public class ComputerController {
    * Post edit.
    *
    * @param computerName the computer name
-   * @param introString the intro string
-   * @param discString the disc string
-   * @param companyName the company name
+   * @param introString  the intro string
+   * @param discString   the disc string
+   * @param companyName  the company name
    * @return the model and view
    */
   @PostMapping(value = "/EditComputer")
-  public ModelAndView postEdit(@RequestParam(name = "name") String computerName,
+  public ModelAndView postEdit(@RequestParam(name = "id") int id,
+      @RequestParam(name = "name") String computerName,
       @RequestParam(required = false, name = "intro") String introString,
       @RequestParam(required = false, name = "disc") String discString,
       @RequestParam(required = false, name = "companyname") String companyName) {
-    
+
     Computer computer = setDto(computerName, introString, discString, companyName);
+    computer.setId(id);
     logger.debug("Updating computer" + computer);
     serviceComputer.update(computer);
 
     return setDashboard("0", "20");
 
   }
-  
-  
+
   /**
    * Sets the dto.
    *
    * @param computerName the computer name
-   * @param introString the intro string
-   * @param discString the disc string
-   * @param companyName the company name
+   * @param introString  the intro string
+   * @param discString   the disc string
+   * @param companyName  the company name
    * @return the computer
    */
-  public Computer setDto(String computerName, String introString, 
-      String discString, String companyName) {
-    
+  public Computer setDto(String computerName, String introString, String discString,
+      String companyName) {
+
     Company company = new Company();
     company.setName(companyName);
     company = serviceCompany.getCompany(company).get(0);
-        
+
     ComputerDto dto = new ComputerDto();
     dto.setName(computerName);
     dto.setIntro(introString);
@@ -246,15 +247,14 @@ public class ComputerController {
 
     return mapper.dtoToComputer(dto);
   }
-  
 
   /**
    * Sets the mv.
    *
    * @param computers the computers
-   * @param order the order
-   * @param page the page
-   * @param limit the limit
+   * @param order     the order
+   * @param page      the page
+   * @param limit     the limit
    * @return the model and view
    */
   public ModelAndView setMv(List<Computer> computers, String order, int page, int limit) {
@@ -275,8 +275,6 @@ public class ComputerController {
     mv.addObject("maxId", serviceComputer.getMaxId());
     return mv;
   }
-  
-
 
   /**
    * Sets the date.

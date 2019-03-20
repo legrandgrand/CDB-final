@@ -9,6 +9,7 @@ import java.util.List;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Root;
 
 import model.Company;
@@ -21,18 +22,10 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
 @Repository
 public class ComputerDaoImp extends Dao implements ComputerDao {
 
-  private static final String INSERT = "INSERT INTO computer "
-      + "(name,introduced,discontinued,company_id) VALUES (?,?,?,?)";
-  private static final String UPDATE = "UPDATE computer "
-      + "SET name=?, introduced = ?, discontinued = ?, company_id = ? WHERE name= ?";
-  private static final String GET_MAX_ID = "SELECT COUNT(*) FROM computer";
-  private static final String DELETE = "DELETE FROM computer WHERE name= ?";
   private static final String DELETE_COMPUTER = "DELETE FROM computer WHERE company_id= ? ";
 
   private JdbcTemplate jdbcTemplate;
@@ -48,16 +41,16 @@ public class ComputerDaoImp extends Dao implements ComputerDao {
   public ComputerDaoImp() {
   }
 
-  private Session getSession() {
-    return sessionFactory.getCurrentSession();
-  }
-
   private void setCriteria() {
     this.session = getSession();
     this.builder = this.session.getCriteriaBuilder();
     this.criteria = this.builder.createQuery(Computer.class);
     this.root = this.criteria.from(Computer.class);
     criteria.select(root);
+  }
+  
+  private Session getSession() {
+    return sessionFactory.getCurrentSession();
   }
 
   @Autowired
@@ -99,7 +92,7 @@ public class ComputerDaoImp extends Dao implements ComputerDao {
     Query<Computer> query = getSession().createQuery(criteria);
     query.setFirstResult(offset);
     query.setMaxResults(limit);
-    
+
     return query.getResultList();
   }
 
@@ -109,14 +102,8 @@ public class ComputerDaoImp extends Dao implements ComputerDao {
 
     criteria.select(root).where(builder.equal(root.get("id"), computer.getId()));
     Query<Computer> query = getSession().createQuery(criteria);
-    
-    return query.getResultList();
-  }
 
-  @Override
-  public int getMaxId() {
-    // return criteria.setProjection(Projections.rowCount()).uniqueResult().hashCode();
-    return this.jdbcTemplate.queryForObject(GET_MAX_ID, Integer.class);
+    return query.getResultList();
   }
 
   @Override
@@ -129,32 +116,50 @@ public class ComputerDaoImp extends Dao implements ComputerDao {
   }
 
   @Override
+  public Long getMaxId() {
+    setCriteria();
+
+    CriteriaBuilder builder = session.getCriteriaBuilder();
+    CriteriaQuery<Long> criteriaQuery = builder.createQuery(Long.class);
+    Root<Computer> root = criteriaQuery.from(Computer.class);
+
+    criteriaQuery.select(builder.count(root));
+    Query<Long> query = session.createQuery(criteriaQuery);
+
+    return query.getSingleResult();
+  }
+
+  @Override
   public void delete(Computer computer) {
-    CriteriaBuilder deletebuilder = getSession().getCriteriaBuilder();
-    CriteriaDelete<Computer> delete = deletebuilder.createCriteriaDelete(Computer.class);
+    CriteriaBuilder deleteBuilder = getSession().getCriteriaBuilder();
+    CriteriaDelete<Computer> delete = deleteBuilder.createCriteriaDelete(Computer.class);
     Root<Computer> deleteRoot = delete.from(Computer.class);
-    delete.where(deletebuilder.equal(deleteRoot.get("id"), computer.getId()));
+
+    delete.where(deleteBuilder.equal(deleteRoot.get("id"), computer.getId()));
+
     getSession().createQuery(delete).executeUpdate();
-    //this.jdbcTemplate.update(DELETE, computer.getName());
   }
 
   @Override
   public void update(Computer computer) {
 
-    Timestamp introduced = toTimestamp(computer.getIntro());
-    Timestamp discontinued = toTimestamp(computer.getDiscontinuation());
+    CriteriaBuilder updateBuilder = getSession().getCriteriaBuilder();
+    CriteriaUpdate<Computer> update = updateBuilder.createCriteriaUpdate(Computer.class);
+    Root<Computer> updateRoot = update.from(Computer.class);
 
-    this.jdbcTemplate.update(UPDATE, computer.getName(), introduced, discontinued,
-        computer.getCompany().getId(), computer.getName());
+    update.set("name", computer.getName());
+    update.set("intro", computer.getIntro());
+    update.set("discontinuation", computer.getDiscontinuation());
+    update.set("company", computer.getCompany());
+    update.where(updateBuilder.equal(updateRoot.get("id"), computer.getId()));
+
+    getSession().createQuery(update).executeUpdate();
   }
 
   @Override
   public void add(Computer computer) {
-    Timestamp introduced = toTimestamp(computer.getIntro());
-    Timestamp discontinued = toTimestamp(computer.getDiscontinuation());
-
-    this.jdbcTemplate.update(INSERT, computer.getName(), introduced, discontinued,
-        computer.getCompany().getId());
+    setCriteria();
+    session.save(computer);//Name not added somehow
   }
 
   @Override

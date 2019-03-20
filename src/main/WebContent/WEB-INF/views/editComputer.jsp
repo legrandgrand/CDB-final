@@ -43,12 +43,12 @@
                             </div>
                             <div class="form-group">
                                 <label for="introduced"><spring:message code="intro"/></label>
-                                <input type="date" class="form-control" id="introduced" placeholder="Introduced date" name="intro" value='${fn:substringBefore(computer.dateIntro," 00:00:00.0")}'>
+                                <input type="date" class="form-control" id="introduced" placeholder="Introduced date" name="intro" value='${fn:substringBefore(computer.intro," 00:00:00.0")}'>
                                 
                             </div>
                             <div class="form-group">
                                 <label for="discontinued"><spring:message code="disc"/></label>
-                                <input type="date" class="form-control" id="discontinued" placeholder="Discontinued date" name="disc" value='${fn:substringBefore(computer.dateDiscontinuation," 00:00:00.0")}'>               
+                                <input type="date" class="form-control" id="discontinued" placeholder="Discontinued date" name="disc" value='${fn:substringBefore(computer.discontinuation," 00:00:00.0")}'>               
                             </div>
                             <div class="form-group">
                                 <label for="companyId"><spring:message code="company"/></label>

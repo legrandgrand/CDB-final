@@ -2,7 +2,7 @@ package dto;
 
 public class ComputerDto {
   
-  private int idComputer;
+  private long idComputer;
   private int idCompany; 
   private String name;// Compulsory
   private String intro;
@@ -19,7 +19,7 @@ public class ComputerDto {
    * @param companyName the company name
    * @param idCompany the id company
    */
-  public ComputerDto(int idComputer, String name, String intro, String discontinuation,
+  public ComputerDto(long idComputer, String name, String intro, String discontinuation,
       String companyName, int idCompany) {
     super();
     this.idComputer = idComputer;
@@ -34,11 +34,11 @@ public class ComputerDto {
     
   }
   
-  public int getIdComputer() {
+  public long getIdComputer() {
     return idComputer;
   }
 
-  public void setIdComputer(int idComputer) {
+  public void setIdComputer(long idComputer) {
     this.idComputer = idComputer;
   }
   

@@ -14,7 +14,7 @@ import javax.persistence.Table;
 public class Computer {
 
   @Id
-  private int id;
+  private long id;
 
   @Column(insertable = false, updatable = false)
   private String name;// Compulsory
@@ -38,7 +38,7 @@ public class Computer {
    * @param discontinuation the discontinuation
    * @param id              the id
    */
-  public Computer(String name, Company company, Date intro, Date discontinuation, int id) {
+  public Computer(String name, Company company, Date intro, Date discontinuation, long id) {
     this.setName(name);
     this.setCompany(company);
     this.setIntro(intro);
@@ -52,11 +52,11 @@ public class Computer {
   public Computer() {
   }
 
-  public int getId() {
+  public long getId() {
     return id;
   }
 
-  public void setId(int id) {
+  public void setId(long id) {
     this.id = id;
   }
 
@@ -109,8 +109,8 @@ public class Computer {
     int result = 1;
     result = prime * result + ((company == null) ? 0 : company.hashCode());
     result = prime * result + ((discontinuation == null) ? 0 : discontinuation.hashCode());
+    result = prime * result + (int) (id ^ (id >>> 32));
     result = prime * result + ((intro == null) ? 0 : intro.hashCode());
-    result = prime * result + id;
     result = prime * result + ((name == null) ? 0 : name.hashCode());
     return result;
   }
