@@ -1,4 +1,4 @@
-package controller;
+package webapp;
 
 import exception.Error403;
 import exception.Error404;

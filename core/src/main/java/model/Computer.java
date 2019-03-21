@@ -16,7 +16,7 @@ public class Computer {
   @Id
   private long id;
 
-  @Column(insertable = false, updatable = false)
+  @Column(name="name")
   private String name;// Compulsory
 
   @Column(name = "introduced")
