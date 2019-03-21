@@ -9,16 +9,6 @@
 		<maven.compiler.target>1.6</maven.compiler.target>
 		<mavencheckstyle.version>3.0.0</mavencheckstyle.version>
 		<mavenccompiler.version>3.1</mavenccompiler.version>
-		<checkstyle.version>8.18</checkstyle.version>
-		<mysql.version>8.0.15</mysql.version>
-		<junit.version>4.12</junit.version>
-		<mockito.version>1.9.5</mockito.version>
-		<log4j.version>2.7</log4j.version>
-		<servlet.version>3.1.0</servlet.version>
-		<jstl.version>1.2</jstl.version>
-		<HikariCP.version>3.2.0</HikariCP.version>
-		<spring.version>5.1.3.RELEASE</spring.version>
-		<hibernate.version>5.4.0.Final</hibernate.version>
 	</properties>
 
 	<parent>
@@ -33,12 +23,6 @@
 	<dependencies>
 		<dependency>
 			<groupId>computer-database</groupId>
-			<artifactId>core</artifactId>
-			<version>${cdb.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>computer-database</groupId>
 			<artifactId>persistence</artifactId>
 			<version>${cdb.version}</version>
 		</dependency>
@@ -48,99 +32,6 @@
 			<artifactId>binding</artifactId>
 			<version>${cdb.version}</version>
 		</dependency>
-
-		<dependency>
-			<groupId>com.puppycrawl.tools</groupId>
-			<artifactId>checkstyle</artifactId>
-			<version>${checkstyle.version}</version>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>${mysql.version}</version>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/junit/junit -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>${junit.version}</version>
-			<scope>test</scope>
-		</dependency>
-
-
-		<!-- log -->
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-api</artifactId>
-			<version>${log4j.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-core</artifactId>
-			<version>${log4j.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-slf4j-impl</artifactId>
-			<version>${log4j.version}</version>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.mockito/mockito-all -->
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-all</artifactId>
-			<version>${mockito.version}</version>
-			<scope>test</scope>
-		</dependency>
-
-		<!-- Servlet -->
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<version>${servlet.version}</version>
-		</dependency>
-
-		<!-- jstl -->
-		<dependency>
-			<groupId>jstl</groupId>
-			<artifactId>jstl</artifactId>
-			<version>${jstl.version}</version>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/com.zaxxer/HikariCP -->
-		<dependency>
-			<groupId>com.zaxxer</groupId>
-			<artifactId>HikariCP</artifactId>
-			<version>${HikariCP.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-core</artifactId>
-			<version>${hibernate.version}</version>
-		</dependency>
-
-		<!-- SPRING -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-webmvc</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<version>${spring.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-orm</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-
 	</dependencies>
 
 	<reporting>

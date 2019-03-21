@@ -10,7 +10,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 
 @Configuration
-@ComponentScan({  "dao", "service", "validator"})
+@ComponentScan({"validator"})
 @PropertySource(value = { "classpath:configuration.properties" })
 public class SpringConfigTest {
 

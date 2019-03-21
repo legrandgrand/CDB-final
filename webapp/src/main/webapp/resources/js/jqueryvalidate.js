@@ -11,7 +11,7 @@
 		         },
 		         "disc": {
 		        	 required: false,
-		        	 date: true;
+		        	 date: true
 		         },
 		         "companyname": {
 		        	 required: false
