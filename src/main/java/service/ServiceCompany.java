@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import validator.ComputerValidator;
 
 @Service
+@Transactional
 public class ServiceCompany {
 
   private static final Logger logger = LoggerFactory.getLogger(ServiceCompany.class);
@@ -78,7 +79,6 @@ public class ServiceCompany {
    *
    * @param company the company
    */
-  @Transactional
   public void delete(Company company) {
     computerDaoImp.deleteComputerOfCompanyId(company);
     companyDaoImp.delete(company);

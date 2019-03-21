@@ -2,43 +2,61 @@ package model;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "computer")
 public class Computer {
 
+  @Id
+  private long id;
+
+  @Column(insertable = false, updatable = false)
   private String name;// Compulsory
-  private Company company;
+
+  @Column(name = "introduced")
   private Date intro;
+
+  @Column(name = "discontinued")
   private Date discontinuation;// Has to be higher than date B
-  private int id;
+
+  @OneToOne
+  @JoinColumn(name = "company_id")
+  private Company company;
 
   /**
    * Instantiates a new computer.
    *
-   * @param name the name
-   * @param company the company
-   * @param intro the intro
+   * @param name            the name
+   * @param company         the company
+   * @param intro           the intro
    * @param discontinuation the discontinuation
-   * @param id the id
+   * @param id              the id
    */
-  public Computer(String name, Company company, Date intro, Date discontinuation, int id) {
+  public Computer(String name, Company company, Date intro, Date discontinuation, long id) {
     this.setName(name);
     this.setCompany(company);
     this.setIntro(intro);
     this.setDiscontinuation(discontinuation);
     this.setId(id);
   }
-  
+
   /**
    * Instantiates a new computer.
    */
   public Computer() {
   }
 
-
-  public int getId() {
+  public long getId() {
     return id;
   }
 
-  public void setId(int id) {
+  public void setId(long id) {
     this.id = id;
   }
 
@@ -74,13 +92,15 @@ public class Computer {
     this.name = name;
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see java.lang.Object#toString()
    */
   @Override
   public String toString() {
-    return "Name: " + name + "\n Introduction : " + intro + "\n Discontinuation: "
-        + discontinuation + "\n Company: " + company;
+    return "Name: " + name + "\n Introduction : " + intro + "\n Discontinuation: " + discontinuation
+        + "\n Company: " + company;
   }
 
   @Override
@@ -89,8 +109,8 @@ public class Computer {
     int result = 1;
     result = prime * result + ((company == null) ? 0 : company.hashCode());
     result = prime * result + ((discontinuation == null) ? 0 : discontinuation.hashCode());
+    result = prime * result + (int) (id ^ (id >>> 32));
     result = prime * result + ((intro == null) ? 0 : intro.hashCode());
-    result = prime * result + id;
     result = prime * result + ((name == null) ? 0 : name.hashCode());
     return result;
   }

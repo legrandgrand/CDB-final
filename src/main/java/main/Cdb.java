@@ -1,7 +1,7 @@
 package main;
 
 import config.SpringConfig;
-import controller.Controller;
+import controller.ControllerCli;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +24,7 @@ public class Cdb {
     
     logger.debug("Starting program");
     
-    Controller controller = applicationContext.getBean("controller", Controller.class);
+    ControllerCli controller = applicationContext.getBean("controllerCli", ControllerCli.class);
     controller.start();
     
     ((ConfigurableApplicationContext)applicationContext).close();

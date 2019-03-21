@@ -11,10 +11,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import validator.ComputerValidator;
 
 @Service
+@Transactional
 public class ServiceComputer {
 
   private static final Logger logger = LoggerFactory.getLogger(ServiceComputer.class);
@@ -129,7 +131,7 @@ public class ServiceComputer {
    * 
    * @return the max Id.
    */
-  public int getMaxId() {
+  public Long getMaxId() {
     return computerDao.getMaxId();
   }
 

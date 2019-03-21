@@ -48,7 +48,7 @@ public class ComputerDaoImpTest {
   @Test
   public void testGetMaxId() {
     List<Computer> computers = computerDaoImp.list();
-    int id = computerDaoImp.getMaxId();
+    Long id = computerDaoImp.getMaxId();
     System.out.println(computers.size() + " et " + id);
     assertTrue(id == computers.size() - 1);
   }
