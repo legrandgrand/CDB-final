@@ -24,7 +24,7 @@ tomcat
 
 # Maven 
 target/
-config.properties
+configuration.properties
 
 # eclipse project file
 .settings/

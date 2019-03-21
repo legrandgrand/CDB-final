@@ -11,6 +11,7 @@
 		<mavenccompiler.version>3.1</mavenccompiler.version>
 		<servlet.version>3.1.0</servlet.version>
 		<jstl.version>1.2</jstl.version>
+		<taglib.version>1.1.2</taglib.version>
 	</properties>
 
 	<parent>
@@ -43,12 +44,19 @@
 			<artifactId>jstl</artifactId>
 			<version>${jstl.version}</version>
 		</dependency>
-		
+
 		<dependency>
-    <groupId>taglibs</groupId>
-    <artifactId>standard</artifactId>
-    <version>1.1.2</version>
-</dependency>
+			<groupId>taglibs</groupId>
+			<artifactId>standard</artifactId>
+			<version>${taglib.version}</version>
+		</dependency>
+		
+		    <dependency>
+        <groupId>javax.servlet</groupId>
+        <artifactId>jsp-api</artifactId>
+        <version>2.0</version>
+        <scope>provided</scope>
+    </dependency>
 
 	</dependencies>
 
@@ -70,6 +78,7 @@
 	</reporting>
 
 	<build>
+    <finalName>computer-database</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
