@@ -11,6 +11,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
@@ -25,6 +26,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 @Configuration
 @EnableWebMvc
+@EnableWebSecurity
 @ComponentScan({ "webapp"})
 @PropertySource(value = { "classpath:configuration.properties" })
 public class SpringConfigWeb extends SpringConfig
@@ -101,6 +103,6 @@ public class SpringConfigWeb extends SpringConfig
     registry.addInterceptor(localeChangeInterceptor());
   }
 
-  // HandlerExceptionResolver
+
 
 }

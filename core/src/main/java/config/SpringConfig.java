@@ -12,6 +12,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -20,7 +21,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @ComponentScan({ "dao", "controller", "mapper", "service", "validator", "view" })
 @PropertySource(value = { "classpath:configuration.properties" })
 public class SpringConfig {
-
   @Autowired
   private Environment env;
 
@@ -79,4 +79,6 @@ public class SpringConfig {
     transactionManager.setSessionFactory(sessionFactory().getObject());
     return transactionManager;
   }
+  
+  
 }
