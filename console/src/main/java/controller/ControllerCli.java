@@ -18,8 +18,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import service.ServiceCompany;
-import service.ServiceComputer;
+import service.CompanyService;
+import service.ComputerService;
 
 import validator.ComputerValidator;
 import view.View;
@@ -30,8 +30,8 @@ public class ControllerCli {
   private static final Logger logger = LoggerFactory.getLogger(ControllerCli.class);
 
   private View view;
-  private ServiceComputer serviceComputer;
-  private ServiceCompany serviceCompany;
+  private ComputerService serviceComputer;
+  private CompanyService serviceCompany;
   private ComputerValidator computerValidator;
 
   /**
@@ -43,8 +43,8 @@ public class ControllerCli {
    * @param view              the view
    */
   @Autowired
-  public ControllerCli(ComputerValidator computerValidator, ServiceCompany serviceCompany,
-      ServiceComputer serviceComputer, View view) {
+  public ControllerCli(ComputerValidator computerValidator, CompanyService serviceCompany,
+      ComputerService serviceComputer, View view) {
     this.view = view;
     this.serviceCompany = serviceCompany;
     this.serviceComputer = serviceComputer;

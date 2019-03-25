@@ -17,9 +17,9 @@ import validator.ComputerValidator;
 
 @Service
 @Transactional
-public class ServiceCompany {
+public class CompanyService {
 
-  private static final Logger logger = LoggerFactory.getLogger(ServiceCompany.class);
+  private static final Logger logger = LoggerFactory.getLogger(CompanyService.class);
 
   private ComputerValidator computerValidator;
   private CompanyDaoImp companyDaoImp;
@@ -33,7 +33,7 @@ public class ServiceCompany {
    * @param computerValidator the computer validator
    */
   @Autowired
-  public ServiceCompany(ComputerDaoImp computerDaoImp, CompanyDaoImp companyDaoImp,
+  public CompanyService(ComputerDaoImp computerDaoImp, CompanyDaoImp companyDaoImp,
       ComputerValidator computerValidator) {
     this.companyDaoImp = companyDaoImp;
     this.computerDaoImp = computerDaoImp;

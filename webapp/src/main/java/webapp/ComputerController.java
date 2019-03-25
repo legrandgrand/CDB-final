@@ -21,15 +21,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import service.ServiceCompany;
-import service.ServiceComputer;
+import service.CompanyService;
+import service.ComputerService;
 
 @Controller
 public class ComputerController {
   private static final Logger logger = LoggerFactory.getLogger(ComputerController.class);
 
-  private ServiceComputer serviceComputer;
-  private ServiceCompany serviceCompany;
+  private ComputerService serviceComputer;
+  private CompanyService serviceCompany;
   private DtoMapper mapper;
 
   /**
@@ -40,8 +40,8 @@ public class ComputerController {
    * @param serviceComputer the service computer
    */
   @Autowired
-  public ComputerController(DtoMapper mapper, ServiceCompany serviceCompany,
-      ServiceComputer serviceComputer) {
+  public ComputerController(DtoMapper mapper, CompanyService serviceCompany,
+      ComputerService serviceComputer) {
     this.serviceComputer = serviceComputer;
     this.serviceCompany = serviceCompany;
     this.mapper = mapper;
