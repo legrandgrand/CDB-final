@@ -43,7 +43,7 @@ public class ControllerCli {
    * @param view              the view
    */
   @Autowired
-  public ControllerCli(ComputerValidator computerValidator, CompanyService serviceCompany,
+  private ControllerCli(ComputerValidator computerValidator, CompanyService serviceCompany,
       ComputerService serviceComputer, View view) {
     this.view = view;
     this.serviceCompany = serviceCompany;

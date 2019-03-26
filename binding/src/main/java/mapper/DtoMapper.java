@@ -32,7 +32,7 @@ public class DtoMapper {
    * Instantiates a new dto mapper.
    */
   @Autowired
-  public DtoMapper(ComputerValidator validator) {
+  private DtoMapper(ComputerValidator validator) {
     this.validator = validator;
   }
 

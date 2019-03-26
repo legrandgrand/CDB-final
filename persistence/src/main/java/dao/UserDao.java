@@ -4,11 +4,10 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Repository;
-
-import model.UserDto;
 
 @Repository
 public class UserDao extends Dao{
@@ -17,7 +16,7 @@ public class UserDao extends Dao{
   private CriteriaQuery<User> criteria;
   private Root<User> root;
 
-  public UserDao() {
+  private UserDao() {
   }
 
   private void setCriteria() {
@@ -27,16 +26,14 @@ public class UserDao extends Dao{
     this.root = this.criteria.from(User.class);
     criteria.select(root);
   }
-  
-  public User login(User user) {
-    setCriteria();
-    criteria.select(root).where(builder.equal(root.get("name"), user.getUsername()));
-    return null;
-  }
 
   public User findByUsername(String username) {
-    // TODO Auto-generated method stub
-    return null;
+    setCriteria();
+    criteria.select(root).where(builder.equal(root.get("name"), username));
+    Query<User> query = getSession().createQuery(criteria);
+    User user = query.getSingleResult();
+    System.out.println(user);
+    return user;
   }
 
 }

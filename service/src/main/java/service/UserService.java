@@ -1,6 +1,7 @@
 package service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ public class UserService implements UserDetailsService {
   private UserDao userDao;
 
   @Autowired
-  public UserService(UserDao userDao) {
+  private UserService(UserDao userDao) {
     this.userDao = userDao;
 
   }
@@ -35,6 +36,7 @@ public class UserService implements UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    System.out.println("loading Username " + username);
     User user = userDao.findByUsername(username);
     if (user == null) {
       throw new UsernameNotFoundException("No user found with username: " + username);
@@ -45,7 +47,7 @@ public class UserService implements UserDetailsService {
     boolean accountNonLocked = true;
     return user = new User(user.getUsername(),
         user.getPassword().toLowerCase(), enabled, accountNonExpired, credentialsNonExpired,
-        accountNonLocked, null);// TODO: getAuthorities
+        accountNonLocked, getAuthorities(Arrays.asList("ADMIN", "USER")));// TODO: getAuthorities
   }
 
 }

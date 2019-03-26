@@ -24,7 +24,7 @@ public class ComputerDaoImp extends Dao implements ComputerDao {
   private CriteriaQuery<Computer> criteria;
   private Root<Computer> root;
 
-  public ComputerDaoImp() {
+  private ComputerDaoImp() {
   }
 
   private void setCriteria() {

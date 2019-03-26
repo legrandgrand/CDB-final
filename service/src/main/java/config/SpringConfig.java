@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @ComponentScan({ "dao", "controller", "mapper", "service", "validator", "view" })
 @PropertySource(value = { "classpath:configuration.properties" })
 public class SpringConfig {
+  
   @Autowired
   private Environment env;
 
