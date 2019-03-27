@@ -9,21 +9,35 @@
 <title>Computer Database</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="resources/css/bootstrap.css" rel="stylesheet" media="screen">
-<link href="resources/css/font-awesome.css" rel="stylesheet" media="screen">
+<link href="resources/css/font-awesome.css" rel="stylesheet"
+	media="screen">
 <link href="resources/css/main.css" rel="stylesheet" media="screen">
 </head>
 
 <body>
+	<header class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container">
+			<span> <a class="navbar-brand" href="Dashboard"> <spring:message
+						code="title" /></a> <a class="navbar-brand" href="/webapp/logout"
+				style="float: right;">logout</a>
+			</span>
+
+		</div>
+	</header>
+	
 	<h1>Registration</h1>
 	<form action="registration" method="POST" enctype="utf8">
 		<div>
-			<label>Login</label> <input type="text" class="form-control" id="username" placeholder="username" name="username"/>
+			<label>Login</label> <input type="text" class="form-control"
+				id="username" placeholder="username" name="username" />
 		</div>
 		<div>
-			<label>password</label> <input type="password" class="form-control" id="password" placeholder="password" name="password"/>
+			<label>password</label> <input type="password" class="form-control"
+				id="password" placeholder="password" name="password" />
 		</div>
 		<div>
-			<label>confirm</label> <input type="password" class="form-control" id="confirm" placeholder="confirm" name=confirm/>
+			<label>confirm</label> <input type="password" class="form-control"
+				id="confirm" placeholder="confirm" name=confirm />
 		</div>
 		<button type="submit">submit</button>
 	</form>

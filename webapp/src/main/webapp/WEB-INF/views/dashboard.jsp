@@ -1,15 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"  %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <!DOCTYPE html>
 <html>
 <head>
 <title>Computer Database</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="utf-8">
-<!-- Bootstrap -->
 <link href="resources/css/bootstrap.min.css" rel="stylesheet"
 	media="screen">
 <link href="resources/css/font-awesome.css" rel="stylesheet"
@@ -19,15 +18,17 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<span>
-				<a class="navbar-brand" href="Dashboard"> <spring:message code="title" /></a>
-				<a class="navbar-brand" href="/webapp/logout" style="float: right;"  >logout</a>
-			</span> 
-             
+			<span> <a class="navbar-brand" href="Dashboard"> <spring:message
+						code="title" /></a> <a class="navbar-brand" href="/webapp/logout"
+				style="float: right;">logout</a>
+			</span>
+
 		</div>
 	</header>
-	
-	<span style="float: right;"><spring:message code="lang" /> : <a href="?lang=en"><spring:message code="lang.en" /></a> | <a href="?lang=fr"><spring:message code="lang.fr" /></a></span>
+
+	<span style="float: right;"><spring:message code="lang" /> : <a
+		href="?lang=en"><spring:message code="lang.en" /></a> | <a
+		href="?lang=fr"><spring:message code="lang.fr" /></a></span>
 
 	<section id="main">
 		<div class="container">
@@ -138,7 +139,7 @@
 
 	</footer>
 
-<!-- 	<script src="resources/js/international.js"></script> -->
+	<!-- 	<script src="resources/js/international.js"></script> -->
 	<script src="resources/js/jquery.min.js"></script>
 	<script src="resources/js/bootstrap.min.js"></script>
 	<script src="resources/js/dashboard.js"></script>
