@@ -18,9 +18,12 @@
 </head>
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <a class="navbar-brand" href="Dashboard"> <spring:message code="title"/> </a>
-        </div>
+		<div class="container">
+			<span> <a class="navbar-brand" href="Dashboard"> <spring:message
+						code="title" /></a> <a class="navbar-brand" href="/webapp/logout"
+				style="float: right;">logout</a>
+			</span>
+		</div>
     </header>
     
     <span style="float: right;"><spring:message code="lang" /> : <a href="?lang=en"><spring:message code="lang.en" /></a> | <a href="?lang=fr"><spring:message code="lang.fr" /></a></span>

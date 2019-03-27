@@ -135,9 +135,7 @@ public class ComputerDaoImp extends Dao implements ComputerDao {
 
   @Override
   public void add(Computer computer) {
-    setCriteria();
-    System.out.println(computer);
-    session.save(computer);//Name not added somehow
+    getSession().save(computer);
   }
 
   @Override

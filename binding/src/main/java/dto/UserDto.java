@@ -1,10 +1,9 @@
-package model;
+package dto;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import validation.ValidateEmailAnnotation.ValidEmail;
-import validation.ValidatePasswordAnnotation.PasswordMatches;
+import validator.ValidatePasswordAnnotation.PasswordMatches;
 
 @PasswordMatches
 public class UserDto {
@@ -16,11 +15,6 @@ public class UserDto {
   @NotEmpty
   private String password;
   private String matchingPassword;
-   
-  @ValidEmail
-  @NotNull
-  @NotEmpty
-  private String email;
 
   public String getUsername() {
     return username;
@@ -46,12 +40,12 @@ public class UserDto {
     this.matchingPassword = matchingPassword;
   }
 
-  public String getEmail() {
-    return email;
+  @Override
+  public String toString() {
+    return "UserDto [username=" + username + ", password=" + password + ", matchingPassword="
+        + matchingPassword + "]";
   }
-
-  public void setEmail(String email) {
-    this.email = email;
-  }
+  
+  
 
 }

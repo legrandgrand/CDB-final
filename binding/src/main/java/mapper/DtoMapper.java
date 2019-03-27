@@ -128,13 +128,7 @@ public class DtoMapper {
     return "";
   }
 
-  /**
-   * Sets the date.
-   *
-   * @param timestamp the timestamp
-   * @return the date
-   */
-  public Date setDate(String timestamp) {
+  private Date setDate(String timestamp) {
     timestamp = timestamp + " 00:00:00";// timestamp format: YYYY-MM-DD (user input) + 00:00:00
     SimpleDateFormat dt = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
     try {

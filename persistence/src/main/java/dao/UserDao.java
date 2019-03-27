@@ -1,22 +1,27 @@
 package dao;
 
+import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 import org.hibernate.query.Query;
 import org.hibernate.Session;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import model.User;
 
 @Repository
-public class UserDao extends Dao{
+@Transactional
+public class UserDao extends Dao {
+  
   private Session session;
   private CriteriaBuilder builder;
   private CriteriaQuery<User> criteria;
   private Root<User> root;
 
-  private UserDao() {
+  public UserDao() {
   }
 
   private void setCriteria() {
@@ -29,10 +34,21 @@ public class UserDao extends Dao{
 
   public User findByUsername(String username) {
     setCriteria();
-    criteria.select(root).where(builder.equal(root.get("name"), username));
+    User user = null;
+    criteria.select(root).where(builder.equal(root.get("username"), username));
     Query<User> query = getSession().createQuery(criteria);
-    User user = query.getSingleResult();
-    System.out.println(user);
+    try {
+    user = query.getSingleResult();
+    System.out.println(user.toString());//Apparently necessary???????????????????????
+    } catch (NoResultException e) {
+      
+    }
+
+    return user;
+  }
+
+  public model.User save(User user) {
+    getSession().save(user);
     return user;
   }
 

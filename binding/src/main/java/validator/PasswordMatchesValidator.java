@@ -1,10 +1,10 @@
-package validation;
+package validator;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-import model.UserDto;
-import validation.ValidatePasswordAnnotation.PasswordMatches;
+import dto.UserDto;
+import validator.ValidatePasswordAnnotation.PasswordMatches;
 
 public class PasswordMatchesValidator implements ConstraintValidator<PasswordMatches, Object> {
 

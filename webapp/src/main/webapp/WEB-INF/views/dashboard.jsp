@@ -19,10 +19,11 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<span><a class="navbar-brand" href="Dashboard"> <spring:message
-						code="title" /></a>
+			<span>
+				<a class="navbar-brand" href="Dashboard"> <spring:message code="title" /></a>
+				<a class="navbar-brand" href="/webapp/logout" style="float: right;"  >logout</a>
 			</span> 
-
+             
 		</div>
 	</header>
 	

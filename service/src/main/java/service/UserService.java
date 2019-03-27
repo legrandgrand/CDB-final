@@ -1,8 +1,9 @@
 package service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -11,43 +12,79 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import dao.UserDao;
+import dto.UserDto;
+import exception.UsernameExistsException;
+import model.UserRole;
 
 @Service
 public class UserService implements UserDetailsService {
 
   private UserDao userDao;
+  private PasswordEncoder passwordEncoder;
 
   @Autowired
-  private UserService(UserDao userDao) {
+  public UserService(UserDao userDao, PasswordEncoder passwordEncoder) {
     this.userDao = userDao;
-
-  }
-
-  private static List<GrantedAuthority> getAuthorities(List<String> roles) {
-    List<GrantedAuthority> authorities = new ArrayList<>();
-    for (String role : roles) {
-      authorities.add(new SimpleGrantedAuthority(role));
-    }
-    return authorities;
+    this.passwordEncoder = passwordEncoder;
   }
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    System.out.println("loading Username " + username);
-    User user = userDao.findByUsername(username);
-    if (user == null) {
-      throw new UsernameNotFoundException("No user found with username: " + username);
-    }
-    boolean enabled = true;
-    boolean accountNonExpired = true;
-    boolean credentialsNonExpired = true;
-    boolean accountNonLocked = true;
-    return user = new User(user.getUsername(),
-        user.getPassword().toLowerCase(), enabled, accountNonExpired, credentialsNonExpired,
-        accountNonLocked, getAuthorities(Arrays.asList("ADMIN", "USER")));// TODO: getAuthorities
+    model.User user = userDao.findByUsername(username);
+    List<GrantedAuthority> authorities = buildUserAuthority(user.getUserRole());
+
+    return buildUserForAuthentication(user, authorities);
   }
+
+  private User buildUserForAuthentication(model.User user, List<GrantedAuthority> authorities) {
+    return new User(user.getUsername(), user.getPassword(), user.isEnabled(), true, true, true,
+        authorities);
+  }
+
+  private List<GrantedAuthority> buildUserAuthority(Set<UserRole> userRoles) {
+
+    Set<GrantedAuthority> setAuths = new HashSet<GrantedAuthority>();
+
+    for (UserRole userRole : userRoles) {
+      setAuths.add(new SimpleGrantedAuthority(userRole.getRole()));
+    }
+
+    List<GrantedAuthority> Result = new ArrayList<GrantedAuthority>(setAuths);
+
+    return Result;
+  }
+
+  @Transactional
+  public model.User registerNewUserAccount(UserDto userDto) 
+    throws UsernameExistsException {
+       
+      if (usernameExist(userDto.getUsername())) {  
+          throw new UsernameExistsException(
+            "There is an account with that email adress: "
+            +  userDto.getUsername());
+      }
+      System.out.println("ezrezrzer"+userDto);
+      model.User user = new model.User();    
+      user.setUsername(userDto.getUsername());
+      user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+      user.setEnabled(true);
+      System.out.println("ezrezrzer"+userDto);
+      return userDao.save(user); 
+  }
+  
+  private boolean usernameExist(String username) {
+      model.User user = userDao.findByUsername(username);
+      if (user != null) {
+          return true;
+      }
+      return false;
+  }
+  
+
 
 }

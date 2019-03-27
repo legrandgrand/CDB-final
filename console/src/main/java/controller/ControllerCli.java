@@ -34,14 +34,6 @@ public class ControllerCli {
   private CompanyService serviceCompany;
   private ComputerValidator computerValidator;
 
-  /**
-   * Instantiates a new controller.
-   *
-   * @param computerValidator the computer validator
-   * @param serviceCompany    the service company
-   * @param serviceComputer   the service computer
-   * @param view              the view
-   */
   @Autowired
   private ControllerCli(ComputerValidator computerValidator, CompanyService serviceCompany,
       ComputerService serviceComputer, View view) {
@@ -160,13 +152,7 @@ public class ControllerCli {
     mainMenu();
   }
 
-  /**
-   * Sets the computer name.
-   *
-   * @return the string
-   * @throws ComputerValidationException the computer validation exception
-   */
-  public String setComputerName(Scanner sc) throws ComputerValidationException {
+  private String setComputerName(Scanner sc) throws ComputerValidationException {
     view.setComputerName();
     String name = sc.nextLine();
 
@@ -179,13 +165,7 @@ public class ControllerCli {
     }
   }
 
-  /**
-   * Sets the computer intro.
-   *
-   * @return the date
-   * @throws ComputerValidationException the computer validation exception
-   */
-  public Date setComputerIntro(Scanner sc) throws ComputerValidationException {
+  private Date setComputerIntro(Scanner sc) throws ComputerValidationException {
     view.addComputerDateIntro();
     Date intro = null;
     String timestamp = null;
@@ -204,13 +184,7 @@ public class ControllerCli {
     return intro;
   }
 
-  /**
-   * Sets the computer disc.
-   *
-   * @return the date
-   * @throws ComputerValidationException the computer validation exception
-   */
-  public Date setComputerDisc(Scanner sc) throws ComputerValidationException {
+  private Date setComputerDisc(Scanner sc) throws ComputerValidationException {
     view.addComputerDateDisc();
     Date discontinuation = null;
     String timestamp = null;
@@ -230,12 +204,7 @@ public class ControllerCli {
 
   }
 
-  /**
-   * Sets the computer company.
-   *
-   * @return the company
-   */
-  public Company setComputerCompany(Scanner sc) throws ComputerValidationException {
+  private Company setComputerCompany(Scanner sc) throws ComputerValidationException {
     view.setComputerCompanyId();
     Company company = new Company();
     company.setName(sc.nextLine().trim());
@@ -301,13 +270,7 @@ public class ControllerCli {
     return new Computer(name, company, intro, discontinuation, 0);
   }
 
-  /**
-   * Sets the date.
-   *
-   * @param timestamp the timestamp
-   * @return the date
-   */
-  public Date setDate(String timestamp) {
+  private Date setDate(String timestamp) {
     timestamp = timestamp + " 00:00:00";// timestamp format: YYYY-MM-DD (user input) + 00:00:00
     SimpleDateFormat dt = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
     try {

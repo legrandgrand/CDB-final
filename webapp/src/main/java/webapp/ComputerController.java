@@ -2,9 +2,6 @@ package webapp;
 
 import dto.ComputerDto;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import mapper.DtoMapper;
@@ -40,7 +37,7 @@ public class ComputerController {
    * @param serviceComputer the service computer
    */
   @Autowired
-  public ComputerController(DtoMapper mapper, CompanyService serviceCompany,
+  private ComputerController(DtoMapper mapper, CompanyService serviceCompany,
       ComputerService serviceComputer) {
     this.serviceComputer = serviceComputer;
     this.serviceCompany = serviceCompany;
@@ -222,16 +219,7 @@ public class ComputerController {
 
   }
 
-  /**
-   * Sets the dto.
-   *
-   * @param computerName the computer name
-   * @param introString  the intro string
-   * @param discString   the disc string
-   * @param companyName  the company name
-   * @return the computer
-   */
-  public Computer setDto(String computerName, String introString, String discString,
+  private Computer setDto(String computerName, String introString, String discString,
       String companyName) {
 
     Company company = new Company();
@@ -276,30 +264,7 @@ public class ComputerController {
     return mv;
   }
 
-  /**
-   * Sets the date.
-   *
-   * @param timestamp the timestamp
-   * @return the date
-   */
-  public Date setDate(String timestamp) {
-    timestamp = timestamp + " 00:00:00";// timestamp format: YYYY-MM-DD (user input) + 00:00:00
-    SimpleDateFormat dt = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
-    try {
-      return dt.parse(timestamp);
-    } catch (ParseException e) {
-      logger.error(e.getMessage(), e);
-    }
-    return null;
-  }
-
-  /**
-   * Sets the limit.
-   *
-   * @param limitString the limit string
-   * @return the int
-   */
-  public int setLimit(String limitString) {
+  private int setLimit(String limitString) {
     int limit = 20;
 
     try {
@@ -313,13 +278,7 @@ public class ComputerController {
     return limit;
   }
 
-  /**
-   * Sets the page.
-   *
-   * @param pageString the page string
-   * @return the int
-   */
-  public int setPage(String pageString) {
+  private int setPage(String pageString) {
     int page = 0;
 
     try {
