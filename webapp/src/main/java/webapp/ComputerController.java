@@ -4,9 +4,7 @@ import dto.ComputerDto;
 
 import java.util.List;
 
-import mapper.DtoMapper;
 import model.Company;
-import model.Computer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,21 +25,11 @@ public class ComputerController {
 
   private ComputerService serviceComputer;
   private CompanyService serviceCompany;
-  private DtoMapper mapper;
 
-  /**
-   * Instantiates a new computer controller.
-   *
-   * @param mapper          the mapper
-   * @param serviceCompany  the service company
-   * @param serviceComputer the service computer
-   */
   @Autowired
-  private ComputerController(DtoMapper mapper, CompanyService serviceCompany,
-      ComputerService serviceComputer) {
+  public ComputerController(CompanyService serviceCompany, ComputerService serviceComputer) {
     this.serviceComputer = serviceComputer;
     this.serviceCompany = serviceCompany;
-    this.mapper = mapper;
   }
 
   /**
@@ -59,8 +47,8 @@ public class ComputerController {
     int page = setPage(pageString);
     int limit = setLimit(limitString);
     String order = "ASC";
-    List<Computer> computers = serviceComputer.listPage(limit, page);
-    return setMv(computers, order, page, limit);
+    List<ComputerDto> dtos = serviceComputer.listPage(limit, page);
+    return setMv(dtos, order, page, limit);
   }
 
   /**
@@ -82,8 +70,8 @@ public class ComputerController {
     int page = setPage(pageString);
     int limit = setLimit(limitString);
 
-    List<Computer> computers = serviceComputer.orderBy(column, order, limit, page);
-    return setMv(computers, order, page, limit);
+    List<ComputerDto> dtos = serviceComputer.orderBy(column, order, limit, page);
+    return setMv(dtos, order, page, limit);
   }
 
   /**
@@ -95,15 +83,14 @@ public class ComputerController {
   @GetMapping(value = "/GetComputer")
   public ModelAndView getComputer(@RequestParam(name = "search") String computerName) {
 
-    Computer computer = new Computer();
-    computer.setName(computerName);
+    ComputerDto dto = new ComputerDto();
+    dto.setName(computerName);
     // TODO: get computers from companyName
-    List<Computer> computers = serviceComputer.getComputerFromName(computer);
-    List<ComputerDto> dto = mapper.listDtos(computers);
+    List<ComputerDto> dtos = serviceComputer.getComputerFromName(dto);
 
     ModelAndView mv = new ModelAndView("dashboard");
-    mv.addObject("computers", dto);
-    mv.addObject("maxId", dto.size());
+    mv.addObject("computers", dtos);
+    mv.addObject("maxId", dtos.size());
     return mv;
   }
 
@@ -116,16 +103,14 @@ public class ComputerController {
   @PostMapping(value = "/DeleteComputer")
   public ModelAndView deleteComputer(
       @RequestParam(required = false, name = "selection") String idString) {
-    Computer computer = new Computer();
+    ComputerDto dto = new ComputerDto();
 
     if (idString != null) {
       String[] idStringTable = idString.split(",");
 
       for (String id : idStringTable) {
-        computer.setId(Integer.parseInt(id));
-        computer = serviceComputer.getComputer(computer).get(0);
-        logger.debug("Deleting computer: " + computer.getName());
-        serviceComputer.delete(computer);
+        dto = serviceComputer.getComputer(Integer.parseInt(id)).get(0);
+        serviceComputer.delete(dto);
       }
     }
 
@@ -163,10 +148,9 @@ public class ComputerController {
       @RequestParam(required = false, name = "disc") String discString,
       @RequestParam(required = false, name = "companyname") String companyName) {
 
-    Computer computer = setDto(computerName, introString, discString, companyName);
+    ComputerDto Dto = setDto(computerName, introString, discString, companyName);
 
-    logger.debug("Adding computer" + computer);
-    serviceComputer.add(computer);
+    serviceComputer.add(Dto);
 
     return setDashboard("0", "20");
   }
@@ -182,13 +166,11 @@ public class ComputerController {
 
     List<Company> companies = serviceCompany.listCompany();
 
-    Computer computer = new Computer();
-    computer.setId(Integer.parseInt(stringId));
-    computer = serviceComputer.getComputer(computer).get(0);
+    ComputerDto dto = serviceComputer.getComputer(Integer.parseInt(stringId)).get(0);
 
     ModelAndView mv = new ModelAndView();
     mv.addObject("companies", companies);
-    mv.addObject("computer", computer);
+    mv.addObject("computer", dto);
     mv.setViewName("editComputer");
     return mv;
 
@@ -197,6 +179,7 @@ public class ComputerController {
   /**
    * Post edit.
    *
+   * @param id           the id
    * @param computerName the computer name
    * @param introString  the intro string
    * @param discString   the disc string
@@ -210,16 +193,15 @@ public class ComputerController {
       @RequestParam(required = false, name = "disc") String discString,
       @RequestParam(required = false, name = "companyname") String companyName) {
 
-    Computer computer = setDto(computerName, introString, discString, companyName);
-    computer.setId(id);
-    logger.debug("Updating computer" + computer);
-    serviceComputer.update(computer);
+    ComputerDto dto = setDto(computerName, introString, discString, companyName);
+    dto.setIdComputer(id);
+    serviceComputer.update(dto);
 
     return setDashboard("0", "20");
 
   }
 
-  private Computer setDto(String computerName, String introString, String discString,
+  private ComputerDto setDto(String computerName, String introString, String discString,
       String companyName) {
 
     Company company = new Company();
@@ -233,27 +215,16 @@ public class ComputerController {
     dto.setCompanyName(company.getName());
     dto.setIdCompany(company.getId());
 
-    return mapper.dtoToComputer(dto);
+    return dto;
   }
 
-  /**
-   * Sets the mv.
-   *
-   * @param computers the computers
-   * @param order     the order
-   * @param page      the page
-   * @param limit     the limit
-   * @return the model and view
-   */
-  public ModelAndView setMv(List<Computer> computers, String order, int page, int limit) {
+  private ModelAndView setMv(List<ComputerDto> dto, String order, int page, int limit) {
 
     if (order.equals("ASC")) {
       order = "DESC";
     } else {
       order = "ASC";
     }
-
-    List<ComputerDto> dto = mapper.listDtos(computers);
 
     ModelAndView mv = new ModelAndView("dashboard");
     mv.addObject("computers", dto);

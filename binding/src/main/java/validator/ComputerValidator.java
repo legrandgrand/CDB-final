@@ -50,8 +50,8 @@ public class ComputerValidator {
    * @throws ComputerNameValidationException the computer name validation exception
    */
   public void validateName(String name) throws ComputerNameValidationException {
-    if (!name.equals("")) {
-      logger.info("valid");
+    if (name != "") {
+      logger.info("valid name");
     } else {
       throw new ComputerNameValidationException("The name you entered is empty. Please try again.");
     }
@@ -66,7 +66,7 @@ public class ComputerValidator {
   public void validateDateFormatIntro(String intro) throws ComputerIntroValidationException {
     SimpleDateFormat dt = new SimpleDateFormat("yyyy-mm-dd");
     try {
-      if (!intro.equals("")) {
+      if (!intro.isEmpty() && intro != null) {
         dt.parse(intro);
       }
     } catch (ParseException e) {
@@ -82,8 +82,9 @@ public class ComputerValidator {
    */
   public void validateDateFormatDisc(String disc) throws ComputerDiscValidationException {
     SimpleDateFormat dt = new SimpleDateFormat("yyyy-mm-dd");
+
     try {
-      if (!disc.equals("")) {
+      if (!disc.isEmpty() && disc != null) {
         dt.parse(disc);
       }
     } catch (ParseException e) {

@@ -1,7 +1,9 @@
 package service;
 
 import dao.ComputerDaoImp;
+import dto.ComputerDto;
 import exception.ComputerValidationException;
+import mapper.DtoMapper;
 
 import java.util.List;
 
@@ -23,6 +25,7 @@ public class ComputerService {
 
   private ComputerValidator computerValidator;
   private ComputerDaoImp computerDao;
+  private DtoMapper mapper;
 
   /**
    * Instantiates a new service computer.
@@ -31,9 +34,10 @@ public class ComputerService {
    * @param computerValidator the computer validator
    */
   @Autowired
-  public ComputerService(ComputerDaoImp computerDao, ComputerValidator computerValidator) {
+  public ComputerService(ComputerDaoImp computerDao, ComputerValidator computerValidator, DtoMapper mapper) {
     this.computerValidator = computerValidator;
     this.computerDao = computerDao;
+    this.mapper = mapper;
   }
 
   /**
@@ -41,8 +45,9 @@ public class ComputerService {
    *
    * @return the list
    */
-  public List<Computer> list() {
-    return computerDao.list();
+  public List<ComputerDto> list() {
+    List<Computer> computers = computerDao.list();
+    return mapper.listDtos(computers);
   }
 
   /**
@@ -51,8 +56,9 @@ public class ComputerService {
    * @param computer the computer
    * @return the computer
    */
-  public List<Computer> getComputer(Computer computer) {
-    return computerDao.getComputer(computer);
+  public List<ComputerDto> getComputer(int id) {
+    List<Computer> computers = computerDao.getComputer(id);
+    return mapper.listDtos(computers);
   }
 
   /**
@@ -61,8 +67,10 @@ public class ComputerService {
    * @param computer the computer
    * @return the computer from name
    */
-  public List<Computer> getComputerFromName(Computer computer) {
-    return computerDao.getComputerFromName(computer);
+  public List<ComputerDto> getComputerFromName(ComputerDto dto) {
+    Computer computer = mapper.dtoToComputer(dto);
+    List<Computer> computers = computerDao.getComputerFromName(computer);
+    return mapper.listDtos(computers);
   }
 
   /**
@@ -72,8 +80,9 @@ public class ComputerService {
    * @param page  the page
    * @return the list
    */
-  public List<Computer> listPage(int limit, int page) {
-    return computerDao.listPage(limit, page);
+  public List<ComputerDto> listPage(int limit, int page) {
+    List<Computer> computers =  computerDao.listPage(limit, page);
+    return mapper.listDtos(computers);
   }
 
   /**
@@ -85,8 +94,9 @@ public class ComputerService {
    * @param page   the page
    * @return the list
    */
-  public List<Computer> orderBy(String column, String type, int limit, int page) {
-    return computerDao.orderBy(column, type, limit, page);
+  public List<ComputerDto> orderBy(String column, String type, int limit, int page) {
+    List<Computer> computers = computerDao.orderBy(column, type, limit, page);
+    return mapper.listDtos(computers);
   }
 
   /**
@@ -94,7 +104,8 @@ public class ComputerService {
    *
    * @param computer the computer
    */
-  public void delete(Computer computer) {
+  public void delete(ComputerDto dto) {
+    Computer computer = mapper.dtoToComputer(dto);
     computerDao.delete(computer);
   }
 
@@ -103,8 +114,9 @@ public class ComputerService {
    *
    * @param computer the computer
    */
-  public void add(Computer computer) {
+  public void add(ComputerDto dto) {
     try {
+      Computer computer = mapper.dtoToComputer(dto);
       computerValidator.validateDiscBeforeIntro(computer.getIntro(), computer.getDiscontinuation());
       computerDao.add(computer);
     } catch (ComputerValidationException e) {
@@ -117,8 +129,9 @@ public class ComputerService {
    *
    * @param computer the computer
    */
-  public void update(Computer computer) {
+  public void update(ComputerDto dto) {
     try {
+      Computer computer = mapper.dtoToComputer(dto);
       computerValidator.validateDiscBeforeIntro(computer.getIntro(), computer.getDiscontinuation());
       computerDao.update(computer);
     } catch (ComputerValidationException e) {

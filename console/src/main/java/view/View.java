@@ -4,9 +4,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import model.Company;
-import model.Computer;
 
 import org.springframework.stereotype.Component;
+
+import dto.ComputerDto;
 
 @Component
 public class View {
@@ -68,12 +69,12 @@ public class View {
    *
    * @param list the list
    */
-  public void listComputers(List<Computer> list) {
-    Computer computer;
-    Iterator<Computer> itr = list.iterator();
+  public void listComputers(List<ComputerDto> list) {
+    ComputerDto dto = new ComputerDto();
+    Iterator<ComputerDto> itr = list.iterator();
     while (itr.hasNext()) {
-      computer = itr.next();
-      System.out.println(computer);
+      dto = itr.next();
+      System.out.println(dto.showComputer());
     }
   }
 
@@ -82,8 +83,8 @@ public class View {
    *
    * @param computer the computer
    */
-  public void addComputer(Computer computer) {
-    System.out.println(computer + " a été rajouté");
+  public void addComputer(ComputerDto dto) {
+    System.out.println(dto.showComputer() + " a été rajouté");
   }
 
   /**
@@ -154,8 +155,8 @@ public class View {
    *
    * @param computer the computer
    */
-  public void updateComputer(Computer computer) {
-    System.out.println(computer + " was updated");
+  public void updateComputer(ComputerDto dto) {
+    System.out.println(dto.showComputer() + " was updated");
   }
 
   /**

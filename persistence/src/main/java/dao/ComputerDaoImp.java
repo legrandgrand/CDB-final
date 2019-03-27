@@ -34,7 +34,7 @@ public class ComputerDaoImp extends Dao implements ComputerDao {
     this.root = this.criteria.from(Computer.class);
     criteria.select(root);
   }
-  
+
   @Override
   public List<Computer> list() {
     setCriteria();
@@ -74,10 +74,10 @@ public class ComputerDaoImp extends Dao implements ComputerDao {
   }
 
   @Override
-  public List<Computer> getComputer(Computer computer) {
+  public List<Computer> getComputer(int id) {
     setCriteria();
 
-    criteria.select(root).where(builder.equal(root.get("id"), computer.getId()));
+    criteria.select(root).where(builder.equal(root.get("id"), id));
     Query<Computer> query = getSession().createQuery(criteria);
 
     return query.getResultList();
@@ -119,23 +119,26 @@ public class ComputerDaoImp extends Dao implements ComputerDao {
 
   @Override
   public void update(Computer computer) {
+    if (computer != null) {
+      CriteriaBuilder updateBuilder = getSession().getCriteriaBuilder();
+      CriteriaUpdate<Computer> update = updateBuilder.createCriteriaUpdate(Computer.class);
+      Root<Computer> updateRoot = update.from(Computer.class);
 
-    CriteriaBuilder updateBuilder = getSession().getCriteriaBuilder();
-    CriteriaUpdate<Computer> update = updateBuilder.createCriteriaUpdate(Computer.class);
-    Root<Computer> updateRoot = update.from(Computer.class);
+      update.set("name", computer.getName());
+      update.set("intro", computer.getIntro());
+      update.set("discontinuation", computer.getDiscontinuation());
+      update.set("company", computer.getCompany());
+      update.where(updateBuilder.equal(updateRoot.get("id"), computer.getId()));
 
-    update.set("name", computer.getName());
-    update.set("intro", computer.getIntro());
-    update.set("discontinuation", computer.getDiscontinuation());
-    update.set("company", computer.getCompany());
-    update.where(updateBuilder.equal(updateRoot.get("id"), computer.getId()));
-
-    getSession().createQuery(update).executeUpdate();
+      getSession().createQuery(update).executeUpdate();
+    }
   }
 
   @Override
   public void add(Computer computer) {
-    getSession().save(computer);
+    if (computer != null) {
+      getSession().save(computer);
+    }
   }
 
   @Override

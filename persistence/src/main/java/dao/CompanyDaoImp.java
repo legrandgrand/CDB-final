@@ -32,7 +32,7 @@ public class CompanyDaoImp extends Dao implements CompanyDao {
     criteria.select(root);
   }
 
-  private CompanyDaoImp() {
+  public CompanyDaoImp() {
   }
 
   @Override

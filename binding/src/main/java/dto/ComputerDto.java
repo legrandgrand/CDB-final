@@ -88,6 +88,16 @@ public class ComputerDto {
         + ", dateIntro=" + intro + ", dateDiscontinuation=" + discontinuation
         + ", companyName=" + companyName + ", idCompany=" + idCompany + "]";
   }
+  
+  public String showComputer() {
+    return "Computer [id=" + idComputer + ", name=" + name
+        + ", dateIntro=" + intro + ", dateDiscontinuation=" + discontinuation
+        + ", companyName=" + companyName + "]";
+  }
+  
+  public String showCompany() {
+    return "Company [companyName=" + companyName + ", idCompany=" + idCompany + "]";
+  }
 
 
 

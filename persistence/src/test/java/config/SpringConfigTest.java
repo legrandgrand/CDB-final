@@ -53,11 +53,6 @@ public class SpringConfigTest {
     return sessionFactory;
   }
   
-  /**
-   * Hibernate properties.
-   *
-   * @return the properties
-   */
   private final Properties hibernateProperties() {
     Properties hibernateProperties = new Properties();
     hibernateProperties.setProperty("hibernate.show_sql", env.getProperty("hibernate.show_sql"));

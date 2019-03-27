@@ -11,13 +11,13 @@ import java.util.List;
 import java.util.Scanner;
 
 import model.Company;
-import model.Computer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import dto.ComputerDto;
 import service.CompanyService;
 import service.ComputerService;
 
@@ -99,7 +99,6 @@ public class ControllerCli {
    */
   public void listCompany() {
     view.startListCompanies();
-    logger.debug("Listing companies");
     List<Company> list = serviceCompany.listCompany();
     view.listCompanies(list);
     mainMenu();
@@ -110,8 +109,7 @@ public class ControllerCli {
    */
   public void listComputers() {
     view.startListComputers();
-    logger.debug("Listing computers");
-    List<Computer> list = serviceComputer.list();
+    List<ComputerDto> list = serviceComputer.list();
     view.listComputers(list);
     mainMenu();
   }
@@ -126,12 +124,11 @@ public class ControllerCli {
     String name = null;
     name = sc.nextLine();
 
-    Computer computer = new Computer();
-    computer.setName(name);
-    serviceComputer.delete(computer);
-    view.deletedComputer(name);
+    ComputerDto dto = new ComputerDto();
+    dto.setName(name);
+    serviceComputer.delete(dto);
+    view.deletedComputer(dto.getName());
 
-    logger.debug("Deleting computer named" + name);
     mainMenu();
   }
 
@@ -226,10 +223,9 @@ public class ControllerCli {
     sc.nextLine();
     view.startAddComputer();
     
-    Computer computer = setComputer(sc);
-    logger.debug("Adding computer: " + computer);
-    serviceComputer.add(computer);
-    view.addComputer(computer);
+    ComputerDto dto = setComputer(sc);
+    serviceComputer.add(dto);
+    view.addComputer(dto);
     mainMenu();
   }
 
@@ -240,10 +236,9 @@ public class ControllerCli {
     sc.nextLine();
     view.startUpdateComputer();
     
-    Computer computer = setComputer(sc);
-    logger.debug("Updating computer: " + computer);
-    serviceComputer.update(computer);
-    view.updateComputer(computer);
+    ComputerDto dto = setComputer(sc);
+    serviceComputer.update(dto);
+    view.updateComputer(dto);
     mainMenu();
   }
 
@@ -252,22 +247,22 @@ public class ControllerCli {
    *
    * @return the computer
    */
-  public Computer setComputer(Scanner sc) {
+  public ComputerDto setComputer(Scanner sc) {
     String name = null;
-    Date intro = null;
-    Date discontinuation = null;
+    String intro = null;
+    String discontinuation = null;
     Company company = new Company();
     try {
       name = setComputerName(sc);
-      intro = setComputerIntro(sc);
-      discontinuation = setComputerDisc(sc);
+      intro = setComputerIntro(sc)+"";
+      discontinuation = setComputerDisc(sc)+"";
       company = setComputerCompany(sc);
     } catch (ComputerValidationException e) {
       logger.error(e.getMessage(), e);
       view.invalidComputer(e.getMessage());
       mainMenu();
     }
-    return new Computer(name, company, intro, discontinuation, 0);
+    return new ComputerDto(0, name, intro, discontinuation, company.getName(), company.getId());
   }
 
   private Date setDate(String timestamp) {

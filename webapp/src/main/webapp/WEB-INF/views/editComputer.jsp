@@ -33,12 +33,12 @@
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
                     <div class="label label-default pull-right">
-                        id: <c:out value="${computer.id}"/>
+                        id: <c:out value="${computer.idComputer}"/>
                     </div>
                     <h1><spring:message code="EditTitle"/></h1>
 
                     <form action="EditComputer" method="POST">
-                        <input type="hidden" value="<c:out value="${computer.id}"/>" id="id" name="id" />
+                        <input type="hidden" value="<c:out value="${computer.idComputer}"/>" id="id" name="id" />
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName"><spring:message code="Name"/></label>
@@ -58,7 +58,7 @@
                                 <select class="form-control" id="companyId" name="companyname">
                                 <c:forEach items="${companies}" var="company">
                                 	<c:choose>
-									  <c:when test="${computer.company.id == company.id}">
+									  <c:when test="${computer.idCompany == company.id}">
 									    <option selected="selected" value="${company.name}">${company.name}</option>
 									  </c:when>
 									  <c:otherwise>

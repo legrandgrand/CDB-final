@@ -68,12 +68,10 @@ public class UserService implements UserDetailsService {
             "There is an account with that email adress: "
             +  userDto.getUsername());
       }
-      System.out.println("ezrezrzer"+userDto);
       model.User user = new model.User();    
       user.setUsername(userDto.getUsername());
       user.setPassword(passwordEncoder.encode(userDto.getPassword()));
       user.setEnabled(true);
-      System.out.println("ezrezrzer"+userDto);
       return userDao.save(user); 
   }
   
