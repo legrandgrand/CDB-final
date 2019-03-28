@@ -34,23 +34,28 @@ public class UserController {
     if (!result.hasErrors()) {
       registered = createUserAccount(userDto, result);
     }
+    
     if (registered == null) {
       result.rejectValue("username", "message.regError");
     }
+    
     if (result.hasErrors()) {
       return new ModelAndView("registration", "user", userDto);
     } else {
       return new ModelAndView("login", "user", userDto);
     }
+    
   }
 
   private User createUserAccount(UserDto userDto, BindingResult result) {
     User registered = null;
+    
     try {
       registered = userService.registerNewUserAccount(userDto);
     } catch (UsernameExistsException e) {
       return null;
     }
+    
     return registered;
   }
   

@@ -1,12 +1,11 @@
 package webapp;
 
+import dto.CompanyDto;
 import dto.ComputerDto;
 import exception.ComputerValidationException;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import model.Company;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -141,7 +140,7 @@ public class ComputerController {
   @GetMapping(value = "/AddComputer")
   public ModelAndView getAdd() {
 
-    List<Company> companies = serviceCompany.listCompany();
+    List<CompanyDto> companies = serviceCompany.listCompany();
 
     ModelAndView mv = new ModelAndView();
     mv.addObject("companies", companies);
@@ -184,7 +183,7 @@ public class ComputerController {
   @GetMapping(value = "/EditComputer")
   public ModelAndView getEdit(@RequestParam(name = "id") String stringId) {
 
-    List<Company> companies = serviceCompany.listCompany();
+    List<CompanyDto> companies = serviceCompany.listCompany();
 
     ComputerDto dto = serviceComputer.getFromId(Integer.parseInt(stringId)).get(0);
 
@@ -228,7 +227,7 @@ public class ComputerController {
   private ComputerDto setDto(String computerName, String introString, String discString,
       String companyName) {
 
-    Company company = new Company();
+    CompanyDto company = new CompanyDto();
     company.setName(companyName);
     company = serviceCompany.getCompany(company).get(0);
 

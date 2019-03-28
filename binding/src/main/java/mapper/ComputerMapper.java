@@ -11,7 +11,6 @@ import java.util.Date;
 import java.util.List;
 
 import model.Company;
-import model.Company.CompanyBuilder;
 import model.Computer;
 
 import org.slf4j.Logger;
@@ -22,17 +21,17 @@ import org.springframework.stereotype.Component;
 import validator.ComputerValidator;
 
 @Component
-public class DtoMapper {
+public class ComputerMapper {
 
-  private static final Logger logger = LoggerFactory.getLogger(DtoMapper.class);
+  private static final Logger logger = LoggerFactory.getLogger(ComputerMapper.class);
 
   ComputerValidator validator;
 
   /**
-   * Instantiates a new dto mapper.
+   * Instantiates a new computer mapper.
    */
   @Autowired
-  private DtoMapper(ComputerValidator validator) {
+  private ComputerMapper(ComputerValidator validator) {
     this.validator = validator;
   }
 
@@ -97,20 +96,6 @@ public class DtoMapper {
     }
     
     return dtos;
-  }
-
-  /**
-   * Map company.
-   *
-   * @param dto the dto
-   * @return the company
-   */
-  public Company mapCompany(ComputerDto dto) {
-    CompanyBuilder companyBuilder = new CompanyBuilder().setNameCompany(dto.getCompanyName())
-        .setCompanyId(dto.getIdCompany());
-
-    return companyBuilder.build();
-
   }
 
   /**

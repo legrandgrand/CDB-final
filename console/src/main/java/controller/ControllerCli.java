@@ -10,18 +10,19 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
-import model.Company;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import dto.CompanyDto;
 import dto.ComputerDto;
+
 import service.CompanyService;
 import service.ComputerService;
 
 import validator.ComputerValidator;
+
 import view.View;
 
 @Component
@@ -60,6 +61,7 @@ public class ControllerCli {
 
     try {
       int userChoice = sc.nextInt();
+      
       switch (userChoice) { // TODO: enums
         case 1:
           listCompany();
@@ -88,6 +90,7 @@ public class ControllerCli {
           mainMenu();
           break;
       }
+      
     } catch (InputMismatchException e) {
       view.invalidInput();
       mainMenu();
@@ -100,7 +103,7 @@ public class ControllerCli {
    */
   public void listCompany() {
     view.startListCompanies();
-    List<Company> list = serviceCompany.listCompany();
+    List<CompanyDto> list = serviceCompany.listCompany();
     view.listCompanies(list);
     mainMenu();
   }
@@ -127,6 +130,7 @@ public class ControllerCli {
 
     ComputerDto dto = new ComputerDto();
     dto.setName(name);
+    
     try {
       serviceComputer.delete(dto);
       view.deletedComputer(dto.getName());
@@ -145,11 +149,13 @@ public class ControllerCli {
     view.startDeleteCompany();
     
     int companyId = sc.nextInt();
-    Company company = new Company();
+    
+    CompanyDto company = new CompanyDto();
     company.setId(companyId);
-    logger.debug("Deleting company of id: " + companyId);
+    
     serviceCompany.delete(company);
     view.deleteCompany(company);
+    
     sc.nextLine();
     mainMenu();
   }
@@ -207,12 +213,12 @@ public class ControllerCli {
 
   }
 
-  private Company setComputerCompany(Scanner sc) throws ComputerValidationException {
+  private CompanyDto setComputerCompany(Scanner sc) throws ComputerValidationException {
     view.setComputerCompanyId();
-    Company company = new Company();
+    CompanyDto company = new CompanyDto();
     company.setName(sc.nextLine().trim());
-    logger.debug("Setting company Id: " + company.getName());
-    List<Company> list = serviceCompany.getCompany(company);
+    
+    List<CompanyDto> list = serviceCompany.getCompany(company);
 
     try {
       company = list.get(0);
@@ -270,7 +276,7 @@ public class ControllerCli {
     String name = null;
     String intro = null;
     String discontinuation = null;
-    Company company = new Company();
+    CompanyDto company = new CompanyDto();
     
     try {//TODO: improve this block way of dealing with exceptions
       name = setComputerName(sc);

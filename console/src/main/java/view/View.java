@@ -3,10 +3,9 @@ package view;
 import java.util.Iterator;
 import java.util.List;
 
-import model.Company;
-
 import org.springframework.stereotype.Component;
 
+import dto.CompanyDto;
 import dto.ComputerDto;
 
 @Component
@@ -48,9 +47,9 @@ public class View {
    *
    * @param list the list
    */
-  public void listCompanies(List<Company> list) {
-    Company company;
-    Iterator<Company> itr = list.iterator();
+  public void listCompanies(List<CompanyDto> list) {
+    CompanyDto company;
+    Iterator<CompanyDto> itr = list.iterator();
     while (itr.hasNext()) {
       company = itr.next();
       System.out.println(company);
@@ -146,7 +145,7 @@ public class View {
    *
    * @param company the company
    */
-  public void deleteCompany(Company company) {
+  public void deleteCompany(CompanyDto company) {
     System.out.println(company.getId() + "a été supprimé");
   }
 

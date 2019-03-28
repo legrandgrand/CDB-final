@@ -129,7 +129,7 @@ public class ComputerValidator {
    * @param id the id
    * @throws ComputerIdValidationException the computer id validation exception
    */
-  public void validateId(int id) throws ComputerIdValidationException {
+  public void validateId(long id) throws ComputerIdValidationException {
     
     if (id > MAX_ID || id < MIN_ID) {
       throw new ComputerIdValidationException();

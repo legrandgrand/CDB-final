@@ -2,6 +2,8 @@ package service;
 
 import dao.CompanyDaoImp;
 import dao.ComputerDaoImp;
+import dto.CompanyDto;
+import mapper.CompanyMapper;
 
 import java.util.List;
 
@@ -24,6 +26,7 @@ public class CompanyService {
   private ComputerValidator computerValidator;
   private CompanyDaoImp companyDaoImp;
   private ComputerDaoImp computerDaoImp;
+  private CompanyMapper companyMapper;
 
   /**
    * Instantiates a new service company.
@@ -34,10 +37,11 @@ public class CompanyService {
    */
   @Autowired
   public CompanyService(ComputerDaoImp computerDaoImp, CompanyDaoImp companyDaoImp,
-      ComputerValidator computerValidator) {
+      ComputerValidator computerValidator, CompanyMapper companyMapper) {
     this.companyDaoImp = companyDaoImp;
     this.computerDaoImp = computerDaoImp;
     this.computerValidator = computerValidator;
+    this.companyMapper = companyMapper;
   }
 
   /**
@@ -45,8 +49,8 @@ public class CompanyService {
    *
    * @return the list
    */
-  public List<Company> listCompany() {
-    return companyDaoImp.list();
+  public List<CompanyDto> listCompany() {  
+     return companyMapper.listDtos(companyDaoImp.list());
   }
 
   /**
@@ -55,8 +59,8 @@ public class CompanyService {
    * @param company the company
    * @return the company
    */
-  public List<Company> getCompany(Company company) {
-    return companyDaoImp.getCompany(company);
+  public List<CompanyDto> getCompany(CompanyDto companyDto) {
+    return companyMapper.listDtos(companyDaoImp.getCompany(companyMapper.dtoToCompany(companyDto)));
   }
 
   /**
@@ -65,13 +69,13 @@ public class CompanyService {
    * @param company the company
    * @return the company from id
    */
-  public List<Company> getCompanyFromId(Company company) {
+  public List<CompanyDto> getCompanyFromId(CompanyDto companyDto) {//TODO: shouldn't validate here
     try {
-      computerValidator.validateId(company.getId());
+      computerValidator.validateId(companyDto.getId());
     } catch (Exception e) {
       logger.error(e.getMessage(), e);
     }
-    return companyDaoImp.getCompanyFromId(company);
+    return companyMapper.listDtos(companyDaoImp.getCompanyFromId(companyMapper.dtoToCompany(companyDto)));
   }
 
   /**
@@ -79,7 +83,8 @@ public class CompanyService {
    *
    * @param company the company
    */
-  public void delete(Company company) {
+  public void delete(CompanyDto companyDto) {
+    Company company = companyMapper.dtoToCompany(companyDto);
     computerDaoImp.deleteComputerOfCompanyId(company);
     companyDaoImp.delete(company);
   }
