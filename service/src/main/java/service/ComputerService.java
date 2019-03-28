@@ -9,8 +9,6 @@ import java.util.List;
 
 import model.Computer;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,8 +18,6 @@ import validator.ComputerValidator;
 @Service
 @Transactional
 public class ComputerService {
-
-  private static final Logger logger = LoggerFactory.getLogger(ComputerService.class);
 
   private ComputerValidator computerValidator;
   private ComputerDaoImp computerDao;
@@ -56,7 +52,7 @@ public class ComputerService {
    * @param computer the computer
    * @return the computer
    */
-  public List<ComputerDto> getComputer(int id) {
+  public List<ComputerDto> getFromId(int id) {
     List<Computer> computers = computerDao.getComputer(id);
     return mapper.listDtos(computers);
   }
@@ -67,7 +63,7 @@ public class ComputerService {
    * @param computer the computer
    * @return the computer from name
    */
-  public List<ComputerDto> getComputerFromName(ComputerDto dto) {
+  public List<ComputerDto> getFromName(ComputerDto dto) throws ComputerValidationException {
     Computer computer = mapper.dtoToComputer(dto);
     List<Computer> computers = computerDao.getComputerFromName(computer);
     return mapper.listDtos(computers);
@@ -104,39 +100,31 @@ public class ComputerService {
    *
    * @param computer the computer
    */
-  public void delete(ComputerDto dto) {
+  public void delete(ComputerDto dto) throws ComputerValidationException {
     Computer computer = mapper.dtoToComputer(dto);
     computerDao.delete(computer);
   }
 
   /**
-   * Adds the.
+   * Adds the computer.
    *
    * @param computer the computer
    */
-  public void add(ComputerDto dto) {
-    try {
+  public void add(ComputerDto dto) throws ComputerValidationException {
       Computer computer = mapper.dtoToComputer(dto);
       computerValidator.validateDiscBeforeIntro(computer.getIntro(), computer.getDiscontinuation());
       computerDao.add(computer);
-    } catch (ComputerValidationException e) {
-      logger.error(e.getMessage(), e);
-    }
   }
 
   /**
-   * Update.
+   * Update the computer.
    *
    * @param computer the computer
    */
-  public void update(ComputerDto dto) {
-    try {
+  public void update(ComputerDto dto) throws ComputerValidationException {
       Computer computer = mapper.dtoToComputer(dto);
       computerValidator.validateDiscBeforeIntro(computer.getIntro(), computer.getDiscontinuation());
       computerDao.update(computer);
-    } catch (ComputerValidationException e) {
-      logger.error(e.getMessage(), e);
-    }
   }
 
   /**

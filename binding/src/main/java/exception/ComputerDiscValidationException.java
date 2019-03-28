@@ -4,7 +4,7 @@ public class ComputerDiscValidationException extends ComputerValidationException
   
   private static final long serialVersionUID = 1L;
 
-  public ComputerDiscValidationException(String message) {
-    super(message);
+  public ComputerDiscValidationException() {
+    super("Date of Discontinuation isn't of the valid format.");
   }
 }

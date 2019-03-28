@@ -1,7 +1,9 @@
 package webapp;
 
 import dto.ComputerDto;
+import exception.ComputerValidationException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import model.Company;
@@ -84,11 +86,19 @@ public class ComputerController {
   public ModelAndView getComputer(@RequestParam(name = "search") String computerName) {
 
     ComputerDto dto = new ComputerDto();
+    List<ComputerDto> dtos = new ArrayList<>();
+    ModelAndView mv = new ModelAndView("dashboard");
+    
     dto.setName(computerName);
     // TODO: get computers from companyName
-    List<ComputerDto> dtos = serviceComputer.getComputerFromName(dto);
+    
+    try {
+      dtos = serviceComputer.getFromName(dto);
+    } catch (ComputerValidationException invalidComputer) {
+      logger.error(invalidComputer.getMessage(), invalidComputer);
+      mv.addObject("message", invalidComputer.getMessage());//TODO: Send error message
+    }
 
-    ModelAndView mv = new ModelAndView("dashboard");
     mv.addObject("computers", dtos);
     mv.addObject("maxId", dtos.size());
     return mv;
@@ -109,8 +119,14 @@ public class ComputerController {
       String[] idStringTable = idString.split(",");
 
       for (String id : idStringTable) {
-        dto = serviceComputer.getComputer(Integer.parseInt(id)).get(0);
-        serviceComputer.delete(dto);
+        dto = serviceComputer.getFromId(Integer.parseInt(id)).get(0);
+        
+        try {
+          serviceComputer.delete(dto);
+        } catch (ComputerValidationException invalidComputer) {
+          logger.error(invalidComputer.getMessage(), invalidComputer);
+        }
+        
       }
     }
 
@@ -150,7 +166,11 @@ public class ComputerController {
 
     ComputerDto Dto = setDto(computerName, introString, discString, companyName);
 
-    serviceComputer.add(Dto);
+    try {
+      serviceComputer.add(Dto);
+    } catch (ComputerValidationException invalidComputer) {
+      logger.error(invalidComputer.getMessage(), invalidComputer);//TODO: show message, return to add computer
+    }
 
     return setDashboard("0", "20");
   }
@@ -166,7 +186,7 @@ public class ComputerController {
 
     List<Company> companies = serviceCompany.listCompany();
 
-    ComputerDto dto = serviceComputer.getComputer(Integer.parseInt(stringId)).get(0);
+    ComputerDto dto = serviceComputer.getFromId(Integer.parseInt(stringId)).get(0);
 
     ModelAndView mv = new ModelAndView();
     mv.addObject("companies", companies);
@@ -195,7 +215,11 @@ public class ComputerController {
 
     ComputerDto dto = setDto(computerName, introString, discString, companyName);
     dto.setIdComputer(id);
-    serviceComputer.update(dto);
+    try {
+      serviceComputer.update(dto);
+    } catch (ComputerValidationException invalidComputer) {
+      logger.error(invalidComputer.getMessage(), invalidComputer);//TODO: show message user and stay on EditComputer
+    }
 
     return setDashboard("0", "20");
 

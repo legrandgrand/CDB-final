@@ -92,6 +92,7 @@ public class ControllerCli {
       view.invalidInput();
       mainMenu();
     }
+    
   }
 
   /**
@@ -126,8 +127,12 @@ public class ControllerCli {
 
     ComputerDto dto = new ComputerDto();
     dto.setName(name);
-    serviceComputer.delete(dto);
-    view.deletedComputer(dto.getName());
+    try {
+      serviceComputer.delete(dto);
+      view.deletedComputer(dto.getName());
+    } catch (ComputerValidationException invalidComputer) {
+      view.invalidComputer(invalidComputer.getMessage());
+    }
 
     mainMenu();
   }
@@ -155,11 +160,11 @@ public class ControllerCli {
 
     try {
       computerValidator.validateName(name);
-      logger.debug("Setting computer name: " + name);
       return name;
     } catch (ComputerValidationException e) {
       throw e;
     }
+    
   }
 
   private Date setComputerIntro(Scanner sc) throws ComputerValidationException {
@@ -173,11 +178,11 @@ public class ControllerCli {
     } catch (ComputerValidationException e) {
       throw e;
     }
+    
     if (!timestamp.equals("")) {
       intro = setDate(timestamp);
     }
-
-    logger.debug("Setting computer date of introduction: " + intro);
+    
     return intro;
   }
 
@@ -192,6 +197,7 @@ public class ControllerCli {
     } catch (ComputerValidationException e) {
       throw e;
     }
+    
     if (!timestamp.equals("")) {
       discontinuation = setDate(timestamp);
     }
@@ -213,6 +219,7 @@ public class ControllerCli {
     } catch (IndexOutOfBoundsException e) {
       throw new ComputerValidationException("The company name you entered doesn't exist");
     }
+    
     return company;
   }
 
@@ -224,8 +231,14 @@ public class ControllerCli {
     view.startAddComputer();
     
     ComputerDto dto = setComputer(sc);
-    serviceComputer.add(dto);
-    view.addComputer(dto);
+    
+    try {
+      serviceComputer.add(dto);
+      view.addComputer(dto);
+    } catch (ComputerValidationException invalidComputer) {
+      view.invalidComputer(invalidComputer.getMessage());
+    }
+
     mainMenu();
   }
 
@@ -237,8 +250,14 @@ public class ControllerCli {
     view.startUpdateComputer();
     
     ComputerDto dto = setComputer(sc);
-    serviceComputer.update(dto);
-    view.updateComputer(dto);
+    
+    try {
+      serviceComputer.update(dto);
+      view.updateComputer(dto);
+    } catch (ComputerValidationException invalidComputer) {
+      view.invalidComputer(invalidComputer.getMessage());
+    }
+
     mainMenu();
   }
 
@@ -252,7 +271,8 @@ public class ControllerCli {
     String intro = null;
     String discontinuation = null;
     Company company = new Company();
-    try {
+    
+    try {//TODO: improve this block way of dealing with exceptions
       name = setComputerName(sc);
       intro = setComputerIntro(sc)+"";
       discontinuation = setComputerDisc(sc)+"";
@@ -262,12 +282,14 @@ public class ControllerCli {
       view.invalidComputer(e.getMessage());
       mainMenu();
     }
+    
     return new ComputerDto(0, name, intro, discontinuation, company.getName(), company.getId());
   }
 
   private Date setDate(String timestamp) {
     timestamp = timestamp + " 00:00:00";// timestamp format: YYYY-MM-DD (user input) + 00:00:00
     SimpleDateFormat dt = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+    
     try {
       return dt.parse(timestamp);
     } catch (ParseException e) {
