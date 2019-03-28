@@ -13,8 +13,10 @@ import org.hibernate.Session;
 import org.hibernate.query.Query;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
+@Transactional
 public class CompanyDaoImp extends Dao implements CompanyDao {
 
   private Session session;
@@ -30,7 +32,7 @@ public class CompanyDaoImp extends Dao implements CompanyDao {
     criteria.select(root);
   }
 
-  private CompanyDaoImp() {
+  public CompanyDaoImp() {
   }
 
   @Override

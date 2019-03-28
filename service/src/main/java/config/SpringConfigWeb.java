@@ -25,7 +25,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan({ "webapp"})
+@ComponentScan({ "webapp", "config"})
 @PropertySource(value = { "classpath:configuration.properties" })
 public class SpringConfigWeb extends SpringConfig
     implements WebApplicationInitializer, WebMvcConfigurer {
@@ -101,6 +101,5 @@ public class SpringConfigWeb extends SpringConfig
     registry.addInterceptor(localeChangeInterceptor());
   }
 
-  // HandlerExceptionResolver
 
 }

@@ -3,7 +3,7 @@ package dto;
 public class ComputerDto {
   
   private long idComputer;
-  private int idCompany; 
+  private long idCompany; 
   private String name;// Compulsory
   private String intro;
   private String discontinuation;// Has to be higher than date B
@@ -20,7 +20,7 @@ public class ComputerDto {
    * @param idCompany the id company
    */
   public ComputerDto(long idComputer, String name, String intro, String discontinuation,
-      String companyName, int idCompany) {
+      String companyName, long idCompany) {
     super();
     this.idComputer = idComputer;
     this.name = name;
@@ -30,9 +30,7 @@ public class ComputerDto {
     this.idCompany = idCompany;
   }
   
-  public ComputerDto() {
-    
-  }
+  public ComputerDto() {}
   
   public long getIdComputer() {
     return idComputer;
@@ -42,11 +40,11 @@ public class ComputerDto {
     this.idComputer = idComputer;
   }
   
-  public int getIdCompany() {
+  public long getIdCompany() {
     return idCompany;
   }
 
-  public void setIdCompany(int idCompany) {
+  public void setIdCompany(long idCompany) {
     this.idCompany = idCompany;
   }
 
@@ -87,6 +85,16 @@ public class ComputerDto {
     return "ComputerDto [idComputer=" + idComputer + ", name=" + name
         + ", dateIntro=" + intro + ", dateDiscontinuation=" + discontinuation
         + ", companyName=" + companyName + ", idCompany=" + idCompany + "]";
+  }
+  
+  public String showComputer() {
+    return "Computer [id=" + idComputer + ", name=" + name
+        + ", dateIntro=" + intro + ", dateDiscontinuation=" + discontinuation
+        + ", companyName=" + companyName + "]";
+  }
+  
+  public String showCompany() {
+    return "Company [companyName=" + companyName + ", idCompany=" + idCompany + "]";
   }
 
 

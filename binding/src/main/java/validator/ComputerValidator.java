@@ -50,11 +50,13 @@ public class ComputerValidator {
    * @throws ComputerNameValidationException the computer name validation exception
    */
   public void validateName(String name) throws ComputerNameValidationException {
-    if (!name.equals("")) {
-      logger.info("valid");
+
+    if (name == "" || name.isEmpty()) {
+      throw new ComputerNameValidationException();
     } else {
-      throw new ComputerNameValidationException("The name you entered is empty. Please try again.");
+      logger.info("valid name");
     }
+
   }
 
   /**
@@ -65,13 +67,18 @@ public class ComputerValidator {
    */
   public void validateDateFormatIntro(String intro) throws ComputerIntroValidationException {
     SimpleDateFormat dt = new SimpleDateFormat("yyyy-mm-dd");
+
     try {
-      if (!intro.equals("")) {
-        dt.parse(intro);
+
+      if (intro.isEmpty() || intro == null) {
+        return;
       }
+
+      dt.parse(intro);
     } catch (ParseException e) {
-      throw new ComputerIntroValidationException("Date of introduction isn't of the valid format.");
+      throw new ComputerIntroValidationException();
     }
+
   }
 
   /**
@@ -82,14 +89,18 @@ public class ComputerValidator {
    */
   public void validateDateFormatDisc(String disc) throws ComputerDiscValidationException {
     SimpleDateFormat dt = new SimpleDateFormat("yyyy-mm-dd");
+
     try {
-      if (!disc.equals("")) {
-        dt.parse(disc);
+
+      if (disc.isEmpty() || disc == null) {
+        return;
       }
+
+      dt.parse(disc);
     } catch (ParseException e) {
-      throw new ComputerDiscValidationException(
-          "Date of Discontinuation isn't of the valid format.");
+      throw new ComputerDiscValidationException();
     }
+
   }
 
   /**
@@ -100,11 +111,16 @@ public class ComputerValidator {
    * @throws ComputerValidationException the computer validation exception
    */
   public void validateDiscBeforeIntro(Date intro, Date disc) throws ComputerValidationException {
-    if (disc != null && disc.before(intro)) {
-      logger.info("");
+
+    if (disc == null || disc.toString().isEmpty()) {
+      return;
+    }
+
+    if (disc.before(intro)) {
       throw new ComputerValidationException("The date you entered happened "
           + "before the date of introduction. Please enter a valid date.");
     }
+
   }
 
   /**
@@ -113,10 +129,12 @@ public class ComputerValidator {
    * @param id the id
    * @throws ComputerIdValidationException the computer id validation exception
    */
-  public void validateId(int id) throws ComputerIdValidationException {
+  public void validateId(long id) throws ComputerIdValidationException {
+    
     if (id > MAX_ID || id < MIN_ID) {
-      throw new ComputerIdValidationException("Invalid company Id");
+      throw new ComputerIdValidationException();
     }
+    
   }
 
 }

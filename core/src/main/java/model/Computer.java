@@ -13,31 +13,12 @@ import javax.persistence.Table;
 @Table(name = "computer")
 public class Computer {
 
-  @Id
   private long id;
-
-  @Column(name="name")
-  private String name;// Compulsory
-
-  @Column(name = "introduced")
+  private String name;
   private Date intro;
-
-  @Column(name = "discontinued")
-  private Date discontinuation;// Has to be higher than date B
-
-  @OneToOne
-  @JoinColumn(name = "company_id")
+  private Date discontinuation;
   private Company company;
 
-  /**
-   * Instantiates a new computer.
-   *
-   * @param name            the name
-   * @param company         the company
-   * @param intro           the intro
-   * @param discontinuation the discontinuation
-   * @param id              the id
-   */
   public Computer(String name, Company company, Date intro, Date discontinuation, long id) {
     this.setName(name);
     this.setCompany(company);
@@ -46,12 +27,10 @@ public class Computer {
     this.setId(id);
   }
 
-  /**
-   * Instantiates a new computer.
-   */
   public Computer() {
   }
 
+  @Id
   public long getId() {
     return id;
   }
@@ -60,6 +39,7 @@ public class Computer {
     this.id = id;
   }
 
+  @Column(name = "introduced")
   public Date getIntro() {
     return intro;
   }
@@ -68,6 +48,7 @@ public class Computer {
     this.intro = intro;
   }
 
+  @Column(name = "discontinued")
   public Date getDiscontinuation() {
     return discontinuation;
   }
@@ -76,6 +57,8 @@ public class Computer {
     this.discontinuation = date;
   }
 
+  @OneToOne
+  @JoinColumn(name = "company_id")
   public Company getCompany() {
     return company;
   }
@@ -84,6 +67,7 @@ public class Computer {
     this.company = company;
   }
 
+  @Column(name="name")
   public String getName() {
     return name;
   }

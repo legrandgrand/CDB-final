@@ -1,15 +1,12 @@
 package webapp;
 
+import dto.CompanyDto;
 import dto.ComputerDto;
+import exception.ComputerValidationException;
+import model.Page;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
-
-import mapper.DtoMapper;
-import model.Company;
-import model.Computer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,30 +18,20 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import service.ServiceCompany;
-import service.ServiceComputer;
+import service.CompanyService;
+import service.ComputerService;
 
 @Controller
 public class ComputerController {
   private static final Logger logger = LoggerFactory.getLogger(ComputerController.class);
 
-  private ServiceComputer serviceComputer;
-  private ServiceCompany serviceCompany;
-  private DtoMapper mapper;
+  private ComputerService serviceComputer;
+  private CompanyService serviceCompany;
 
-  /**
-   * Instantiates a new computer controller.
-   *
-   * @param mapper          the mapper
-   * @param serviceCompany  the service company
-   * @param serviceComputer the service computer
-   */
   @Autowired
-  public ComputerController(DtoMapper mapper, ServiceCompany serviceCompany,
-      ServiceComputer serviceComputer) {
+  public ComputerController(CompanyService serviceCompany, ComputerService serviceComputer) {
     this.serviceComputer = serviceComputer;
     this.serviceCompany = serviceCompany;
-    this.mapper = mapper;
   }
 
   /**
@@ -62,8 +49,8 @@ public class ComputerController {
     int page = setPage(pageString);
     int limit = setLimit(limitString);
     String order = "ASC";
-    List<Computer> computers = serviceComputer.listPage(limit, page);
-    return setMv(computers, order, page, limit);
+    List<ComputerDto> dtos = serviceComputer.listPage(limit, page);
+    return setMv(dtos, order, page, limit);
   }
 
   /**
@@ -82,11 +69,10 @@ public class ComputerController {
       @RequestParam(defaultValue = "ASC", name = "Order") String order,
       @RequestParam(defaultValue = "id", name = "type") String column) {
 
-    int page = setPage(pageString);
-    int limit = setLimit(limitString);
+    Page page = new Page(setLimit(limitString), setPage(pageString), order, column, "");
 
-    List<Computer> computers = serviceComputer.orderBy(column, order, limit, page);
-    return setMv(computers, order, page, limit);
+    List<ComputerDto> dtos = serviceComputer.orderBy(page);
+    return setMv(dtos, page.getOrderBy(), page.getOffset(), page.getLimit());
   }
 
   /**
@@ -98,15 +84,22 @@ public class ComputerController {
   @GetMapping(value = "/GetComputer")
   public ModelAndView getComputer(@RequestParam(name = "search") String computerName) {
 
-    Computer computer = new Computer();
-    computer.setName(computerName);
-    // TODO: get computers from companyName
-    List<Computer> computers = serviceComputer.getComputerFromName(computer);
-    List<ComputerDto> dto = mapper.listDtos(computers);
-
+    ComputerDto dto = new ComputerDto();
+    List<ComputerDto> dtos = new ArrayList<>();
     ModelAndView mv = new ModelAndView("dashboard");
-    mv.addObject("computers", dto);
-    mv.addObject("maxId", dto.size());
+    
+    dto.setName(computerName);
+    // TODO: get computers from companyName
+    
+    try {
+      dtos = serviceComputer.getFromName(dto);
+    } catch (ComputerValidationException invalidComputer) {
+      logger.error(invalidComputer.getMessage(), invalidComputer);
+      mv.addObject("message", invalidComputer.getMessage());//TODO: Send error message
+    }
+
+    mv.addObject("computers", dtos);
+    mv.addObject("maxId", dtos.size());
     return mv;
   }
 
@@ -119,16 +112,20 @@ public class ComputerController {
   @PostMapping(value = "/DeleteComputer")
   public ModelAndView deleteComputer(
       @RequestParam(required = false, name = "selection") String idString) {
-    Computer computer = new Computer();
+    ComputerDto dto = new ComputerDto();
 
     if (idString != null) {
       String[] idStringTable = idString.split(",");
 
       for (String id : idStringTable) {
-        computer.setId(Integer.parseInt(id));
-        computer = serviceComputer.getComputer(computer).get(0);
-        logger.debug("Deleting computer: " + computer.getName());
-        serviceComputer.delete(computer);
+        dto = serviceComputer.getFromId(Integer.parseInt(id)).get(0);
+        
+        try {
+          serviceComputer.delete(dto);
+        } catch (ComputerValidationException invalidComputer) {
+          logger.error(invalidComputer.getMessage(), invalidComputer);
+        }
+        
       }
     }
 
@@ -143,7 +140,7 @@ public class ComputerController {
   @GetMapping(value = "/AddComputer")
   public ModelAndView getAdd() {
 
-    List<Company> companies = serviceCompany.listCompany();
+    List<CompanyDto> companies = serviceCompany.listCompany();
 
     ModelAndView mv = new ModelAndView();
     mv.addObject("companies", companies);
@@ -166,10 +163,13 @@ public class ComputerController {
       @RequestParam(required = false, name = "disc") String discString,
       @RequestParam(required = false, name = "companyname") String companyName) {
 
-    Computer computer = setDto(computerName, introString, discString, companyName);
+    ComputerDto Dto = setDto(computerName, introString, discString, companyName);
 
-    logger.debug("Adding computer" + computer);
-    serviceComputer.add(computer);
+    try {
+      serviceComputer.add(Dto);
+    } catch (ComputerValidationException invalidComputer) {
+      logger.error(invalidComputer.getMessage(), invalidComputer);//TODO: show message, return to add computer
+    }
 
     return setDashboard("0", "20");
   }
@@ -183,15 +183,13 @@ public class ComputerController {
   @GetMapping(value = "/EditComputer")
   public ModelAndView getEdit(@RequestParam(name = "id") String stringId) {
 
-    List<Company> companies = serviceCompany.listCompany();
+    List<CompanyDto> companies = serviceCompany.listCompany();
 
-    Computer computer = new Computer();
-    computer.setId(Integer.parseInt(stringId));
-    computer = serviceComputer.getComputer(computer).get(0);
+    ComputerDto dto = serviceComputer.getFromId(Integer.parseInt(stringId)).get(0);
 
     ModelAndView mv = new ModelAndView();
     mv.addObject("companies", companies);
-    mv.addObject("computer", computer);
+    mv.addObject("computer", dto);
     mv.setViewName("editComputer");
     return mv;
 
@@ -200,6 +198,7 @@ public class ComputerController {
   /**
    * Post edit.
    *
+   * @param id           the id
    * @param computerName the computer name
    * @param introString  the intro string
    * @param discString   the disc string
@@ -213,28 +212,22 @@ public class ComputerController {
       @RequestParam(required = false, name = "disc") String discString,
       @RequestParam(required = false, name = "companyname") String companyName) {
 
-    Computer computer = setDto(computerName, introString, discString, companyName);
-    computer.setId(id);
-    logger.debug("Updating computer" + computer);
-    serviceComputer.update(computer);
+    ComputerDto dto = setDto(computerName, introString, discString, companyName);
+    dto.setIdComputer(id);
+    try {
+      serviceComputer.update(dto);
+    } catch (ComputerValidationException invalidComputer) {
+      logger.error(invalidComputer.getMessage(), invalidComputer);//TODO: show message user and stay on EditComputer
+    }
 
     return setDashboard("0", "20");
 
   }
 
-  /**
-   * Sets the dto.
-   *
-   * @param computerName the computer name
-   * @param introString  the intro string
-   * @param discString   the disc string
-   * @param companyName  the company name
-   * @return the computer
-   */
-  public Computer setDto(String computerName, String introString, String discString,
+  private ComputerDto setDto(String computerName, String introString, String discString,
       String companyName) {
 
-    Company company = new Company();
+    CompanyDto company = new CompanyDto();
     company.setName(companyName);
     company = serviceCompany.getCompany(company).get(0);
 
@@ -245,27 +238,16 @@ public class ComputerController {
     dto.setCompanyName(company.getName());
     dto.setIdCompany(company.getId());
 
-    return mapper.dtoToComputer(dto);
+    return dto;
   }
 
-  /**
-   * Sets the mv.
-   *
-   * @param computers the computers
-   * @param order     the order
-   * @param page      the page
-   * @param limit     the limit
-   * @return the model and view
-   */
-  public ModelAndView setMv(List<Computer> computers, String order, int page, int limit) {
+  private ModelAndView setMv(List<ComputerDto> dto, String order, int page, int limit) {
 
     if (order.equals("ASC")) {
       order = "DESC";
     } else {
       order = "ASC";
     }
-
-    List<ComputerDto> dto = mapper.listDtos(computers);
 
     ModelAndView mv = new ModelAndView("dashboard");
     mv.addObject("computers", dto);
@@ -276,30 +258,7 @@ public class ComputerController {
     return mv;
   }
 
-  /**
-   * Sets the date.
-   *
-   * @param timestamp the timestamp
-   * @return the date
-   */
-  public Date setDate(String timestamp) {
-    timestamp = timestamp + " 00:00:00";// timestamp format: YYYY-MM-DD (user input) + 00:00:00
-    SimpleDateFormat dt = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
-    try {
-      return dt.parse(timestamp);
-    } catch (ParseException e) {
-      logger.error(e.getMessage(), e);
-    }
-    return null;
-  }
-
-  /**
-   * Sets the limit.
-   *
-   * @param limitString the limit string
-   * @return the int
-   */
-  public int setLimit(String limitString) {
+  private int setLimit(String limitString) {
     int limit = 20;
 
     try {
@@ -313,13 +272,7 @@ public class ComputerController {
     return limit;
   }
 
-  /**
-   * Sets the page.
-   *
-   * @param pageString the page string
-   * @return the int
-   */
-  public int setPage(String pageString) {
+  private int setPage(String pageString) {
     int page = 0;
 
     try {

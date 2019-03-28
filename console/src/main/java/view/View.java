@@ -3,10 +3,10 @@ package view;
 import java.util.Iterator;
 import java.util.List;
 
-import model.Company;
-import model.Computer;
-
 import org.springframework.stereotype.Component;
+
+import dto.CompanyDto;
+import dto.ComputerDto;
 
 @Component
 public class View {
@@ -47,9 +47,9 @@ public class View {
    *
    * @param list the list
    */
-  public void listCompanies(List<Company> list) {
-    Company company;
-    Iterator<Company> itr = list.iterator();
+  public void listCompanies(List<CompanyDto> list) {
+    CompanyDto company;
+    Iterator<CompanyDto> itr = list.iterator();
     while (itr.hasNext()) {
       company = itr.next();
       System.out.println(company);
@@ -68,12 +68,12 @@ public class View {
    *
    * @param list the list
    */
-  public void listComputers(List<Computer> list) {
-    Computer computer;
-    Iterator<Computer> itr = list.iterator();
+  public void listComputers(List<ComputerDto> list) {
+    ComputerDto dto = new ComputerDto();
+    Iterator<ComputerDto> itr = list.iterator();
     while (itr.hasNext()) {
-      computer = itr.next();
-      System.out.println(computer);
+      dto = itr.next();
+      System.out.println(dto.showComputer());
     }
   }
 
@@ -82,8 +82,8 @@ public class View {
    *
    * @param computer the computer
    */
-  public void addComputer(Computer computer) {
-    System.out.println(computer + " a été rajouté");
+  public void addComputer(ComputerDto dto) {
+    System.out.println(dto.showComputer() + " a été rajouté");
   }
 
   /**
@@ -145,7 +145,7 @@ public class View {
    *
    * @param company the company
    */
-  public void deleteCompany(Company company) {
+  public void deleteCompany(CompanyDto company) {
     System.out.println(company.getId() + "a été supprimé");
   }
 
@@ -154,8 +154,8 @@ public class View {
    *
    * @param computer the computer
    */
-  public void updateComputer(Computer computer) {
-    System.out.println(computer + " was updated");
+  public void updateComputer(ComputerDto dto) {
+    System.out.println(dto.showComputer() + " was updated");
   }
 
   /**

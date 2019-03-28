@@ -9,39 +9,29 @@ import javax.persistence.Table;
 @Table(name = "company")
 public class Company {
   
-  @Column
   private String name;
-  
-  @Id
-  private int id;
+  private long id;
 
-  /**
-   * Instantiates a new company.
-   *
-   * @param name the name company
-   * @param id   the company id
-   */
-  public Company(String name, int id) {
+  public Company(String name, long id) {
     super();
     this.name = name;
     this.id = id;
   }
 
-  /**
-   * Instantiates a new company.
-   */
   public Company() {
   }
 
 
-  public int getId() {
+  @Id
+  public long getId() {
     return id;
   }
 
-  public void setId(int id) {
+  public void setId(long id) {
     this.id = id;
   }
 
+  @Column
   public String getName() {
     return name;
   }
@@ -65,19 +55,24 @@ public class Company {
 
   @Override
   public boolean equals(Object obj) {
+    
     if (this == obj) {
       return true;
     }
+    
     if (obj == null) {
       return false;
     }
+    
     if (getClass() != obj.getClass()) {
       return false;
     }
+    
     Company other = (Company) obj;
     if (id != other.id) {
       return false;
     }
+    
     if (name == null) {
       if (other.name != null) {
         return false;
@@ -85,12 +80,13 @@ public class Company {
     } else if (!name.equals(other.name)) {
       return false;
     }
+    
     return true;
   }
 
   public static class CompanyBuilder {
     private String name;
-    private int id;
+    private long id;
 
     /**
      * Builds the company.
@@ -106,12 +102,12 @@ public class Company {
       return company;
     }
 
-    public CompanyBuilder setNameCompany(String name) {
+    public CompanyBuilder setName(String name) {
       this.name = name;
       return this;
     }
 
-    public CompanyBuilder setCompanyId(int id) {
+    public CompanyBuilder setId(long id) {
       this.id = id;
       return this;
     }

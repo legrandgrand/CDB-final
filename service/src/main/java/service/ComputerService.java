@@ -1,14 +1,15 @@
 package service;
 
 import dao.ComputerDaoImp;
+import dto.ComputerDto;
 import exception.ComputerValidationException;
+import mapper.ComputerMapper;
 
 import java.util.List;
 
 import model.Computer;
+import model.Page;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,12 +18,11 @@ import validator.ComputerValidator;
 
 @Service
 @Transactional
-public class ServiceComputer {
-
-  private static final Logger logger = LoggerFactory.getLogger(ServiceComputer.class);
+public class ComputerService {
 
   private ComputerValidator computerValidator;
   private ComputerDaoImp computerDao;
+  private ComputerMapper mapper;
 
   /**
    * Instantiates a new service computer.
@@ -31,9 +31,10 @@ public class ServiceComputer {
    * @param computerValidator the computer validator
    */
   @Autowired
-  public ServiceComputer(ComputerDaoImp computerDao, ComputerValidator computerValidator) {
+  public ComputerService(ComputerDaoImp computerDao, ComputerValidator computerValidator, ComputerMapper mapper) {
     this.computerValidator = computerValidator;
     this.computerDao = computerDao;
+    this.mapper = mapper;
   }
 
   /**
@@ -41,28 +42,28 @@ public class ServiceComputer {
    *
    * @return the list
    */
-  public List<Computer> list() {
-    return computerDao.list();
+  public List<ComputerDto> list() {
+    return mapper.listDtos(computerDao.list());
   }
 
   /**
-   * Gets the computer.
+   * Gets from id.
    *
    * @param computer the computer
    * @return the computer
    */
-  public List<Computer> getComputer(Computer computer) {
-    return computerDao.getComputer(computer);
+  public List<ComputerDto> getFromId(int id) {
+    return mapper.listDtos(computerDao.getComputer(id));
   }
 
   /**
-   * Gets the computer from name.
+   * Gets from name.
    *
    * @param computer the computer
    * @return the computer from name
    */
-  public List<Computer> getComputerFromName(Computer computer) {
-    return computerDao.getComputerFromName(computer);
+  public List<ComputerDto> getFromName(ComputerDto dto) throws ComputerValidationException {
+    return mapper.listDtos(computerDao.getComputerFromName(mapper.dtoToComputer(dto)));
   }
 
   /**
@@ -72,8 +73,8 @@ public class ServiceComputer {
    * @param page  the page
    * @return the list
    */
-  public List<Computer> listPage(int limit, int page) {
-    return computerDao.listPage(limit, page);
+  public List<ComputerDto> listPage(int limit, int page) {
+    return mapper.listDtos(computerDao.listPage(limit, page));
   }
 
   /**
@@ -85,8 +86,8 @@ public class ServiceComputer {
    * @param page   the page
    * @return the list
    */
-  public List<Computer> orderBy(String column, String type, int limit, int page) {
-    return computerDao.orderBy(column, type, limit, page);
+  public List<ComputerDto> orderBy(Page page) {
+    return mapper.listDtos(computerDao.orderBy(page));
   }
 
   /**
@@ -94,36 +95,30 @@ public class ServiceComputer {
    *
    * @param computer the computer
    */
-  public void delete(Computer computer) {
-    computerDao.delete(computer);
+  public void delete(ComputerDto dto) throws ComputerValidationException {
+    computerDao.delete(mapper.dtoToComputer(dto));
   }
 
   /**
-   * Adds the.
+   * Adds the computer.
    *
    * @param computer the computer
    */
-  public void add(Computer computer) {
-    try {
+  public void add(ComputerDto dto) throws ComputerValidationException {
+      Computer computer = mapper.dtoToComputer(dto);
       computerValidator.validateDiscBeforeIntro(computer.getIntro(), computer.getDiscontinuation());
       computerDao.add(computer);
-    } catch (ComputerValidationException e) {
-      logger.error(e.getMessage(), e);
-    }
   }
 
   /**
-   * Update.
+   * Update the computer.
    *
    * @param computer the computer
    */
-  public void update(Computer computer) {
-    try {
+  public void update(ComputerDto dto) throws ComputerValidationException {
+      Computer computer = mapper.dtoToComputer(dto);
       computerValidator.validateDiscBeforeIntro(computer.getIntro(), computer.getDiscontinuation());
       computerDao.update(computer);
-    } catch (ComputerValidationException e) {
-      logger.error(e.getMessage(), e);
-    }
   }
 
   /**

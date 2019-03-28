@@ -71,7 +71,7 @@ public class ComputerDaoImpTest {
   public void testGetComputer() {
     Company company = new Company("Thinking Machines", 2);
     Computer computer = new Computer("CM-2a", company, null, null, 2);
-    List<Computer> computers = computerDaoImp.getComputer(computer);
+    List<Computer> computers = computerDaoImp.getComputer((int) computer.getId());
     assertTrue(computers.contains(computer));
   }
 

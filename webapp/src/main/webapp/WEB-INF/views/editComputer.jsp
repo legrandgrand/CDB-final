@@ -18,9 +18,12 @@
 </head>
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <a class="navbar-brand" href="Dashboard"> <spring:message code="title"/> </a>
-        </div>
+		<div class="container">
+			<span> <a class="navbar-brand" href="Dashboard"> <spring:message
+						code="title" /></a> <a class="navbar-brand" href="/webapp/logout"
+				style="float: right;">logout</a>
+			</span>
+		</div>
     </header>
     
     <span style="float: right;"><spring:message code="lang" /> : <a href="?lang=en"><spring:message code="lang.en" /></a> | <a href="?lang=fr"><spring:message code="lang.fr" /></a></span>
@@ -30,12 +33,12 @@
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
                     <div class="label label-default pull-right">
-                        id: <c:out value="${computer.id}"/>
+                        id: <c:out value="${computer.idComputer}"/>
                     </div>
                     <h1><spring:message code="EditTitle"/></h1>
 
                     <form action="EditComputer" method="POST">
-                        <input type="hidden" value="<c:out value="${computer.id}"/>" id="id" name="id" />
+                        <input type="hidden" value="<c:out value="${computer.idComputer}"/>" id="id" name="id" />
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName"><spring:message code="Name"/></label>
@@ -55,7 +58,7 @@
                                 <select class="form-control" id="companyId" name="companyname">
                                 <c:forEach items="${companies}" var="company">
                                 	<c:choose>
-									  <c:when test="${computer.company.id == company.id}">
+									  <c:when test="${computer.idCompany == company.id}">
 									    <option selected="selected" value="${company.name}">${company.name}</option>
 									  </c:when>
 									  <c:otherwise>

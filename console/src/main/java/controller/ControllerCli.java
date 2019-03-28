@@ -10,18 +10,19 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
-import model.Company;
-import model.Computer;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import service.ServiceCompany;
-import service.ServiceComputer;
+import dto.CompanyDto;
+import dto.ComputerDto;
+
+import service.CompanyService;
+import service.ComputerService;
 
 import validator.ComputerValidator;
+
 import view.View;
 
 @Component
@@ -30,21 +31,13 @@ public class ControllerCli {
   private static final Logger logger = LoggerFactory.getLogger(ControllerCli.class);
 
   private View view;
-  private ServiceComputer serviceComputer;
-  private ServiceCompany serviceCompany;
+  private ComputerService serviceComputer;
+  private CompanyService serviceCompany;
   private ComputerValidator computerValidator;
 
-  /**
-   * Instantiates a new controller.
-   *
-   * @param computerValidator the computer validator
-   * @param serviceCompany    the service company
-   * @param serviceComputer   the service computer
-   * @param view              the view
-   */
   @Autowired
-  public ControllerCli(ComputerValidator computerValidator, ServiceCompany serviceCompany,
-      ServiceComputer serviceComputer, View view) {
+  private ControllerCli(ComputerValidator computerValidator, CompanyService serviceCompany,
+      ComputerService serviceComputer, View view) {
     this.view = view;
     this.serviceCompany = serviceCompany;
     this.serviceComputer = serviceComputer;
@@ -68,6 +61,7 @@ public class ControllerCli {
 
     try {
       int userChoice = sc.nextInt();
+      
       switch (userChoice) { // TODO: enums
         case 1:
           listCompany();
@@ -96,10 +90,12 @@ public class ControllerCli {
           mainMenu();
           break;
       }
+      
     } catch (InputMismatchException e) {
       view.invalidInput();
       mainMenu();
     }
+    
   }
 
   /**
@@ -107,8 +103,7 @@ public class ControllerCli {
    */
   public void listCompany() {
     view.startListCompanies();
-    logger.debug("Listing companies");
-    List<Company> list = serviceCompany.listCompany();
+    List<CompanyDto> list = serviceCompany.listCompany();
     view.listCompanies(list);
     mainMenu();
   }
@@ -118,8 +113,7 @@ public class ControllerCli {
    */
   public void listComputers() {
     view.startListComputers();
-    logger.debug("Listing computers");
-    List<Computer> list = serviceComputer.list();
+    List<ComputerDto> list = serviceComputer.list();
     view.listComputers(list);
     mainMenu();
   }
@@ -134,12 +128,16 @@ public class ControllerCli {
     String name = null;
     name = sc.nextLine();
 
-    Computer computer = new Computer();
-    computer.setName(name);
-    serviceComputer.delete(computer);
-    view.deletedComputer(name);
+    ComputerDto dto = new ComputerDto();
+    dto.setName(name);
+    
+    try {
+      serviceComputer.delete(dto);
+      view.deletedComputer(dto.getName());
+    } catch (ComputerValidationException invalidComputer) {
+      view.invalidComputer(invalidComputer.getMessage());
+    }
 
-    logger.debug("Deleting computer named" + name);
     mainMenu();
   }
 
@@ -151,41 +149,31 @@ public class ControllerCli {
     view.startDeleteCompany();
     
     int companyId = sc.nextInt();
-    Company company = new Company();
+    
+    CompanyDto company = new CompanyDto();
     company.setId(companyId);
-    logger.debug("Deleting company of id: " + companyId);
+    
     serviceCompany.delete(company);
     view.deleteCompany(company);
+    
     sc.nextLine();
     mainMenu();
   }
 
-  /**
-   * Sets the computer name.
-   *
-   * @return the string
-   * @throws ComputerValidationException the computer validation exception
-   */
-  public String setComputerName(Scanner sc) throws ComputerValidationException {
+  private String setComputerName(Scanner sc) throws ComputerValidationException {
     view.setComputerName();
     String name = sc.nextLine();
 
     try {
       computerValidator.validateName(name);
-      logger.debug("Setting computer name: " + name);
       return name;
     } catch (ComputerValidationException e) {
       throw e;
     }
+    
   }
 
-  /**
-   * Sets the computer intro.
-   *
-   * @return the date
-   * @throws ComputerValidationException the computer validation exception
-   */
-  public Date setComputerIntro(Scanner sc) throws ComputerValidationException {
+  private Date setComputerIntro(Scanner sc) throws ComputerValidationException {
     view.addComputerDateIntro();
     Date intro = null;
     String timestamp = null;
@@ -196,21 +184,15 @@ public class ControllerCli {
     } catch (ComputerValidationException e) {
       throw e;
     }
+    
     if (!timestamp.equals("")) {
       intro = setDate(timestamp);
     }
-
-    logger.debug("Setting computer date of introduction: " + intro);
+    
     return intro;
   }
 
-  /**
-   * Sets the computer disc.
-   *
-   * @return the date
-   * @throws ComputerValidationException the computer validation exception
-   */
-  public Date setComputerDisc(Scanner sc) throws ComputerValidationException {
+  private Date setComputerDisc(Scanner sc) throws ComputerValidationException {
     view.addComputerDateDisc();
     Date discontinuation = null;
     String timestamp = null;
@@ -221,6 +203,7 @@ public class ControllerCli {
     } catch (ComputerValidationException e) {
       throw e;
     }
+    
     if (!timestamp.equals("")) {
       discontinuation = setDate(timestamp);
     }
@@ -230,23 +213,19 @@ public class ControllerCli {
 
   }
 
-  /**
-   * Sets the computer company.
-   *
-   * @return the company
-   */
-  public Company setComputerCompany(Scanner sc) throws ComputerValidationException {
+  private CompanyDto setComputerCompany(Scanner sc) throws ComputerValidationException {
     view.setComputerCompanyId();
-    Company company = new Company();
+    CompanyDto company = new CompanyDto();
     company.setName(sc.nextLine().trim());
-    logger.debug("Setting company Id: " + company.getName());
-    List<Company> list = serviceCompany.getCompany(company);
+    
+    List<CompanyDto> list = serviceCompany.getCompany(company);
 
     try {
       company = list.get(0);
     } catch (IndexOutOfBoundsException e) {
       throw new ComputerValidationException("The company name you entered doesn't exist");
     }
+    
     return company;
   }
 
@@ -257,10 +236,15 @@ public class ControllerCli {
     sc.nextLine();
     view.startAddComputer();
     
-    Computer computer = setComputer(sc);
-    logger.debug("Adding computer: " + computer);
-    serviceComputer.add(computer);
-    view.addComputer(computer);
+    ComputerDto dto = setComputer(sc);
+    
+    try {
+      serviceComputer.add(dto);
+      view.addComputer(dto);
+    } catch (ComputerValidationException invalidComputer) {
+      view.invalidComputer(invalidComputer.getMessage());
+    }
+
     mainMenu();
   }
 
@@ -271,10 +255,15 @@ public class ControllerCli {
     sc.nextLine();
     view.startUpdateComputer();
     
-    Computer computer = setComputer(sc);
-    logger.debug("Updating computer: " + computer);
-    serviceComputer.update(computer);
-    view.updateComputer(computer);
+    ComputerDto dto = setComputer(sc);
+    
+    try {
+      serviceComputer.update(dto);
+      view.updateComputer(dto);
+    } catch (ComputerValidationException invalidComputer) {
+      view.invalidComputer(invalidComputer.getMessage());
+    }
+
     mainMenu();
   }
 
@@ -283,33 +272,30 @@ public class ControllerCli {
    *
    * @return the computer
    */
-  public Computer setComputer(Scanner sc) {
+  public ComputerDto setComputer(Scanner sc) {
     String name = null;
-    Date intro = null;
-    Date discontinuation = null;
-    Company company = new Company();
-    try {
+    String intro = null;
+    String discontinuation = null;
+    CompanyDto company = new CompanyDto();
+    
+    try {//TODO: improve this block way of dealing with exceptions
       name = setComputerName(sc);
-      intro = setComputerIntro(sc);
-      discontinuation = setComputerDisc(sc);
+      intro = setComputerIntro(sc)+"";
+      discontinuation = setComputerDisc(sc)+"";
       company = setComputerCompany(sc);
     } catch (ComputerValidationException e) {
       logger.error(e.getMessage(), e);
       view.invalidComputer(e.getMessage());
       mainMenu();
     }
-    return new Computer(name, company, intro, discontinuation, 0);
+    
+    return new ComputerDto(0, name, intro, discontinuation, company.getName(), company.getId());
   }
 
-  /**
-   * Sets the date.
-   *
-   * @param timestamp the timestamp
-   * @return the date
-   */
-  public Date setDate(String timestamp) {
+  private Date setDate(String timestamp) {
     timestamp = timestamp + " 00:00:00";// timestamp format: YYYY-MM-DD (user input) + 00:00:00
     SimpleDateFormat dt = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+    
     try {
       return dt.parse(timestamp);
     } catch (ParseException e) {

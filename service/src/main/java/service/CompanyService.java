@@ -2,6 +2,8 @@ package service;
 
 import dao.CompanyDaoImp;
 import dao.ComputerDaoImp;
+import dto.CompanyDto;
+import mapper.CompanyMapper;
 
 import java.util.List;
 
@@ -17,13 +19,14 @@ import validator.ComputerValidator;
 
 @Service
 @Transactional
-public class ServiceCompany {
+public class CompanyService {
 
-  private static final Logger logger = LoggerFactory.getLogger(ServiceCompany.class);
+  private static final Logger logger = LoggerFactory.getLogger(CompanyService.class);
 
   private ComputerValidator computerValidator;
   private CompanyDaoImp companyDaoImp;
   private ComputerDaoImp computerDaoImp;
+  private CompanyMapper companyMapper;
 
   /**
    * Instantiates a new service company.
@@ -33,11 +36,12 @@ public class ServiceCompany {
    * @param computerValidator the computer validator
    */
   @Autowired
-  public ServiceCompany(ComputerDaoImp computerDaoImp, CompanyDaoImp companyDaoImp,
-      ComputerValidator computerValidator) {
+  public CompanyService(ComputerDaoImp computerDaoImp, CompanyDaoImp companyDaoImp,
+      ComputerValidator computerValidator, CompanyMapper companyMapper) {
     this.companyDaoImp = companyDaoImp;
     this.computerDaoImp = computerDaoImp;
     this.computerValidator = computerValidator;
+    this.companyMapper = companyMapper;
   }
 
   /**
@@ -45,8 +49,8 @@ public class ServiceCompany {
    *
    * @return the list
    */
-  public List<Company> listCompany() {
-    return companyDaoImp.list();
+  public List<CompanyDto> listCompany() {  
+     return companyMapper.listDtos(companyDaoImp.list());
   }
 
   /**
@@ -55,8 +59,8 @@ public class ServiceCompany {
    * @param company the company
    * @return the company
    */
-  public List<Company> getCompany(Company company) {
-    return companyDaoImp.getCompany(company);
+  public List<CompanyDto> getCompany(CompanyDto companyDto) {
+    return companyMapper.listDtos(companyDaoImp.getCompany(companyMapper.dtoToCompany(companyDto)));
   }
 
   /**
@@ -65,13 +69,13 @@ public class ServiceCompany {
    * @param company the company
    * @return the company from id
    */
-  public List<Company> getCompanyFromId(Company company) {
+  public List<CompanyDto> getCompanyFromId(CompanyDto companyDto) {//TODO: shouldn't validate here
     try {
-      computerValidator.validateId(company.getId());
+      computerValidator.validateId(companyDto.getId());
     } catch (Exception e) {
       logger.error(e.getMessage(), e);
     }
-    return companyDaoImp.getCompanyFromId(company);
+    return companyMapper.listDtos(companyDaoImp.getCompanyFromId(companyMapper.dtoToCompany(companyDto)));
   }
 
   /**
@@ -79,7 +83,8 @@ public class ServiceCompany {
    *
    * @param company the company
    */
-  public void delete(Company company) {
+  public void delete(CompanyDto companyDto) {
+    Company company = companyMapper.dtoToCompany(companyDto);
     computerDaoImp.deleteComputerOfCompanyId(company);
     companyDaoImp.delete(company);
   }

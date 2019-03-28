@@ -9,6 +9,7 @@
 		<maven.compiler.target>1.6</maven.compiler.target>
 		<mavencheckstyle.version>3.0.0</mavencheckstyle.version>
 		<mavenccompiler.version>3.1</mavenccompiler.version>
+		<spring.version>5.1.3.RELEASE</spring.version>
 	</properties>
 
 	<parent>

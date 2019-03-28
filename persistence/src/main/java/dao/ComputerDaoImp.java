@@ -10,6 +10,7 @@ import javax.persistence.criteria.Root;
 
 import model.Company;
 import model.Computer;
+import model.Page;
 
 import org.hibernate.Session;
 import org.hibernate.query.Query;
@@ -24,7 +25,7 @@ public class ComputerDaoImp extends Dao implements ComputerDao {
   private CriteriaQuery<Computer> criteria;
   private Root<Computer> root;
 
-  public ComputerDaoImp() {
+  private ComputerDaoImp() {
   }
 
   private void setCriteria() {
@@ -34,7 +35,7 @@ public class ComputerDaoImp extends Dao implements ComputerDao {
     this.root = this.criteria.from(Computer.class);
     criteria.select(root);
   }
-  
+
   @Override
   public List<Computer> list() {
     setCriteria();
@@ -44,20 +45,20 @@ public class ComputerDaoImp extends Dao implements ComputerDao {
   }
 
   @Override
-  public List<Computer> orderBy(String column, String order, int limit, int offset) {
+  public List<Computer> orderBy(Page page) {
     setCriteria();
 
-    if (order.equals("ASC")) {
-      criteria.orderBy(builder.asc(root.get(column)));
-    } else if (order.equals("DESC")) {
-      criteria.orderBy(builder.desc(root.get(column)));
+    if (page.getOrderBy().equals("ASC")) {
+      criteria.orderBy(builder.asc(root.get(page.getType())));
+    } else if (page.getOrderBy().equals("DESC")) {
+      criteria.orderBy(builder.desc(root.get(page.getType())));
     } else {
       criteria.orderBy(builder.asc(root.get("id")));
     }
 
     Query<Computer> query = getSession().createQuery(criteria);
-    query.setFirstResult(offset);
-    query.setMaxResults(limit);
+    query.setFirstResult(page.getOffset());
+    query.setMaxResults(page.getLimit());
 
     return query.getResultList();
   }
@@ -74,10 +75,10 @@ public class ComputerDaoImp extends Dao implements ComputerDao {
   }
 
   @Override
-  public List<Computer> getComputer(Computer computer) {
+  public List<Computer> getComputer(int id) {
     setCriteria();
 
-    criteria.select(root).where(builder.equal(root.get("id"), computer.getId()));
+    criteria.select(root).where(builder.equal(root.get("id"), id));
     Query<Computer> query = getSession().createQuery(criteria);
 
     return query.getResultList();
@@ -119,25 +120,26 @@ public class ComputerDaoImp extends Dao implements ComputerDao {
 
   @Override
   public void update(Computer computer) {
+    if (computer != null) {
+      CriteriaBuilder updateBuilder = getSession().getCriteriaBuilder();
+      CriteriaUpdate<Computer> update = updateBuilder.createCriteriaUpdate(Computer.class);
+      Root<Computer> updateRoot = update.from(Computer.class);
 
-    CriteriaBuilder updateBuilder = getSession().getCriteriaBuilder();
-    CriteriaUpdate<Computer> update = updateBuilder.createCriteriaUpdate(Computer.class);
-    Root<Computer> updateRoot = update.from(Computer.class);
+      update.set("name", computer.getName());
+      update.set("intro", computer.getIntro());
+      update.set("discontinuation", computer.getDiscontinuation());
+      update.set("company", computer.getCompany());
+      update.where(updateBuilder.equal(updateRoot.get("id"), computer.getId()));
 
-    update.set("name", computer.getName());
-    update.set("intro", computer.getIntro());
-    update.set("discontinuation", computer.getDiscontinuation());
-    update.set("company", computer.getCompany());
-    update.where(updateBuilder.equal(updateRoot.get("id"), computer.getId()));
-
-    getSession().createQuery(update).executeUpdate();
+      getSession().createQuery(update).executeUpdate();
+    }
   }
 
   @Override
   public void add(Computer computer) {
-    setCriteria();
-    System.out.println(computer);
-    session.save(computer);//Name not added somehow
+    if (computer != null) {
+      getSession().save(computer);
+    }
   }
 
   @Override
