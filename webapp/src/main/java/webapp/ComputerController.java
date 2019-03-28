@@ -3,6 +3,7 @@ package webapp;
 import dto.CompanyDto;
 import dto.ComputerDto;
 import exception.ComputerValidationException;
+import model.Page;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,11 +69,10 @@ public class ComputerController {
       @RequestParam(defaultValue = "ASC", name = "Order") String order,
       @RequestParam(defaultValue = "id", name = "type") String column) {
 
-    int page = setPage(pageString);
-    int limit = setLimit(limitString);
+    Page page = new Page(setLimit(limitString), setPage(pageString), order, column, "");
 
-    List<ComputerDto> dtos = serviceComputer.orderBy(column, order, limit, page);
-    return setMv(dtos, order, page, limit);
+    List<ComputerDto> dtos = serviceComputer.orderBy(page);
+    return setMv(dtos, page.getOrderBy(), page.getOffset(), page.getLimit());
   }
 
   /**

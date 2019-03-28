@@ -4,6 +4,7 @@ import java.util.List;
 
 import model.Company;
 import model.Computer;
+import model.Page;
 
 public interface ComputerDao {
 
@@ -54,11 +55,11 @@ public interface ComputerDao {
 
   Long getMaxId();
 
-  List<Computer> orderBy(String column, String type, int limit, int offset);
-
   void deleteComputerOfCompanyId(Company company);
 
   List<Computer> getComputer(int id);
+
+  List<Computer> orderBy(Page page);
 
 
 

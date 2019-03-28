@@ -10,6 +10,7 @@ import javax.persistence.criteria.Root;
 
 import model.Company;
 import model.Computer;
+import model.Page;
 
 import org.hibernate.Session;
 import org.hibernate.query.Query;
@@ -44,20 +45,20 @@ public class ComputerDaoImp extends Dao implements ComputerDao {
   }
 
   @Override
-  public List<Computer> orderBy(String column, String order, int limit, int offset) {
+  public List<Computer> orderBy(Page page) {
     setCriteria();
 
-    if (order.equals("ASC")) {
-      criteria.orderBy(builder.asc(root.get(column)));
-    } else if (order.equals("DESC")) {
-      criteria.orderBy(builder.desc(root.get(column)));
+    if (page.getOrderBy().equals("ASC")) {
+      criteria.orderBy(builder.asc(root.get(page.getType())));
+    } else if (page.getOrderBy().equals("DESC")) {
+      criteria.orderBy(builder.desc(root.get(page.getType())));
     } else {
       criteria.orderBy(builder.asc(root.get("id")));
     }
 
     Query<Computer> query = getSession().createQuery(criteria);
-    query.setFirstResult(offset);
-    query.setMaxResults(limit);
+    query.setFirstResult(page.getOffset());
+    query.setMaxResults(page.getLimit());
 
     return query.getResultList();
   }

@@ -8,6 +8,7 @@ import mapper.ComputerMapper;
 import java.util.List;
 
 import model.Computer;
+import model.Page;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -85,8 +86,8 @@ public class ComputerService {
    * @param page   the page
    * @return the list
    */
-  public List<ComputerDto> orderBy(String column, String type, int limit, int page) {
-    return mapper.listDtos(computerDao.orderBy(column, type, limit, page));
+  public List<ComputerDto> orderBy(Page page) {
+    return mapper.listDtos(computerDao.orderBy(page));
   }
 
   /**
