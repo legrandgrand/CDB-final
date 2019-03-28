@@ -3,14 +3,6 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<properties>
-		<cdb.version>0.0.1-SNAPSHOT</cdb.version>
-		<maven.compiler.source>1.6</maven.compiler.source>
-		<maven.compiler.target>1.6</maven.compiler.target>
-		<mavencheckstyle.version>3.0.0</mavencheckstyle.version>
-		<mavenccompiler.version>3.1</mavenccompiler.version>
-	</properties>
-
 	<parent>
 		<groupId>computer-database</groupId>
 		<artifactId>computer-database</artifactId>
