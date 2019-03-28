@@ -29,7 +29,7 @@ public class CompanyDaoImp extends Dao implements CompanyDao {
     this.builder = this.session.getCriteriaBuilder();
     this.criteria = this.builder.createQuery(Company.class);
     this.root = this.criteria.from(Company.class);
-    criteria.select(root);
+
   }
 
   public CompanyDaoImp() {
@@ -38,7 +38,7 @@ public class CompanyDaoImp extends Dao implements CompanyDao {
   @Override
   public List<Company> list() {
     setCriteria();
-
+    criteria.select(root);
     Query<Company> query = getSession().createQuery(criteria.select(root));
     return query.getResultList();
   }

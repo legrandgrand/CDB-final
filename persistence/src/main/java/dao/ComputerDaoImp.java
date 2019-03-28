@@ -33,13 +33,13 @@ public class ComputerDaoImp extends Dao implements ComputerDao {
     this.builder = this.session.getCriteriaBuilder();
     this.criteria = this.builder.createQuery(Computer.class);
     this.root = this.criteria.from(Computer.class);
-    criteria.select(root);
+
   }
 
   @Override
   public List<Computer> list() {
     setCriteria();
-
+    criteria.select(root);
     Query<Computer> query = getSession().createQuery(criteria.select(root));
     return query.getResultList();
   }
@@ -47,13 +47,12 @@ public class ComputerDaoImp extends Dao implements ComputerDao {
   @Override
   public List<Computer> orderBy(Page page) {
     setCriteria();
-
     if (page.getOrderBy().equals("ASC")) {
-      criteria.orderBy(builder.asc(root.get(page.getType())));
+      criteria.select(root).orderBy(builder.asc(root.get(page.getType())));
     } else if (page.getOrderBy().equals("DESC")) {
-      criteria.orderBy(builder.desc(root.get(page.getType())));
+      criteria.select(root).orderBy(builder.desc(root.get(page.getType())));
     } else {
-      criteria.orderBy(builder.asc(root.get("id")));
+      criteria.select(root).orderBy(builder.asc(root.get("id")));
     }
 
     Query<Computer> query = getSession().createQuery(criteria);
@@ -64,12 +63,12 @@ public class ComputerDaoImp extends Dao implements ComputerDao {
   }
 
   @Override
-  public List<Computer> listPage(int limit, int offset) {
+  public List<Computer> listPage(Page page) {
     setCriteria();
 
     Query<Computer> query = getSession().createQuery(criteria);
-    query.setFirstResult(offset);
-    query.setMaxResults(limit);
+    query.setFirstResult(page.getOffset());
+    query.setMaxResults(page.getLimit());
 
     return query.getResultList();
   }
@@ -88,7 +87,7 @@ public class ComputerDaoImp extends Dao implements ComputerDao {
   public List<Computer> getComputerFromName(Computer computer) {
     setCriteria();
 
-    criteria.select(root).where(builder.like(root.<String>get("name"), computer.getName() + "%"));
+    criteria.select(root).where(builder.like(root.<String>get("name"), "%" + computer.getName().toLowerCase() + "%"));
     Query<Computer> query = getSession().createQuery(criteria);
     return query.getResultList();
   }
@@ -120,26 +119,30 @@ public class ComputerDaoImp extends Dao implements ComputerDao {
 
   @Override
   public void update(Computer computer) {
+
     if (computer != null) {
       CriteriaBuilder updateBuilder = getSession().getCriteriaBuilder();
       CriteriaUpdate<Computer> update = updateBuilder.createCriteriaUpdate(Computer.class);
       Root<Computer> updateRoot = update.from(Computer.class);
 
-      update.set("name", computer.getName());
-      update.set("intro", computer.getIntro());
-      update.set("discontinuation", computer.getDiscontinuation());
-      update.set("company", computer.getCompany());
-      update.where(updateBuilder.equal(updateRoot.get("id"), computer.getId()));
+      update.set("name", computer.getName())
+          .set("intro", computer.getIntro())
+          .set("discontinuation", computer.getDiscontinuation())
+          .set("company", computer.getCompany())
+          .where(updateBuilder.equal(updateRoot.get("id"), computer.getId()));
 
       getSession().createQuery(update).executeUpdate();
     }
+
   }
 
   @Override
   public void add(Computer computer) {
+
     if (computer != null) {
       getSession().save(computer);
     }
+
   }
 
   @Override

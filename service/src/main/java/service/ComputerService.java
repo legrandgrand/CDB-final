@@ -73,8 +73,8 @@ public class ComputerService {
    * @param page  the page
    * @return the list
    */
-  public List<ComputerDto> listPage(int limit, int page) {
-    return mapper.listDtos(computerDao.listPage(limit, page));
+  public List<ComputerDto> listPage(Page page) {
+    return mapper.listDtos(computerDao.listPage(page));
   }
 
   /**

@@ -23,12 +23,6 @@
 	<dependencies>
 		<dependency>
 			<groupId>computer-database</groupId>
-			<artifactId>binding</artifactId>
-			<version>${cdb.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>computer-database</groupId>
 			<artifactId>service</artifactId>
 			<version>${cdb.version}</version>
 		</dependency>

@@ -46,11 +46,9 @@ public class ComputerController {
       @RequestParam(defaultValue = "0", name = "page") String pageString,
       @RequestParam(defaultValue = "20", name = "limit") String limitString) {
 
-    int page = setPage(pageString);
-    int limit = setLimit(limitString);
-    String order = "ASC";
-    List<ComputerDto> dtos = serviceComputer.listPage(limit, page);
-    return setMv(dtos, order, page, limit);
+    Page page = new Page(setLimit(limitString), setPage(pageString), "ASC", "", "");
+    List<ComputerDto> dtos = serviceComputer.listPage(page);
+    return setMv(dtos, page.getOrderBy(), page.getOffset(), page.getLimit());
   }
 
   /**
