@@ -26,11 +26,19 @@
 		</div>
 	</header>
 
-	<span style="float: right;"><spring:message code="lang" /> : <a
-		href="?lang=en"><spring:message code="lang.en" /></a> | <a
-		href="?lang=fr"><spring:message code="lang.fr" /></a></span>
+	<span style="float: right;"><spring:message
+			code="lang" /> : <a href="?lang=en"><spring:message
+				code="lang.en" /></a> | <a href="?lang=fr"><spring:message
+				code="lang.fr" /></a></span>
+
 
 	<section id="main">
+		<c:if test="${not empty error}">
+			<div class="alert alert-danger">
+				<c:out value="${error}" />
+			</div>
+		</c:if>
+
 		<div class="container">
 			<h1 id="homeTitle">
 				${maxId}

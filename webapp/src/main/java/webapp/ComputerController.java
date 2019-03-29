@@ -93,7 +93,8 @@ public class ComputerController {
       dtos = serviceComputer.getFromName(dto);
     } catch (ComputerValidationException invalidComputer) {
       logger.error(invalidComputer.getMessage(), invalidComputer);
-      mv.addObject("message", invalidComputer.getMessage());//TODO: Send error message
+      mv.addObject("error", invalidComputer.getMessage());
+      return mv;
     }
 
     mv.addObject("computers", dtos);
@@ -122,6 +123,9 @@ public class ComputerController {
           serviceComputer.delete(dto);
         } catch (ComputerValidationException invalidComputer) {
           logger.error(invalidComputer.getMessage(), invalidComputer);
+          ModelAndView mv = setDashboard("0", "20");
+          mv.addObject("error", invalidComputer.getMessage());
+          return mv;
         }
         
       }
@@ -166,7 +170,10 @@ public class ComputerController {
     try {
       serviceComputer.add(Dto);
     } catch (ComputerValidationException invalidComputer) {
-      logger.error(invalidComputer.getMessage(), invalidComputer);//TODO: show message, return to add computer
+      logger.error(invalidComputer.getMessage(), invalidComputer);
+      ModelAndView mv = getAdd();
+      mv.addObject("error", invalidComputer.getMessage());
+      return mv;
     }
 
     return setDashboard("0", "20");
@@ -179,11 +186,11 @@ public class ComputerController {
    * @return the edits the
    */
   @GetMapping(value = "/EditComputer")
-  public ModelAndView getEdit(@RequestParam(name = "id") String stringId) {
+  public ModelAndView getEdit(@RequestParam(name = "id") int id) {
 
     List<CompanyDto> companies = serviceCompany.listCompany();
 
-    ComputerDto dto = serviceComputer.getFromId(Integer.parseInt(stringId)).get(0);
+    ComputerDto dto = serviceComputer.getFromId(id).get(0);
 
     ModelAndView mv = new ModelAndView();
     mv.addObject("companies", companies);
@@ -215,7 +222,10 @@ public class ComputerController {
     try {
       serviceComputer.update(dto);
     } catch (ComputerValidationException invalidComputer) {
-      logger.error(invalidComputer.getMessage(), invalidComputer);//TODO: show message user and stay on EditComputer
+      logger.error(invalidComputer.getMessage(), invalidComputer);
+      ModelAndView mv = getEdit(id);
+      mv.addObject("error", invalidComputer.getMessage());
+      return mv;
     }
 
     return setDashboard("0", "20");
