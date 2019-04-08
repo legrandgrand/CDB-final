@@ -82,21 +82,7 @@ public class ComputerDto {
  
   @Override
   public String toString() {
-    return "ComputerDto [idComputer=" + idComputer + ", name=" + name
-        + ", dateIntro=" + intro + ", dateDiscontinuation=" + discontinuation
-        + ", companyName=" + companyName + ", idCompany=" + idCompany + "]";
+    return "Name: " + name + "\n Introduction : " + intro + "\n Discontinuation: " + discontinuation
+        + "\n Company: " + companyName;
   }
-  
-  public String showComputer() {
-    return "Computer [id=" + idComputer + ", name=" + name
-        + ", dateIntro=" + intro + ", dateDiscontinuation=" + discontinuation
-        + ", companyName=" + companyName + "]";
-  }
-  
-  public String showCompany() {
-    return "Company [companyName=" + companyName + ", idCompany=" + idCompany + "]";
-  }
-
-
-
 }

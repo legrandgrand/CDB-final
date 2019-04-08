@@ -25,6 +25,7 @@ public class Cdb {
     logger.debug("Starting program");
     
     ControllerCli controller = applicationContext.getBean("controllerCli", ControllerCli.class);
+    
     controller.start();
     
     ((ConfigurableApplicationContext)applicationContext).close();

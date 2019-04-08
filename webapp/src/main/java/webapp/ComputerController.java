@@ -12,16 +12,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import service.CompanyService;
 import service.ComputerService;
 
-@Controller
+@RestController
 public class ComputerController {
   private static final Logger logger = LoggerFactory.getLogger(ComputerController.class);
 
@@ -231,8 +232,18 @@ public class ComputerController {
     return setDashboard("0", "20");
 
   }
+   
+  @GetMapping("/computer/{id}")
+  public ComputerDto getComputer(@PathVariable long id) {//REST Endpoint.
+    return serviceComputer.getFromId(id).get(0);
+  }
+  
+  @GetMapping("/computer/")
+  public List<ComputerDto> getAll() {//REST Endpoint.
+    return serviceComputer.list();
+  }
 
-  private ComputerDto setDto(String computerName, String introString, String discString,
+  private ComputerDto setDto(String computerName, String introString, String discString, //TODO: highly unnecessary, to refacto
       String companyName) {
 
     CompanyDto company = new CompanyDto();

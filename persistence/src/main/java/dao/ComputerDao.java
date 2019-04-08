@@ -23,7 +23,7 @@ public interface ComputerDao {
    */
   List<Computer> getComputerFromName(Computer computer);
   
-  List<Computer> getComputer(int id);
+  List<Computer> getComputer(long id);
 
   List<Computer> orderBy(Page page);
 

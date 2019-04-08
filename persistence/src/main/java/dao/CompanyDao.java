@@ -26,7 +26,7 @@ public interface CompanyDao {
    * @param company the company
    * @return the company from id
    */
-  public List<Company> getCompanyFromId(Company company);
+  public List<Company> getCompanyFromId(long id);
 
   void delete(Company company);
 }

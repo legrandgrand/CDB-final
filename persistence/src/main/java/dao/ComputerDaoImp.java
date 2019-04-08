@@ -74,7 +74,7 @@ public class ComputerDaoImp extends Dao implements ComputerDao {
   }
 
   @Override
-  public List<Computer> getComputer(int id) {
+  public List<Computer> getComputer(long id) {
     setCriteria();
 
     criteria.select(root).where(builder.equal(root.get("id"), id));
@@ -138,7 +138,7 @@ public class ComputerDaoImp extends Dao implements ComputerDao {
 
   @Override
   public void add(Computer computer) {
-
+    
     if (computer != null) {
       getSession().save(computer);
     }

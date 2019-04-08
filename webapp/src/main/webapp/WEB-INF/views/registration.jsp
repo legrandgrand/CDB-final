@@ -18,7 +18,7 @@
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
 			<span> <a class="navbar-brand" href="Dashboard"> <spring:message
-						code="title" /></a> <a class="navbar-brand" href="/webapp/logout"
+						code="title" /></a> <a class="navbar-brand" href="/computer-database/logout"
 				style="float: right;">logout</a>
 			</span>
 

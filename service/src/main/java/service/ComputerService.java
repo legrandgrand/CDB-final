@@ -52,7 +52,7 @@ public class ComputerService {
    * @param computer the computer
    * @return the computer
    */
-  public List<ComputerDto> getFromId(int id) {
+  public List<ComputerDto> getFromId(long id) {
     return mapper.listDtos(computerDao.getComputer(id));
   }
 

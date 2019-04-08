@@ -73,7 +73,7 @@ public class View {
     Iterator<ComputerDto> itr = list.iterator();
     while (itr.hasNext()) {
       dto = itr.next();
-      System.out.println(dto.showComputer());
+      System.out.println(dto.toString());
     }
   }
 
@@ -83,7 +83,7 @@ public class View {
    * @param computer the computer
    */
   public void addComputer(ComputerDto dto) {
-    System.out.println(dto.showComputer() + " a été rajouté");
+    System.out.println(dto.toString() + " a été rajouté");
   }
 
   /**
@@ -155,7 +155,7 @@ public class View {
    * @param computer the computer
    */
   public void updateComputer(ComputerDto dto) {
-    System.out.println(dto.showComputer() + " was updated");
+    System.out.println(dto.toString() + " was updated");
   }
 
   /**

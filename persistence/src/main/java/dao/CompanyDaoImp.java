@@ -53,10 +53,10 @@ public class CompanyDaoImp extends Dao implements CompanyDao {
   }
 
   @Override
-  public List<Company> getCompanyFromId(Company company) {
+  public List<Company> getCompanyFromId(long id) {
     setCriteria();
 
-    criteria.select(root).where(builder.equal(root.get("id"), company.getId()));
+    criteria.select(root).where(builder.equal(root.get("id"), id));
     Query<Company> query = getSession().createQuery(criteria);
 
     return query.getResultList();
