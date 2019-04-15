@@ -46,15 +46,9 @@ public class ComputerMapper {
     validator.validateDto(dto);
 
     computer.setName(dto.getName());
-    
-    if (dto.getIntro() != null) {
-      computer.setIntro(setDate(dto.getIntro()));
-    }
-    
-    if (dto.getDiscontinuation() != null) {
-      computer.setDiscontinuation(setDate(dto.getDiscontinuation()));
-    }
-    
+    computer.setIntro(setDate(dto.getIntro()));
+    computer.setDiscontinuation(setDate(dto.getDiscontinuation()));
+
     computer.setCompany(new Company(dto.getCompanyName(), dto.getIdCompany()));
 
     return computer;
@@ -90,11 +84,11 @@ public class ComputerMapper {
    */
   public List<ComputerDto> listDtos(List<Computer> computers) {
     List<ComputerDto> dtos = new ArrayList<>();
-    
+
     for (Computer computer : computers) {
       dtos.add(computerToDto(computer));
     }
-    
+
     return dtos;
   }
 
@@ -105,28 +99,36 @@ public class ComputerMapper {
    * @return the string
    */
   private String dateToString(Date date) {
-    
+
     if (date != null) {
       Calendar calendar = Calendar.getInstance();
       calendar.setTime(date);
       return String.format("%d/%d/%d", calendar.get(Calendar.DAY_OF_MONTH),
           calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.YEAR));
     }
-    
+
     return "";
   }
 
   private Date setDate(String timestamp) {
-    timestamp = timestamp + " 00:00:00";// timestamp format: YYYY-MM-DD (user input) + 00:00:00
-    SimpleDateFormat dt = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
-    
-    try {
-      return dt.parse(timestamp);
-    } catch (ParseException e) {
-      logger.error(e.getMessage(), e);
+    Date date = null;
+
+    if (timestamp == null || timestamp.isEmpty()) {
+      return null;
+      
+    } else {
+      timestamp = timestamp + " 00:00:00";// timestamp format: YYYY-MM-DD (user input) + 00:00:00
+      SimpleDateFormat dt = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+      
+      try {
+        date = dt.parse(timestamp);
+      } catch (ParseException e) {
+        logger.error(e.getMessage(), e);
+      }
     }
-    
-    return null;
+
+    return date;
+
   }
 
 }

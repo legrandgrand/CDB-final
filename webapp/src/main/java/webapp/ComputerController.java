@@ -118,7 +118,6 @@ public class ComputerController {
 
       for (String id : idStringTable) {
         dto = serviceComputer.getFromId(Integer.parseInt(id)).get(0);
-        
         try {
           serviceComputer.delete(dto);
         } catch (ComputerValidationException invalidComputer) {

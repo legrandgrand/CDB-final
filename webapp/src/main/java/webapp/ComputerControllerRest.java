@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -42,8 +43,8 @@ public class ComputerControllerRest {
     return serviceComputer.list();
   }
   
-  @PostMapping("/add")
-  public ResponseEntity<ComputerDto> AddComputer(ComputerDto dto){
+  @PostMapping("/")
+  public ResponseEntity<ComputerDto> AddComputer(@RequestBody ComputerDto dto){
     
     try {
       serviceComputer.add(dto);
@@ -55,8 +56,8 @@ public class ComputerControllerRest {
     return new ResponseEntity<ComputerDto>(dto, HttpStatus.OK); 
   }
   
-  @PatchMapping("/update")
-  public ResponseEntity<ComputerDto> updateComputer(ComputerDto dto){
+  @PatchMapping("/")
+  public ResponseEntity<ComputerDto> updateComputer(@RequestBody ComputerDto dto){
     
     try {
       serviceComputer.update(dto);
@@ -68,8 +69,8 @@ public class ComputerControllerRest {
     return new ResponseEntity<ComputerDto>(dto, HttpStatus.OK); 
   }
   
-  @DeleteMapping("/delete")
-  public ResponseEntity<ComputerDto> deleteComputer(ComputerDto dto){
+  @DeleteMapping("/")
+  public ResponseEntity<ComputerDto> deleteComputer(@RequestBody ComputerDto dto){
     
     try {
       serviceComputer.delete(dto);

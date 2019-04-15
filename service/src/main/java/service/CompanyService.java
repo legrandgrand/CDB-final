@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import validator.ComputerValidator;
 
 @Service
-@Transactional
 public class CompanyService {
   
   private ComputerValidator computerValidator;
@@ -78,6 +77,7 @@ public class CompanyService {
    *
    * @param company the company
    */
+  @Transactional
   public void delete(CompanyDto companyDto) {
     Company company = companyMapper.dtoToCompany(companyDto);
     computerDaoImp.deleteComputerOfCompanyId(company);
