@@ -3,7 +3,6 @@ package mapper;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import dto.CompanyDto;
@@ -11,20 +10,8 @@ import dto.CompanyDto;
 import model.Company;
 import model.Company.CompanyBuilder;
 
-import validator.ComputerValidator;
-
 @Component
 public class CompanyMapper {
-
-  ComputerValidator validator;
-
-  /**
-   * Instantiates a new company mapper.
-   */
-  @Autowired
-  private CompanyMapper(ComputerValidator validator) {
-    this.validator = validator;
-  }
 
   /**
    * Map company.
@@ -33,6 +20,8 @@ public class CompanyMapper {
    * @return the company
    */
   public Company dtoToCompany(CompanyDto dto) {
+    
+    
     CompanyBuilder companyBuilder = new CompanyBuilder()
         .setName(dto.getName())
         .setId(dto.getId());

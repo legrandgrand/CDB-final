@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -233,16 +232,10 @@ public class ComputerController {
 
   }
    
-  @GetMapping("/computer/{id}")
-  public ComputerDto getComputer(@PathVariable long id) {//REST Endpoint.
-    return serviceComputer.getFromId(id).get(0);
-  }
-  
-  @GetMapping("/computer/")
-  public List<ComputerDto> getAll() {//REST Endpoint.
-    return serviceComputer.list();
-  }
 
+
+  
+  /*Setters for DTO*/
   private ComputerDto setDto(String computerName, String introString, String discString, //TODO: highly unnecessary, to refacto
       String companyName) {
 
