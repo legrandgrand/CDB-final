@@ -9,27 +9,20 @@ import javax.persistence.criteria.Root;
 
 import model.Company;
 
-import org.hibernate.Session;
-import org.hibernate.query.Query;
 
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-@Transactional
 public class CompanyDaoImp extends Dao implements CompanyDao {
 
-  private Session session;
   private CriteriaBuilder builder;
   private CriteriaQuery<Company> criteria;
   private Root<Company> root;
   
   private void setCriteria() {
-    this.session = getSession();
-    this.builder = this.session.getCriteriaBuilder();
+    this.builder = entityManager.getCriteriaBuilder();
     this.criteria = this.builder.createQuery(Company.class);
     this.root = this.criteria.from(Company.class);
-
   }
 
   public CompanyDaoImp() {
@@ -39,8 +32,8 @@ public class CompanyDaoImp extends Dao implements CompanyDao {
   public List<Company> list() {
     setCriteria();
     criteria.select(root);
-    Query<Company> query = getSession().createQuery(criteria.select(root));
-    return query.getResultList();
+    
+    return entityManager.createQuery(criteria.select(root)).getResultList();
   }
 
   @Override
@@ -48,8 +41,8 @@ public class CompanyDaoImp extends Dao implements CompanyDao {
     setCriteria();
 
     criteria.select(root).where(builder.like(root.<String>get("name"), company.getName() + "%"));
-    Query<Company> query = getSession().createQuery(criteria);
-    return query.getResultList();
+    
+    return entityManager.createQuery(criteria).getResultList();
   }
 
   @Override
@@ -57,20 +50,19 @@ public class CompanyDaoImp extends Dao implements CompanyDao {
     setCriteria();
 
     criteria.select(root).where(builder.equal(root.get("id"), id));
-    Query<Company> query = getSession().createQuery(criteria);
-
-    return query.getResultList();
+    
+    return entityManager.createQuery(criteria).getResultList();
   }
 
   @Override
   public void delete(Company company) {
-    CriteriaBuilder deleteBuilder = getSession().getCriteriaBuilder();
+    CriteriaBuilder deleteBuilder = entityManager.getCriteriaBuilder();
     CriteriaDelete<Company> delete = deleteBuilder.createCriteriaDelete(Company.class);
     Root<Company> deleteRoot = delete.from(Company.class);
 
     delete.where(deleteBuilder.equal(deleteRoot.get("company"), company.getId()));
 
-    getSession().createQuery(delete).executeUpdate();
+    entityManager.createQuery(delete).executeUpdate();
   }
 
 }

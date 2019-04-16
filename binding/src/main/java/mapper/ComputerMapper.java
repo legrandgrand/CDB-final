@@ -44,7 +44,8 @@ public class ComputerMapper {
   public Computer dtoToComputer(ComputerDto dto) throws ComputerValidationException {
     Computer computer = new Computer();
     validator.validateDto(dto);
-
+    
+    computer.setId(dto.getIdComputer());
     computer.setName(dto.getName());
     computer.setIntro(setDate(dto.getIntro()));
     computer.setDiscontinuation(setDate(dto.getDiscontinuation()));

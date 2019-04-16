@@ -2,6 +2,7 @@ package dao;
 
 import java.util.List;
 
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaQuery;
@@ -12,25 +13,19 @@ import model.Company;
 import model.Computer;
 import model.Page;
 
-import org.hibernate.Session;
-import org.hibernate.query.Query;
-
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class ComputerDaoImp extends Dao implements ComputerDao {
 
-  private Session session;
   private CriteriaBuilder builder;
   private CriteriaQuery<Computer> criteria;
   private Root<Computer> root;
 
-  private ComputerDaoImp() {
-  }
+  private ComputerDaoImp() {  }
 
   private void setCriteria() {
-    this.session = getSession();
-    this.builder = this.session.getCriteriaBuilder();
+    this.builder = entityManager.getCriteriaBuilder();
     this.criteria = this.builder.createQuery(Computer.class);
     this.root = this.criteria.from(Computer.class);
 
@@ -40,13 +35,14 @@ public class ComputerDaoImp extends Dao implements ComputerDao {
   public List<Computer> list() {
     setCriteria();
     criteria.select(root);
-    Query<Computer> query = getSession().createQuery(criteria.select(root));
-    return query.getResultList();
+    
+    return entityManager.createQuery(criteria.select(root)).getResultList();
   }
 
   @Override
   public List<Computer> orderBy(Page page) {
     setCriteria();
+    
     if (page.getOrderBy().equals("ASC")) {
       criteria.select(root).orderBy(builder.asc(root.get(page.getType())));
     } else if (page.getOrderBy().equals("DESC")) {
@@ -55,7 +51,7 @@ public class ComputerDaoImp extends Dao implements ComputerDao {
       criteria.select(root).orderBy(builder.asc(root.get("id")));
     }
 
-    Query<Computer> query = getSession().createQuery(criteria);
+    TypedQuery<Computer> query = entityManager.createQuery(criteria);
     query.setFirstResult(page.getOffset());
     query.setMaxResults(page.getLimit());
 
@@ -66,10 +62,10 @@ public class ComputerDaoImp extends Dao implements ComputerDao {
   public List<Computer> listPage(Page page) {
     setCriteria();
 
-    Query<Computer> query = getSession().createQuery(criteria);
+    TypedQuery<Computer> query = entityManager.createQuery(criteria);
     query.setFirstResult(page.getOffset());
     query.setMaxResults(page.getLimit());
-
+    
     return query.getResultList();
   }
 
@@ -78,9 +74,7 @@ public class ComputerDaoImp extends Dao implements ComputerDao {
     setCriteria();
 
     criteria.select(root).where(builder.equal(root.get("id"), id));
-    Query<Computer> query = getSession().createQuery(criteria);
-
-    return query.getResultList();
+    return entityManager.createQuery(criteria).getResultList();
   }
 
   @Override
@@ -88,40 +82,39 @@ public class ComputerDaoImp extends Dao implements ComputerDao {
     setCriteria();
 
     criteria.select(root).where(builder.like(root.<String>get("name"), "%" + computer.getName().toLowerCase() + "%"));
-    Query<Computer> query = getSession().createQuery(criteria);
-    return query.getResultList();
+    
+    return entityManager.createQuery(criteria).getResultList();
   }
 
   @Override
   public Long getMaxId() {
     setCriteria();
 
-    CriteriaBuilder builder = session.getCriteriaBuilder();
+    CriteriaBuilder builder = entityManager.getCriteriaBuilder();
     CriteriaQuery<Long> criteriaQuery = builder.createQuery(Long.class);
     Root<Computer> root = criteriaQuery.from(Computer.class);
 
     criteriaQuery.select(builder.count(root));
-    Query<Long> query = session.createQuery(criteriaQuery);
-
-    return query.getSingleResult();
+    
+    return entityManager.createQuery(criteriaQuery).getSingleResult();
   }
 
   @Override
   public void delete(Computer computer) {
-    CriteriaBuilder deleteBuilder = getSession().getCriteriaBuilder();
+    CriteriaBuilder deleteBuilder = entityManager.getCriteriaBuilder();
     CriteriaDelete<Computer> delete = deleteBuilder.createCriteriaDelete(Computer.class);
     Root<Computer> deleteRoot = delete.from(Computer.class);
 
     delete.where(deleteBuilder.equal(deleteRoot.get("id"), computer.getId()));
 
-    getSession().createQuery(delete).executeUpdate();
+    entityManager.createQuery(delete).executeUpdate();
   }
 
   @Override
   public void update(Computer computer) {
-
+    
     if (computer != null) {
-      CriteriaBuilder updateBuilder = getSession().getCriteriaBuilder();
+      CriteriaBuilder updateBuilder = entityManager.getCriteriaBuilder();
       CriteriaUpdate<Computer> update = updateBuilder.createCriteriaUpdate(Computer.class);
       Root<Computer> updateRoot = update.from(Computer.class);
 
@@ -131,7 +124,8 @@ public class ComputerDaoImp extends Dao implements ComputerDao {
           .set("company", computer.getCompany())
           .where(updateBuilder.equal(updateRoot.get("id"), computer.getId()));
 
-      getSession().createQuery(update).executeUpdate();
+      entityManager.createQuery(update).executeUpdate();
+      
     }
 
   }
@@ -147,13 +141,13 @@ public class ComputerDaoImp extends Dao implements ComputerDao {
 
   @Override
   public void deleteComputerOfCompanyId(Company company) {
-    CriteriaBuilder deleteBuilder = getSession().getCriteriaBuilder();
+    CriteriaBuilder deleteBuilder = entityManager.getCriteriaBuilder();
     CriteriaDelete<Computer> delete = deleteBuilder.createCriteriaDelete(Computer.class);
     Root<Computer> deleteRoot = delete.from(Computer.class);
 
     delete.where(deleteBuilder.equal(deleteRoot.get("company"), company.getId()));
 
-    getSession().createQuery(delete).executeUpdate();
+    entityManager.createQuery(delete).executeUpdate();
   }
 
 }
