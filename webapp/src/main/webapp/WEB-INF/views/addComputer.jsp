@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <!DOCTYPE html>
 <html>
@@ -21,17 +21,25 @@
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
 			<span> <a class="navbar-brand" href="Dashboard"> <spring:message
-						code="title" /></a> <a class="navbar-brand" href="/webapp/logout"
+						code="title" /></a> <a class="navbar-brand" href="/computer-database/logout"
 				style="float: right;">logout</a>
 			</span>
 		</div>
 	</header>
 
-	<span style="float: right;"><spring:message code="lang" /> : <a
-		href="?lang=en"><spring:message code="lang.en" /></a> | <a
-		href="?lang=fr"><spring:message code="lang.fr" /></a></span>
+	<span style="float: right;"><spring:message
+			code="lang" /> : <a href="?lang=en"><spring:message
+				code="lang.en" /></a> | <a href="?lang=fr"><spring:message
+				code="lang.fr" /></a></span>
+
 
 	<section id="main">
+		<c:if test="${not empty error}">
+			<div class="alert alert-danger">
+				<c:out value="${error}" />
+			</div>
+		</c:if>
+
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">

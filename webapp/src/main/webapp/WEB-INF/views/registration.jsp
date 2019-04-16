@@ -18,30 +18,33 @@
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
 			<span> <a class="navbar-brand" href="Dashboard"> <spring:message
-						code="title" /></a> <a class="navbar-brand" href="/webapp/logout"
+						code="title" /></a> <a class="navbar-brand" href="/computer-database/logout"
 				style="float: right;">logout</a>
 			</span>
 
 		</div>
 	</header>
-	
-	<h1>Registration</h1>
-	<form action="registration" method="POST" enctype="utf8">
-		<div>
-			<label>Login</label> <input type="text" class="form-control"
-				id="username" placeholder="username" name="username" />
+	<div class="row">
+		<div class="col-xs-8 col-xs-offset-2 box">
+			<h1>Registration</h1>
+			<form action="registration" method="POST" enctype="utf8">
+				<div>
+					<label>Login</label> <input type="text" class="form-control"
+						id="username" placeholder="username" name="username" />
+				</div>
+				<div>
+					<label>password</label> <input type="password" class="form-control"
+						id="password" placeholder="password" name="password" />
+				</div>
+				<div>
+					<label>confirm</label> <input type="password" class="form-control"
+						id="confirm" placeholder="confirm" name=confirm />
+				</div>
+				<button type="submit">submit</button>
+			</form>
+			
+				<a href="/webapp/login">login</a>
 		</div>
-		<div>
-			<label>password</label> <input type="password" class="form-control"
-				id="password" placeholder="password" name="password" />
-		</div>
-		<div>
-			<label>confirm</label> <input type="password" class="form-control"
-				id="confirm" placeholder="confirm" name=confirm />
-		</div>
-		<button type="submit">submit</button>
-	</form>
-
-	<a href="/webapp/login">login</a>
+	</div>
 </body>
 </html>

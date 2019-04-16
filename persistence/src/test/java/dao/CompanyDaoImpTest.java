@@ -62,7 +62,7 @@ public class CompanyDaoImpTest {
   @Test
   public void testGetCompanyFromId() {
     Company company = new Company("OQO", 18);
-    List<Company> companies = companyDaoImp.getCompanyFromId(company);
+    List<Company> companies = companyDaoImp.getCompanyFromId(company.getId());
     assertEquals(true, companies.contains(company));
   }
 }

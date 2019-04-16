@@ -14,6 +14,20 @@ public interface ComputerDao {
    * @return the list
    */
   public List<Computer> list();
+  
+  /**
+   * Gets the computer from name.
+   *
+   * @param computer the computer
+   * @return the computer from name
+   */
+  List<Computer> getComputerFromName(Computer computer);
+  
+  List<Computer> getComputer(long id);
+
+  List<Computer> orderBy(Page page);
+
+  List<Computer> listPage(Page page);
 
   /**
    * Delete computer.
@@ -35,32 +49,9 @@ public interface ComputerDao {
    * @param computer the computer
    */
   public void add(Computer computer);
- 
 
-  /**
-   * List page.
-   *
-   * @param page the page
-   * @return the list
-   */
-  public List<Computer> listPage(int limit, int page);
+  public Long getMaxId();
 
-  /**
-   * Gets the computer from name.
-   *
-   * @param computer the computer
-   * @return the computer from name
-   */
-  List<Computer> getComputerFromName(Computer computer);
-
-  Long getMaxId();
-
-  void deleteComputerOfCompanyId(Company company);
-
-  List<Computer> getComputer(int id);
-
-  List<Computer> orderBy(Page page);
-
-
-
+  public void deleteComputerOfCompanyId(Company company);
+  
 }

@@ -3,26 +3,23 @@ package service;
 import dao.CompanyDaoImp;
 import dao.ComputerDaoImp;
 import dto.CompanyDto;
+import exception.ComputerValidationException;
 import mapper.CompanyMapper;
 
 import java.util.List;
 
 import model.Company;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
 import validator.ComputerValidator;
 
 @Service
-@Transactional
 public class CompanyService {
-
-  private static final Logger logger = LoggerFactory.getLogger(CompanyService.class);
-
+  
   private ComputerValidator computerValidator;
   private CompanyDaoImp companyDaoImp;
   private ComputerDaoImp computerDaoImp;
@@ -69,13 +66,10 @@ public class CompanyService {
    * @param company the company
    * @return the company from id
    */
-  public List<CompanyDto> getCompanyFromId(CompanyDto companyDto) {//TODO: shouldn't validate here
-    try {
-      computerValidator.validateId(companyDto.getId());
-    } catch (Exception e) {
-      logger.error(e.getMessage(), e);
-    }
-    return companyMapper.listDtos(companyDaoImp.getCompanyFromId(companyMapper.dtoToCompany(companyDto)));
+  public List<CompanyDto> getCompanyFromId(long id) throws ComputerValidationException {
+      computerValidator.validateId(id);
+
+    return companyMapper.listDtos(companyDaoImp.getCompanyFromId(id));
   }
 
   /**
@@ -83,6 +77,7 @@ public class CompanyService {
    *
    * @param company the company
    */
+  @Transactional
   public void delete(CompanyDto companyDto) {
     Company company = companyMapper.dtoToCompany(companyDto);
     computerDaoImp.deleteComputerOfCompanyId(company);

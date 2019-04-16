@@ -12,16 +12,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import service.CompanyService;
 import service.ComputerService;
 
-@Controller
+@RestController
 public class ComputerController {
   private static final Logger logger = LoggerFactory.getLogger(ComputerController.class);
 
@@ -46,11 +46,9 @@ public class ComputerController {
       @RequestParam(defaultValue = "0", name = "page") String pageString,
       @RequestParam(defaultValue = "20", name = "limit") String limitString) {
 
-    int page = setPage(pageString);
-    int limit = setLimit(limitString);
-    String order = "ASC";
-    List<ComputerDto> dtos = serviceComputer.listPage(limit, page);
-    return setMv(dtos, order, page, limit);
+    Page page = new Page(setLimit(limitString), setPage(pageString), "ASC", "", "");
+    List<ComputerDto> dtos = serviceComputer.listPage(page);
+    return setMv(dtos, page.getOrderBy(), page.getOffset(), page.getLimit());
   }
 
   /**
@@ -95,7 +93,8 @@ public class ComputerController {
       dtos = serviceComputer.getFromName(dto);
     } catch (ComputerValidationException invalidComputer) {
       logger.error(invalidComputer.getMessage(), invalidComputer);
-      mv.addObject("message", invalidComputer.getMessage());//TODO: Send error message
+      mv.addObject("error", invalidComputer.getMessage());
+      return mv;
     }
 
     mv.addObject("computers", dtos);
@@ -119,11 +118,13 @@ public class ComputerController {
 
       for (String id : idStringTable) {
         dto = serviceComputer.getFromId(Integer.parseInt(id)).get(0);
-        
         try {
           serviceComputer.delete(dto);
         } catch (ComputerValidationException invalidComputer) {
           logger.error(invalidComputer.getMessage(), invalidComputer);
+          ModelAndView mv = setDashboard("0", "20");
+          mv.addObject("error", invalidComputer.getMessage());
+          return mv;
         }
         
       }
@@ -168,7 +169,10 @@ public class ComputerController {
     try {
       serviceComputer.add(Dto);
     } catch (ComputerValidationException invalidComputer) {
-      logger.error(invalidComputer.getMessage(), invalidComputer);//TODO: show message, return to add computer
+      logger.error(invalidComputer.getMessage(), invalidComputer);
+      ModelAndView mv = getAdd();
+      mv.addObject("error", invalidComputer.getMessage());
+      return mv;
     }
 
     return setDashboard("0", "20");
@@ -181,11 +185,11 @@ public class ComputerController {
    * @return the edits the
    */
   @GetMapping(value = "/EditComputer")
-  public ModelAndView getEdit(@RequestParam(name = "id") String stringId) {
+  public ModelAndView getEdit(@RequestParam(name = "id") int id) {
 
     List<CompanyDto> companies = serviceCompany.listCompany();
 
-    ComputerDto dto = serviceComputer.getFromId(Integer.parseInt(stringId)).get(0);
+    ComputerDto dto = serviceComputer.getFromId(id).get(0);
 
     ModelAndView mv = new ModelAndView();
     mv.addObject("companies", companies);
@@ -217,14 +221,21 @@ public class ComputerController {
     try {
       serviceComputer.update(dto);
     } catch (ComputerValidationException invalidComputer) {
-      logger.error(invalidComputer.getMessage(), invalidComputer);//TODO: show message user and stay on EditComputer
+      logger.error(invalidComputer.getMessage(), invalidComputer);
+      ModelAndView mv = getEdit(id);
+      mv.addObject("error", invalidComputer.getMessage());
+      return mv;
     }
 
     return setDashboard("0", "20");
 
   }
+   
 
-  private ComputerDto setDto(String computerName, String introString, String discString,
+
+  
+  /*Setters for DTO*/
+  private ComputerDto setDto(String computerName, String introString, String discString, //TODO: highly unnecessary, to refacto
       String companyName) {
 
     CompanyDto company = new CompanyDto();

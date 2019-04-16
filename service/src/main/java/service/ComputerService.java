@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import validator.ComputerValidator;
 
 @Service
-@Transactional
 public class ComputerService {
 
   private ComputerValidator computerValidator;
@@ -52,7 +51,7 @@ public class ComputerService {
    * @param computer the computer
    * @return the computer
    */
-  public List<ComputerDto> getFromId(int id) {
+  public List<ComputerDto> getFromId(long id) {
     return mapper.listDtos(computerDao.getComputer(id));
   }
 
@@ -73,8 +72,8 @@ public class ComputerService {
    * @param page  the page
    * @return the list
    */
-  public List<ComputerDto> listPage(int limit, int page) {
-    return mapper.listDtos(computerDao.listPage(limit, page));
+  public List<ComputerDto> listPage(Page page) {
+    return mapper.listDtos(computerDao.listPage(page));
   }
 
   /**
@@ -95,6 +94,7 @@ public class ComputerService {
    *
    * @param computer the computer
    */
+  @Transactional
   public void delete(ComputerDto dto) throws ComputerValidationException {
     computerDao.delete(mapper.dtoToComputer(dto));
   }
@@ -104,6 +104,7 @@ public class ComputerService {
    *
    * @param computer the computer
    */
+  @Transactional
   public void add(ComputerDto dto) throws ComputerValidationException {
       Computer computer = mapper.dtoToComputer(dto);
       computerValidator.validateDiscBeforeIntro(computer.getIntro(), computer.getDiscontinuation());
@@ -115,6 +116,7 @@ public class ComputerService {
    *
    * @param computer the computer
    */
+  @Transactional
   public void update(ComputerDto dto) throws ComputerValidationException {
       Computer computer = mapper.dtoToComputer(dto);
       computerValidator.validateDiscBeforeIntro(computer.getIntro(), computer.getDiscontinuation());

@@ -30,7 +30,7 @@ public class CompanyDto {
 
   @Override
   public String toString() {
-    return "CompanyDto [name=" + name + ", id=" + id + "]";
+    return name;
   }
 
 }

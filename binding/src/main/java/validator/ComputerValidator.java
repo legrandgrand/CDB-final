@@ -70,7 +70,7 @@ public class ComputerValidator {
 
     try {
 
-      if (intro.isEmpty() || intro == null) {
+      if (intro == null || intro.isEmpty()) {
         return;
       }
 
@@ -92,7 +92,7 @@ public class ComputerValidator {
 
     try {
 
-      if (disc.isEmpty() || disc == null) {
+      if (disc == null || disc.isEmpty()) {
         return;
       }
 
